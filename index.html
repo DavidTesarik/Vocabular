@@ -1,0 +1,2338 @@
+<!DOCTYPE html>
+<html lang="cs" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Španělština">
+<meta name="theme-color" content="#F3F5FA">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<title>Španělský slovník</title>
+<style>
+:root{--fs:1}
+html[data-theme=light]{--bg:#F3F5FA;--surface:#FFFFFF;--surface2:#E8ECF6;--text:#121A33;--muted:#66708C;--border:#DDE2EE;--accent:#2445C7;--accent2:#F2B01E;--good:#1E9E55;--warn:#D99A00;--bad:#D93A3A;--shadow:0 10px 30px rgba(18,26,51,.07)}
+html[data-theme=dark]{--bg:#0C1128;--surface:#161D40;--surface2:#212A55;--text:#EEF1FA;--muted:#9AA3C4;--border:#2A3463;--accent:#6F8BFF;--accent2:#F7C548;--good:#3DD27F;--warn:#F5B81C;--bad:#FF6464;--shadow:0 10px 30px rgba(0,0,0,.3)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html{font-size:calc(16px * var(--fs));-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;line-height:1.4;padding-top:env(safe-area-inset-top);padding-bottom:calc(88px + env(safe-area-inset-bottom));min-height:100vh;overscroll-behavior-y:none;touch-action:manipulation}
+body.lock{overflow:hidden}
+.rd{font-family:ui-rounded,"SF Pro Rounded",-apple-system,system-ui,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent2);outline-offset:2px}
+main{max-width:640px;margin:0 auto;padding:4px 18px 24px}
+.view[hidden]{display:none}
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:16px 2px 8px}
+h1{font-family:ui-rounded,"SF Pro Rounded",-apple-system,sans-serif;font-size:2.1rem;line-height:1.1;margin:0;font-weight:800;letter-spacing:-.02em}
+h2{font-size:1.15rem;margin:0 0 4px;font-weight:700}
+h3{font-size:1.25rem;margin:4px 0 12px;font-weight:800}
+.sub{color:var(--muted);font-size:.9rem}
+.muted{color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:18px;margin:12px 0;box-shadow:var(--shadow)}
+.lbl{font-size:.85rem;font-weight:600;color:var(--muted);margin:16px 0 7px}
+.lbl:first-child{margin-top:0}
+.btn{appearance:none;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-weight:650;padding:12px 16px;border-radius:14px;font-size:1rem;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .1s}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--accent);border-color:transparent;color:#fff}
+.btn.big{width:100%;padding:17px;font-size:1.12rem;border-radius:18px;margin-top:18px}
+.btn.block{width:100%;margin-top:8px}
+.btn.danger{color:var(--bad)}
+.btn.ghost{background:transparent}
+.row{display:flex;gap:8px;align-items:center}
+.row>*{flex:1}
+.seg{display:flex;background:var(--surface2);border-radius:13px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:none;color:var(--muted);font-weight:650;font-size:.9rem;padding:9px 4px;border-radius:10px;white-space:nowrap}
+.seg button.on{background:var(--surface);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.14)}
+input[type=text],input[type=search],textarea,select{width:100%;font:inherit;font-size:max(16px,1rem);padding:12px 14px;border-radius:13px;border:1.5px solid var(--border);background:var(--surface);color:var(--text);outline:none;-webkit-appearance:none;appearance:none}
+textarea{resize:vertical;min-height:140px;line-height:1.5}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+.charbar{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:10px 0}
+.charbar button{height:44px;border-radius:10px;border:1px solid var(--border);background:var(--surface);font-size:1.15rem;font-weight:600;padding:0}
+.charbar button:active{background:var(--surface2)}
+.charbar button.shift.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+/* tabbar */
+.tabbar{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--surface);background:color-mix(in srgb,var(--surface) 86%,transparent);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:20}
+.tabbar button{flex:1;background:none;border:0;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:600;padding:5px 0}
+.tabbar button.on{color:var(--accent)}
+.tabbar svg{width:26px;height:26px}
+/* home */
+.streak{background:var(--surface);border:1px solid var(--border);border-radius:99px;padding:7px 13px;font-weight:700;white-space:nowrap}
+.goal{display:flex;align-items:center;gap:16px}
+.ring{width:78px;height:78px;flex:none}
+.ring circle{fill:none;stroke-width:9}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:13px}
+.kpi b{font-family:ui-rounded,-apple-system,sans-serif;font-size:1.6rem;display:block;line-height:1.1}
+.kpi span{font-size:.78rem;color:var(--muted);font-weight:600}
+.srcbtn{width:100%;text-align:left;display:flex;align-items:center;gap:10px;padding:13px 14px;border-radius:14px;border:1.5px solid var(--border);background:var(--surface);font-weight:650}
+.srcbtn .n{margin-left:auto;color:var(--muted);font-weight:600;font-size:.9rem}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.qbtn{text-align:left;padding:14px;border-radius:18px;border:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;gap:2px}
+.qbtn b{font-size:.98rem}
+.qbtn span{font-size:.8rem;color:var(--muted)}
+.wod{background:var(--accent);color:#fff;border:0;position:relative;overflow:hidden}
+.wod .w{font-family:ui-rounded,-apple-system,sans-serif;font-size:1.9rem;font-weight:800;margin:4px 0 2px}
+.wod .spk{position:absolute;right:14px;bottom:14px;background:rgba(255,255,255,.18);color:#fff;border:0}
+.tile{background-image:radial-gradient(circle at 100% 0,color-mix(in srgb,var(--accent2) 85%,transparent) 0 26%,transparent 27%),radial-gradient(circle at 100% 0,transparent 0 38%,rgba(255,255,255,.14) 39% 42%,transparent 43%);background-size:140px 140px;background-repeat:no-repeat;background-position:right top}
+.wod.tile{background-color:var(--accent)}
+/* practice */
+#practice{position:fixed;inset:0;z-index:40;background:var(--bg);display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top) + 8px) 16px calc(env(safe-area-inset-bottom) + 12px);overflow:hidden}
+#practice[hidden]{display:none}
+.p-top{display:flex;align-items:center;gap:12px;max-width:520px;width:100%;margin:0 auto}
+.icon-btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--border);background:var(--surface);font-size:1.05rem;display:grid;place-items:center;flex:none;padding:0}
+.icon-btn:disabled{opacity:.35}
+.p-prog{flex:1}
+.bar{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.p-count{font-size:.78rem;color:var(--muted);text-align:center;margin-top:5px;font-weight:600}
+.p-score{display:flex;justify-content:center;gap:8px;margin:10px 0 6px}
+.pill{padding:5px 12px;border-radius:99px;font-weight:750;font-size:.9rem;background:var(--surface2)}
+.pill.good{color:var(--good);background:color-mix(in srgb,var(--good) 14%,transparent)}
+.pill.warn{color:var(--warn);background:color-mix(in srgb,var(--warn) 16%,transparent)}
+.pill.bad{color:var(--bad);background:color-mix(in srgb,var(--bad) 14%,transparent)}
+.p-body{flex:1;display:flex;flex-direction:column;min-height:0;max-width:520px;width:100%;margin:0 auto;overflow-y:auto}
+.stage{flex:1;position:relative;display:flex;align-items:center;justify-content:center;perspective:1400px;min-height:260px;padding:6px 4px}
+.deck{position:relative;width:100%;height:100%;max-height:470px}
+.peek{position:absolute;inset:0;transform:scale(.93) translateY(16px);background:var(--surface);border:1px solid var(--border);border-radius:30px;opacity:.55}
+.fcard{position:absolute;inset:0;touch-action:none;user-select:none;-webkit-user-select:none;will-change:transform;transition:transform .3s cubic-bezier(.2,.8,.2,1),opacity .3s;cursor:grab;z-index:2}
+.fc-inner{position:absolute;inset:0;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;transition:transform .5s cubic-bezier(.3,.7,.2,1)}
+.fcard.flipped .fc-inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--surface);border:1px solid var(--border);border-radius:30px;box-shadow:0 18px 44px rgba(18,26,51,.14);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:44px 24px;text-align:center;overflow:hidden}
+.face.back{transform:rotateY(180deg)}
+.face.back::before{content:"";position:absolute;left:0;right:0;top:0;height:14px;background-color:var(--accent)}
+.face .lang{position:absolute;top:22px;left:0;right:0;font-size:.85rem;font-weight:650;color:var(--muted)}
+.word{font-family:ui-rounded,"SF Pro Rounded",-apple-system,sans-serif;font-size:2.5rem;font-weight:800;line-height:1.15;word-break:break-word;letter-spacing:-.01em}
+.face .orig{margin-top:12px;color:var(--muted);font-size:1.05rem}
+.face .note{margin-top:10px;font-size:.9rem;background:var(--surface2);padding:6px 12px;border-radius:10px;color:var(--muted)}
+.face .hint{position:absolute;bottom:20px;font-size:.8rem;color:var(--muted)}
+.spk{margin-top:18px;width:48px;height:48px;border-radius:50%;border:1px solid var(--border);background:var(--surface2);font-size:1.25rem;display:grid;place-items:center;padding:0}
+.stamp{position:absolute;top:26px;z-index:5;padding:5px 14px;border:3px solid;border-radius:12px;font-weight:900;font-size:1.25rem;opacity:0;pointer-events:none;background:var(--surface)}
+.stamp.good{right:20px;color:var(--good);transform:rotate(12deg)}
+.stamp.bad{left:20px;color:var(--bad);transform:rotate(-12deg)}
+.stamp.unsure{left:50%;top:auto;bottom:40px;transform:translateX(-50%);color:var(--warn)}
+.edge{position:fixed;top:0;bottom:0;width:40%;pointer-events:none;opacity:0;z-index:0}
+.edge.l{left:0;background:linear-gradient(90deg,color-mix(in srgb,var(--bad) 40%,transparent),transparent)}
+.edge.r{right:0;background:linear-gradient(-90deg,color-mix(in srgb,var(--good) 40%,transparent),transparent)}
+.edge.u{left:0;right:0;width:auto;bottom:auto;height:40%;background:linear-gradient(180deg,color-mix(in srgb,var(--warn) 40%,transparent),transparent)}
+.legend{display:flex;justify-content:space-between;font-size:.85rem;font-weight:700;margin:14px 8px 10px}
+.legend .bad{color:var(--bad)}.legend .warn{color:var(--warn)}.legend .good{color:var(--good)}
+.actions{display:flex;justify-content:center;align-items:center;gap:22px;padding-bottom:4px}
+.round{width:66px;height:66px;border-radius:50%;border:2.5px solid;background:var(--surface);font-size:1.6rem;font-weight:800;display:grid;place-items:center;padding:0}
+.round:active{transform:scale(.92)}
+.round.sm{width:52px;height:52px;font-size:1.25rem}
+.round.good{color:var(--good);border-color:var(--good)}
+.round.bad{color:var(--bad);border-color:var(--bad)}
+.round.warn{color:var(--warn);border-color:var(--warn)}
+.tcard{background:var(--surface);border:1px solid var(--border);border-radius:26px;padding:42px 20px 22px;text-align:center;position:relative;margin-top:6px;box-shadow:var(--shadow)}
+.tcard .lang{position:absolute;top:16px;left:0;right:0;font-size:.85rem;font-weight:650;color:var(--muted)}
+.tcard .word{font-size:2.1rem}
+.tcard .spk{margin:12px auto 0}
+.ans{font-size:max(18px,1.3rem)!important;text-align:center;padding:15px!important;border-width:2.5px!important;margin-top:16px;transition:background .2s,border-color .2s}
+.ans.ok{border-color:var(--good)!important;background:color-mix(in srgb,var(--good) 16%,var(--surface))!important}
+.ans.almost{border-color:var(--warn)!important;background:color-mix(in srgb,var(--warn) 20%,var(--surface))!important}
+.ans.wrong{border-color:var(--bad)!important;background:color-mix(in srgb,var(--bad) 15%,var(--surface))!important}
+.fb{text-align:center;margin:4px 0 8px;font-size:1rem;min-height:1.4em}
+.fb .v{font-weight:800;font-size:1.15rem;display:block;margin-bottom:2px}
+.fb .v.good{color:var(--good)}.fb .v.warn{color:var(--warn)}.fb .v.bad{color:var(--bad)}
+mark{background:color-mix(in srgb,var(--warn) 45%,transparent);color:inherit;border-radius:3px;padding:0 1px}
+.t-actions{display:flex;gap:10px;margin-top:4px}
+.t-actions .btn{flex:1}
+.opts{display:grid;gap:10px;margin-top:16px}
+.opt{padding:16px 18px;border-radius:16px;border:1.5px solid var(--border);background:var(--surface);font-size:1.1rem;font-weight:650;text-align:left}
+.opt.good{border-color:var(--good);background:color-mix(in srgb,var(--good) 16%,var(--surface))}
+.opt.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 15%,var(--surface))}
+.opt:disabled{opacity:1}
+.result{text-align:center;padding-top:20px}
+.result .big{font-size:3.4rem}
+.res-list{text-align:left;margin-top:14px}
+/* sheet */
+#sheet{position:fixed;inset:0;z-index:60}
+#sheet[hidden]{display:none}
+.scrim{position:absolute;inset:0;background:rgba(5,10,30,.45);opacity:0;transition:opacity .25s}
+.sheet-panel{position:absolute;left:0;right:0;bottom:0;max-height:92vh;overflow:auto;-webkit-overflow-scrolling:touch;background:var(--bg);border-radius:26px 26px 0 0;padding:8px 18px calc(22px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .28s cubic-bezier(.2,.8,.2,1);max-width:640px;margin:0 auto}
+#sheet.open .scrim{opacity:1}
+#sheet.open .sheet-panel{transform:none}
+.grab{width:40px;height:5px;border-radius:9px;background:var(--border);margin:4px auto 10px}
+.opt-list{display:flex;flex-direction:column;gap:6px}
+.opt-list button{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:14px;border:1px solid var(--border);background:var(--surface);text-align:left;font-weight:600}
+.opt-list button.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.opt-list .n{margin-left:auto;color:var(--muted);font-size:.88rem}
+.gtitle{font-size:.85rem;font-weight:700;color:var(--muted);margin:16px 4px 8px}
+#toast{position:fixed;left:50%;bottom:calc(104px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--bg);padding:11px 18px;border-radius:99px;font-weight:650;font-size:.92rem;opacity:0;transition:.25s;z-index:90;pointer-events:none;max-width:90vw;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%)}
+/* dictionary */
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 18px 10px;margin:0 -18px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--border);background:var(--surface);padding:8px 13px;border-radius:99px;font-size:.88rem;font-weight:650;white-space:nowrap}
+.chip.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:2px 2px 10px;font-size:.88rem;color:var(--muted)}
+.toolbar select{width:auto;padding:6px 10px;font-size:max(16px,.88rem);border-radius:10px}
+.linkbtn{background:none;border:0;color:var(--accent);font-weight:700;padding:6px 4px}
+.wlist{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden}
+.wrow{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border)}
+.wrow:last-child{border-bottom:0}
+.wt{flex:1;min-width:0}
+.wt b{display:block;font-size:1.02rem;font-weight:650}
+.wt span{display:block;color:var(--muted);font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dot{width:10px;height:10px;border-radius:50%;flex:none;background:var(--border)}
+.dot.known{background:var(--good)}.dot.unsure{background:var(--warn)}.dot.weak{background:var(--bad)}
+.star{background:none;border:0;font-size:1.3rem;color:var(--border);padding:2px 4px;line-height:1}
+.star.on{color:var(--accent2)}
+.chk{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);flex:none;display:grid;place-items:center;font-size:.8rem;color:#fff}
+.wrow.picked .chk{background:var(--accent);border-color:var(--accent)}
+.fab{position:fixed;right:18px;bottom:calc(92px + env(safe-area-inset-bottom));width:60px;height:60px;border-radius:50%;background:var(--accent);color:#fff;border:0;font-size:2rem;line-height:1;box-shadow:0 10px 26px color-mix(in srgb,var(--accent) 45%,transparent);z-index:15;padding:0}
+.selbar{position:fixed;left:12px;right:12px;bottom:calc(86px + env(safe-area-inset-bottom));background:var(--text);color:var(--bg);border-radius:18px;padding:8px 10px;display:flex;gap:2px;align-items:center;z-index:16;max-width:620px;margin:0 auto}
+.selbar b{flex:1;padding-left:6px;font-size:.9rem}
+.selbar button{background:none;border:0;color:inherit;font-weight:700;font-size:.88rem;padding:8px}
+.empty{text-align:center;padding:40px 20px;color:var(--muted)}
+.lcard{display:flex;align-items:center;gap:12px;padding:13px;background:var(--surface);border:1px solid var(--border);border-radius:20px;margin-bottom:10px}
+.lemoji{font-size:1.5rem;width:46px;height:46px;border-radius:14px;background:var(--surface2);display:grid;place-items:center;flex:none}
+.lbody{flex:1;min-width:0;background:none;border:0;text-align:left;padding:0}
+.lname{font-weight:700;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lmeta{font-size:.8rem;color:var(--muted);margin:1px 0 7px;display:block}
+.mbar{display:flex;height:6px;border-radius:9px;overflow:hidden;background:var(--surface2)}
+.mbar i{display:block;height:100%}
+.lplay{width:40px;height:40px;border-radius:50%;background:var(--accent);color:#fff;border:0;font-size:.95rem;flex:none;padding:0}
+.lmore{width:36px;height:40px;border:0;background:none;font-size:1.3rem;color:var(--muted);flex:none;padding:0}
+.lchips{display:flex;flex-wrap:wrap;gap:6px}
+.lchips button{border:1px solid var(--border);background:var(--surface);padding:7px 11px;border-radius:99px;font-size:.85rem;font-weight:600}
+.lchips button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.wstats{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+/* stats */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chart{display:flex;align-items:stretch;gap:5px;height:140px;margin-top:10px}
+.col{flex:1;display:flex;flex-direction:column;min-width:0}
+.colbar{flex:1;display:flex;align-items:flex-end}
+.stack{width:100%;display:flex;flex-direction:column-reverse;border-radius:6px;overflow:hidden;min-height:3px;background:var(--surface2)}
+.col small{text-align:center;font-size:.66rem;color:var(--muted);margin-top:5px}
+.col.today small{color:var(--accent);font-weight:800}
+.bigbar{display:flex;height:14px;border-radius:9px;overflow:hidden;margin:12px 0 10px;background:var(--surface2)}
+.legend2{display:flex;flex-wrap:wrap;gap:12px;font-size:.82rem;color:var(--muted)}
+.legend2 span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;background:var(--c)}
+details.grp{background:var(--surface);border:1px solid var(--border);border-radius:20px;margin-bottom:10px;overflow:hidden}
+details.grp summary{list-style:none;padding:15px 16px;display:flex;align-items:center;gap:10px;font-weight:700;cursor:pointer}
+details.grp summary::-webkit-details-marker{display:none}
+details.grp summary .n{margin-left:auto;color:var(--muted);font-weight:600}
+details.grp summary::after{content:"›";font-size:1.3rem;color:var(--muted);transition:transform .2s}
+details.grp[open] summary::after{transform:rotate(90deg)}
+.grp-body{padding:0 16px 14px}
+.mini{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--border);font-size:.92rem}
+.mini span:last-child{color:var(--muted);text-align:right}
+.sess{display:flex;justify-content:space-between;padding:9px 0;border-top:1px solid var(--border);font-size:.9rem}
+/* settings */
+.set-group{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-bottom:6px}
+.set-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 16px;border-bottom:1px solid var(--border)}
+.set-row:last-child{border-bottom:0}
+.set-row.col{flex-direction:column;align-items:stretch}
+.set-row .t{font-weight:650}
+.set-row .d{font-size:.8rem;color:var(--muted);margin-top:2px}
+.set-title{font-size:.85rem;font-weight:700;color:var(--muted);margin:22px 6px 8px}
+.switch{position:relative;width:51px;height:31px;flex:none}
+.switch input{opacity:0;position:absolute;inset:0;margin:0;z-index:1;cursor:pointer}
+.switch i{position:absolute;inset:0;background:var(--surface2);border-radius:99px;transition:.2s;border:1px solid var(--border)}
+.switch i::after{content:"";position:absolute;top:2px;left:2px;width:25px;height:25px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.25);transition:.2s}
+.switch input:checked+i{background:var(--good);border-color:var(--good)}
+.switch input:checked+i::after{transform:translateX(20px)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.set-btn{width:100%;text-align:left;background:none;border:0;padding:14px 16px;border-bottom:1px solid var(--border);font-weight:650}
+.set-btn:last-child{border-bottom:0}
+.set-btn.danger{color:var(--bad)}
+.howto{font-size:.9rem;color:var(--muted);padding:0 16px 14px}
+.howto ol{padding-left:20px;margin:6px 0}
+/* gramatika */
+#lesson{position:fixed;inset:0;z-index:35;background:var(--bg);display:flex;flex-direction:column;padding-top:calc(env(safe-area-inset-top) + 6px)}
+.l-top{display:flex;align-items:center;gap:12px;padding:6px 16px 8px;max-width:680px;width:100%;margin:0 auto}
+.l-title{font-weight:800;font-size:1.1rem;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.l-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px 18px 28px}
+.l-foot{padding:10px 18px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--border);background:var(--surface)}
+.l-foot .btn{max-width:640px;margin:0 auto;display:flex}
+.g{max-width:640px;margin:0 auto;line-height:1.55}
+.g h4{font-size:1.12rem;margin:24px 0 8px}
+.g p{margin:8px 0}
+.g .lead{font-size:1.05rem;color:var(--muted);margin-top:12px}
+.g ul{padding-left:20px;margin:8px 0}.g li{margin:6px 0}
+.tw{overflow-x:auto;margin:10px 0;border:1px solid var(--border);border-radius:16px;background:var(--surface)}
+.gt{width:100%;border-collapse:collapse;font-size:.95rem}
+.gt th{text-align:left;padding:10px 12px;color:var(--muted);font-weight:700;background:var(--surface2);font-size:.85rem;white-space:nowrap}
+.gt td{padding:9px 12px;border-top:1px solid var(--border)}
+.gt td:first-child{color:var(--muted)}
+.gt td b,.g li b,.g p b{color:var(--accent)}
+.gex{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2px 14px;margin:10px 0}
+.gex div{padding:9px 0;border-top:1px solid var(--border)}.gex div:first-child{border-top:0}
+.gex b{display:block;font-weight:700}.gex span{color:var(--muted);font-size:.92rem}
+.tip{background:color-mix(in srgb,var(--accent2) 20%,var(--surface));border-radius:14px;padding:12px 14px;margin:14px 0;font-size:.95rem}
+.tip b{color:inherit!important}
+.gl{width:100%;display:flex;align-items:center;gap:12px;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:20px;margin-bottom:10px;text-align:left}
+.lbody2{flex:1;min-width:0}.lbody2 b{display:block}.lbody2 span{display:block;font-size:.82rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.badge{flex:none;font-size:.8rem;font-weight:700;padding:5px 10px;border-radius:99px;background:var(--surface2);color:var(--muted)}
+.badge.ok{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)}
+.gqt{font-family:ui-rounded,"SF Pro Rounded",-apple-system,sans-serif;font-size:1.5rem;font-weight:700;line-height:1.4}
+.blank{display:inline-block;min-width:3em;border-bottom:3px solid var(--accent);margin:0 4px;vertical-align:-3px}
+.gperson{margin-top:14px;display:inline-block;background:var(--accent);color:#fff;font-weight:750;padding:6px 16px;border-radius:99px}
+.gnote{margin-top:10px;font-size:.9rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px;justify-content:center}
+.gnote .hl{color:var(--accent)}.gnote .hl b{text-decoration:underline}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <section class="view" id="view-home"></section>
+  <section class="view" id="view-dict" hidden></section>
+  <section class="view" id="view-gram" hidden></section>
+  <section class="view" id="view-stats" hidden></section>
+  <section class="view" id="view-settings" hidden></section>
+</main>
+
+<nav class="tabbar" id="tabbar">
+  <button data-tab="home" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Procvičovat</button>
+  <button data-tab="dict"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2 2 2 0 0 0 2 2h13"/><path d="M9 7h6M9 11h4"/></svg>Slovník</button>
+  <button data-tab="gram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 9 12 4 2 9l10 5 10-5z"/><path d="M6 11.5V16c3 2.5 9 2.5 12 0v-4.5"/><path d="M22 9v5"/></svg>Gramatika</button>
+  <button data-tab="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Statistiky</button>
+  <button data-tab="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Nastavení</button>
+</nav>
+
+<div id="practice" hidden>
+  <div class="p-top">
+    <button class="icon-btn" id="pClose" aria-label="Ukončit">✕</button>
+    <div class="p-prog"><div class="bar"><i id="pBar"></i></div><div class="p-count" id="pCount"></div></div>
+    <button class="icon-btn" id="pUndo" aria-label="Vrátit poslední">↶</button>
+  </div>
+  <div class="p-score"><span class="pill good">✓ <b id="scC">0</b></span><span class="pill warn">≈ <b id="scA">0</b></span><span class="pill bad">✗ <b id="scW">0</b></span></div>
+  <div class="p-body" id="pBody"></div>
+</div>
+
+<div id="lesson" hidden>
+  <div class="l-top"><button class="icon-btn" id="lClose" aria-label="Zavřít">✕</button><div class="l-title" id="lTitle"></div></div>
+  <div class="l-body" id="lBody"></div>
+  <div class="l-foot"><button class="btn primary big" id="lGo"></button></div>
+</div>
+<div id="sheet" hidden><div class="scrim"></div><div class="sheet-panel"><div class="grab"></div><div id="sheetBody"></div></div></div>
+<div id="toast"></div>
+<input type="file" id="importFile" accept="application/json,.json" hidden>
+
+<script>
+/* ===================== VÝCHOZÍ DATABÁZE ===================== */
+const SEED=[
+['basic','👋','Základní fráze',`hola|ahoj
+adiós|nashledanou, sbohem
+buenos días|dobré ráno, dobrý den
+buenas tardes|dobré odpoledne
+buenas noches|dobrý večer, dobrou noc
+por favor|prosím
+gracias|děkuji, díky
+muchas gracias|děkuji mnohokrát
+de nada|není zač
+lo siento|je mi líto, promiň
+perdón|pardon, promiňte
+con permiso|s dovolením
+sí|ano
+no|ne
+¿Qué tal?|jak se máš?, jak je?
+¿Cómo estás?|jak se máš?
+bien|dobře
+mal|špatně
+hasta luego|na shledanou, zatím
+hasta mañana|na shledanou zítra
+mucho gusto|těší mě
+encantado|těší mě (muž)
+¿Cómo te llamas?|jak se jmenuješ?
+me llamo|jmenuji se
+¿De dónde eres?|odkud jsi?
+soy de|jsem z
+no entiendo|nerozumím
+¿Hablas inglés?|mluvíš anglicky?
+¿Cuánto cuesta?|kolik to stojí?
+¿Dónde está?|kde je?
+salud|na zdraví
+bienvenido|vítej
+claro|jasně, samozřejmě
+vale|dobře, OK|hlavně ve Španělsku
+¡Buen provecho!|dobrou chuť`],
+['num','🔢','Čísla',`cero|nula
+uno|jedna
+dos|dva
+tres|tři
+cuatro|čtyři
+cinco|pět
+seis|šest
+siete|sedm
+ocho|osm
+nueve|devět
+diez|deset
+once|jedenáct
+doce|dvanáct
+trece|třináct
+catorce|čtrnáct
+quince|patnáct
+dieciséis|šestnáct
+diecisiete|sedmnáct
+dieciocho|osmnáct
+diecinueve|devatenáct
+veinte|dvacet
+treinta|třicet
+cuarenta|čtyřicet
+cincuenta|padesát
+sesenta|šedesát
+setenta|sedmdesát
+ochenta|osmdesát
+noventa|devadesát
+cien|sto
+mil|tisíc
+un millón|milion
+primero|první
+segundo|druhý
+tercero|třetí
+último|poslední`],
+['col','🎨','Barvy',`el color|barva
+rojo|červený
+azul|modrý
+verde|zelený
+amarillo|žlutý
+negro|černý
+blanco|bílý
+gris|šedý
+marrón|hnědý
+anaranjado|oranžový
+rosa|růžový
+morado|fialový
+celeste|světle modrý
+dorado|zlatý
+plateado|stříbrný
+oscuro|tmavý`],
+['fam','👨‍👩‍👧','Rodina a lidé',`la familia|rodina
+la madre|matka
+el padre|otec
+los padres|rodiče
+el hermano|bratr
+la hermana|sestra
+el hijo|syn
+la hija|dcera
+los hijos|děti (vlastní)
+el abuelo|dědeček
+la abuela|babička
+el nieto|vnuk
+la nieta|vnučka
+el tío|strýc
+la tía|teta
+el primo|bratranec
+la prima|sestřenice
+el sobrino|synovec
+la sobrina|neteř
+el esposo|manžel
+la esposa|manželka
+el novio|přítel, snoubenec
+la novia|přítelkyně, snoubenka
+el bebé|miminko
+el niño|chlapec, dítě
+la niña|holčička
+el suegro|tchán
+la suegra|tchyně
+el amigo|kamarád
+la amiga|kamarádka
+la gente|lidé
+el hombre|muž
+la mujer|žena`],
+['body','🫀','Tělo',`el cuerpo|tělo
+la cabeza|hlava
+el pelo|vlasy
+la cara|obličej
+el ojo|oko
+la oreja|ucho
+la nariz|nos
+la boca|ústa
+el diente|zub
+la lengua|jazyk
+el cuello|krk
+el hombro|rameno
+el brazo|paže
+el codo|loket
+la mano|ruka
+el dedo|prst
+la espalda|záda
+el pecho|hruď
+el estómago|žaludek
+la barriga|břicho
+la pierna|noha
+la rodilla|koleno
+el pie|chodidlo
+el corazón|srdce
+la piel|kůže
+la sangre|krev
+el hueso|kost`],
+['food','🥘','Jídlo a pití',`la comida|jídlo
+el desayuno|snídaně
+el almuerzo|oběd
+la cena|večeře
+el agua|voda
+el pan|chléb
+la leche|mléko
+el café|káva
+el té|čaj
+el zumo|džus
+la cerveza|pivo
+el vino|víno
+el queso|sýr
+el huevo|vejce
+la carne|maso
+el pollo|kuře
+la carne de cerdo|vepřové maso
+la ternera|hovězí, telecí
+el pescado|ryba (jídlo)
+el jamón|šunka
+el arroz|rýže
+la pasta|těstoviny
+la patata|brambora
+la sopa|polévka
+la ensalada|salát
+la fruta|ovoce
+la manzana|jablko
+la naranja|pomeranč
+el plátano|banán
+la fresa|jahoda
+el limón|citron
+la uva|hroznové víno
+la pera|hruška
+el tomate|rajče
+la cebolla|cibule
+el ajo|česnek
+la zanahoria|mrkev
+la verdura|zelenina
+la sal|sůl
+el azúcar|cukr
+el aceite|olej
+la mantequilla|máslo
+el pastel|dort, koláč
+el helado|zmrzlina
+el chocolate|čokoláda
+la cuenta|účet
+el camarero|číšník
+el plato|talíř, chod
+el vaso|sklenice
+la taza|hrnek, šálek
+el tenedor|vidlička
+el cuchillo|nůž
+la cuchara|lžíce
+tener hambre|mít hlad
+tener sed|mít žízeň
+delicioso|výborný, lahodný`],
+['anim','🐾','Zvířata',`el animal|zvíře
+el perro|pes
+el gato|kočka
+el caballo|kůň
+la vaca|kráva
+el cerdo|prase
+la oveja|ovce
+la cabra|koza
+el pájaro|pták
+la gallina|slepice
+el pato|kachna
+el pez|ryba (živá)
+el ratón|myš
+el conejo|králík
+el león|lev
+el tigre|tygr
+el oso|medvěd
+el lobo|vlk
+el zorro|liška
+el elefante|slon
+el mono|opice
+la serpiente|had
+la tortuga|želva
+la rana|žába
+la mariposa|motýl
+la abeja|včela
+la mosca|moucha
+la araña|pavouk
+el ciervo|jelen
+la ardilla|veverka
+el toro|býk
+la ballena|velryba
+el delfín|delfín
+el burro|osel`],
+['home','🏠','Dům a byt',`la casa|dům
+el piso|byt, patro
+la habitación|pokoj
+el dormitorio|ložnice
+la cocina|kuchyně
+el baño|koupelna
+el salón|obývací pokoj
+el comedor|jídelna
+el jardín|zahrada
+la puerta|dveře
+la ventana|okno
+la pared|zeď
+el suelo|podlaha
+el techo|strop, střecha
+la escalera|schody
+la mesa|stůl
+la silla|židle
+el sofá|pohovka
+la cama|postel
+el armario|skříň
+la lámpara|lampa
+el espejo|zrcadlo
+la nevera|lednice
+el horno|trouba
+la ducha|sprcha
+la llave|klíč
+la almohada|polštář
+la toalla|ručník
+la basura|odpadky
+el vecino|soused`],
+['cloth','👕','Oblečení',`la ropa|oblečení
+la camisa|košile
+la camiseta|tričko
+los pantalones|kalhoty
+la falda|sukně
+el vestido|šaty
+la chaqueta|bunda, sako
+el abrigo|kabát
+el jersey|svetr
+los zapatos|boty
+los calcetines|ponožky
+el sombrero|klobouk
+la gorra|kšiltovka
+la bufanda|šála
+los guantes|rukavice
+el cinturón|pásek
+la corbata|kravata
+el bolso|kabelka
+la mochila|batoh
+las gafas|brýle
+el reloj|hodinky, hodiny
+el traje de baño|plavky
+el pijama|pyžamo
+ponerse|obléknout si
+quitarse|svléknout si`],
+['time','📅','Čas a kalendář',`el tiempo|čas, počasí
+la hora|hodina
+el minuto|minuta
+el día|den
+la semana|týden
+el mes|měsíc
+el año|rok
+hoy|dnes
+mañana|zítra
+ayer|včera
+la mañana|ráno, dopoledne
+la tarde|odpoledne
+la noche|noc
+el fin de semana|víkend
+el lunes|pondělí
+el martes|úterý
+el miércoles|středa
+el jueves|čtvrtek
+el viernes|pátek
+el sábado|sobota
+el domingo|neděle
+enero|leden
+febrero|únor
+marzo|březen
+abril|duben
+mayo|květen
+junio|červen
+julio|červenec
+agosto|srpen
+septiembre|září
+octubre|říjen
+noviembre|listopad
+diciembre|prosinec
+la primavera|jaro
+el verano|léto
+el otoño|podzim
+el invierno|zima
+temprano|brzy
+tarde|pozdě
+ahora|teď`],
+['nat','🌦️','Počasí a příroda',`hace sol|je slunečno
+hace calor|je horko
+hace frío|je zima
+hace viento|fouká vítr
+llueve|prší
+nieva|sněží
+está nublado|je zataženo
+el sol|slunce
+la luna|měsíc (na obloze)
+la estrella|hvězda
+el cielo|nebe, obloha
+la nube|mrak
+la lluvia|déšť
+la nieve|sníh
+el viento|vítr
+la tormenta|bouřka
+el mar|moře
+la playa|pláž
+el río|řeka
+el lago|jezero
+la montaña|hora
+el bosque|les
+el árbol|strom
+la flor|květina
+la isla|ostrov
+el campo|venkov, pole
+la tierra|země, půda
+el fuego|oheň`],
+['city','🚆','Město a cestování',`la ciudad|město
+el pueblo|vesnice
+la calle|ulice
+la plaza|náměstí
+el edificio|budova
+la tienda|obchod
+el supermercado|supermarket
+el mercado|trh
+el banco|banka, lavička
+el restaurante|restaurace
+el hotel|hotel
+el hospital|nemocnice
+la farmacia|lékárna
+la iglesia|kostel
+el museo|muzeum
+el parque|park
+la estación|nádraží, stanice
+el aeropuerto|letiště
+el coche|auto
+el autobús|autobus
+el tren|vlak
+el avión|letadlo
+el barco|loď
+la bicicleta|kolo
+el metro|metro
+el billete|jízdenka, lístek
+el pasaporte|pas
+la maleta|kufr
+el viaje|cesta, výlet
+las vacaciones|prázdniny, dovolená
+a la derecha|doprava, vpravo
+a la izquierda|doleva, vlevo
+todo recto|rovně
+cerca|blízko
+lejos|daleko
+el mapa|mapa
+la entrada|vchod
+la salida|východ, odjezd`],
+['school','🎒','Škola a práce',`la escuela|škola
+la universidad|univerzita
+la clase|třída, hodina
+el profesor|učitel
+el estudiante|student
+el libro|kniha
+el cuaderno|sešit
+el bolígrafo|propiska
+el lápiz|tužka
+la pregunta|otázka
+la respuesta|odpověď
+el examen|zkouška, test
+los deberes|domácí úkoly
+la palabra|slovo
+la frase|věta
+el idioma|jazyk (řeč)
+el trabajo|práce
+la oficina|kancelář
+el jefe|šéf
+la reunión|schůzka, porada
+el ordenador|počítač
+el teléfono|telefon
+el móvil|mobil
+el correo electrónico|e-mail
+el dinero|peníze
+el sueldo|plat
+la empresa|firma
+el papel|papír
+la biblioteca|knihovna
+la nota|známka, poznámka`],
+['job','👩‍⚕️','Povolání',`el médico|lékař
+el enfermero|zdravotní bratr, zdravotník
+el abogado|právník
+el ingeniero|inženýr
+el cocinero|kuchař
+el policía|policista
+el bombero|hasič
+el conductor|řidič
+el vendedor|prodavač
+el agricultor|zemědělec
+el periodista|novinář
+el artista|umělec
+el músico|hudebník
+el actor|herec
+el escritor|spisovatel
+el dentista|zubař
+el peluquero|kadeřník
+el panadero|pekař
+el científico|vědec
+el programador|programátor`],
+['verb','🏃','Slovesa',`ser|být (trvale)
+estar|být (stav, místo)
+tener|mít
+hacer|dělat
+ir|jít, jet
+venir|přijít
+poder|moci
+querer|chtít, mít rád
+decir|říct
+saber|vědět, umět
+conocer|znát
+ver|vidět
+mirar|dívat se
+oír|slyšet
+escuchar|poslouchat
+hablar|mluvit
+comer|jíst
+beber|pít
+vivir|žít, bydlet
+trabajar|pracovat
+estudiar|studovat
+aprender|učit se
+enseñar|učit (někoho), ukázat
+leer|číst
+escribir|psát
+dormir|spát
+despertarse|probudit se
+levantarse|vstát
+llamar|volat
+llamarse|jmenovat se
+dar|dát
+tomar|vzít, dát si
+llevar|nést, nosit
+traer|přinést
+poner|položit, dát
+salir|odejít, vyjít
+entrar|vstoupit, vejít
+volver|vrátit se
+llegar|přijet, dorazit
+esperar|čekat, doufat
+buscar|hledat
+encontrar|najít
+pensar|myslet
+creer|věřit
+entender|rozumět
+preguntar|ptát se
+responder|odpovědět
+abrir|otevřít
+cerrar|zavřít
+empezar|začít
+terminar|skončit
+comprar|koupit
+vender|prodat
+pagar|platit
+gustar|líbit se
+necesitar|potřebovat
+ayudar|pomoci
+jugar|hrát (si)
+correr|běžet
+caminar|chodit
+nadar|plavat
+viajar|cestovat
+cocinar|vařit
+limpiar|uklízet
+usar|používat
+cambiar|změnit
+olvidar|zapomenout
+recordar|pamatovat si
+sentir|cítit
+amar|milovat
+conducir|řídit
+bailar|tančit
+cantar|zpívat
+perder|ztratit, prohrát
+ganar|vyhrát, vydělat
+morir|zemřít
+nacer|narodit se
+tocar|dotknout se, hrát (na nástroj)`],
+['adj','✨','Přídavná jména',`grande|velký
+pequeño|malý
+alto|vysoký
+bajo|nízký
+largo|dlouhý
+corto|krátký
+nuevo|nový
+viejo|starý
+joven|mladý
+bueno|dobrý
+malo|špatný
+bonito|hezký
+feo|ošklivý
+guapo|pohledný
+caro|drahý
+barato|levný
+fácil|snadný, lehký
+difícil|těžký, obtížný
+rápido|rychlý
+lento|pomalý
+caliente|horký
+frío|studený
+fuerte|silný
+débil|slabý
+rico|bohatý, chutný
+pobre|chudý
+limpio|čistý
+sucio|špinavý
+lleno|plný
+vacío|prázdný
+abierto|otevřený
+cerrado|zavřený
+feliz|šťastný
+triste|smutný
+cansado|unavený
+enfermo|nemocný
+ocupado|zaneprázdněný, obsazený
+libre|volný
+importante|důležitý
+interesante|zajímavý
+aburrido|nudný, znuděný
+divertido|zábavný
+simpático|sympatický, milý
+inteligente|inteligentní
+tonto|hloupý
+gordo|tlustý
+delgado|štíhlý
+mismo|stejný
+diferente|odlišný, jiný
+mejor|lepší
+peor|horší
+seguro|jistý, bezpečný
+peligroso|nebezpečný
+tranquilo|klidný
+ruidoso|hlučný`],
+['adv','🔗','Otázky, spojky, příslovce',`y|a
+o|nebo
+pero|ale
+porque|protože
+¿por qué?|proč?
+si|jestli, pokud
+también|také
+tampoco|také ne
+muy|velmi
+mucho|hodně
+poco|málo
+más|více
+menos|méně
+siempre|vždy
+nunca|nikdy
+a veces|někdy
+ya|už
+todavía|ještě, stále
+pronto|brzy, hned
+después|potom, později
+antes|předtím, dříve
+aquí|tady
+allí|tam
+dentro|uvnitř
+fuera|venku
+arriba|nahoře
+abajo|dole
+¿qué?|co?
+¿quién?|kdo?
+¿dónde?|kde?
+¿cuándo?|kdy?
+¿cómo?|jak?
+¿cuánto?|kolik?
+¿cuál?|který?
+con|s, se
+sin|bez
+para|pro
+entre|mezi
+casi|skoro, téměř
+solo|jen, pouze
+juntos|spolu
+todo|všechno
+cada|každý`],
+['emo','😊','Emoce a povaha',`el amor|láska
+la alegría|radost
+la tristeza|smutek
+el miedo|strach
+la sorpresa|překvapení
+enfadado|naštvaný
+contento|spokojený, rád
+nervioso|nervózní
+preocupado|ustaraný
+tímido|stydlivý
+valiente|statečný
+amable|laskavý, milý
+perezoso|líný
+trabajador|pracovitý
+generoso|štědrý
+orgulloso|hrdý
+celoso|žárlivý
+tener miedo|bát se
+estar enamorado|být zamilovaný
+echar de menos|stýskat se`],
+['health','🩺','Zdraví',`la salud|zdraví
+el dolor|bolest
+me duele|bolí mě
+la fiebre|horečka
+el resfriado|nachlazení
+la tos|kašel
+la medicina|lék, medicína
+la pastilla|pilulka, prášek
+la receta|recept
+la herida|zranění, rána
+la cita|schůzka, objednání
+la ambulancia|sanitka
+la alergia|alergie
+sano|zdravý
+¡Socorro!|pomoc!`],
+['fun','⚽','Volný čas a sport',`el deporte|sport
+el fútbol|fotbal
+el baloncesto|basketbal
+el tenis|tenis
+la natación|plavání
+el equipo|tým
+el partido|zápas
+la pelota|míč
+la música|hudba
+la canción|píseň
+la película|film
+el cine|kino
+el teatro|divadlo
+el concierto|koncert
+la fiesta|večírek, oslava
+el juego|hra
+la foto|fotka
+pasear|procházet se
+descansar|odpočívat
+el tiempo libre|volný čas
+dibujar|kreslit
+pintar|malovat
+la guitarra|kytara
+el gimnasio|posilovna`]
+];
+
+/* ===================== ZÁKLAD ===================== */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const KEY='slovnik-es-v1', INTERVALS=[0,1,3,7,14,30];
+const DEF={theme:'auto',fontScale:1,smart:true,ignoreArticles:true,tolerant:false,autoSpeak:false,ttsRate:0.9,dailyGoal:20,mode:'cards',dir:'es-cz',len:20,source:'all',conjTense:'pres',conjSet:'reg',vosotros:true};
+const memStore={};
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return memStore[k]??null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){memStore[k]=v}}};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const dkey=(d=new Date())=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const fold=s=>(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+const plural=(n,a,b,c)=>n===1?a:(n>=2&&n<=4?b:c);
+
+function newWord(es,cz,note='',lists=[]){return{id:uid(),es:es.trim(),cz:cz.trim(),note:(note||'').trim(),lists,star:false,c:0,a:0,w:0,box:0,due:0,recent:[],last:null,t:Date.now()}}
+function buildSeed(){
+  const lists=[],words=[],byEs=new Map();
+  for(const [id,emoji,name,txt] of SEED){
+    const lid='b-'+id; lists.push({id:lid,name,emoji,builtin:true});
+    txt.trim().split('\n').forEach(line=>{
+      const [es,cz,note]=line.split('|'); if(!es||!cz) return;
+      const k=es.trim().toLowerCase();
+      if(byEs.has(k)){const w=byEs.get(k); if(!w.lists.includes(lid)) w.lists.push(lid); return;}
+      const w=newWord(es,cz,note,[lid]); words.push(w); byEs.set(k,w);
+    });
+  }
+  return{lists,words};
+}
+
+let D;
+function load(){
+  try{const raw=store.get(KEY); if(raw) D=JSON.parse(raw);}catch(e){D=null}
+  if(!D||!Array.isArray(D.words)){const s=buildSeed(); D={v:1,words:s.words,lists:s.lists,settings:{},days:{},sessions:[]};}
+  D.settings={...DEF,...(D.settings||{})}; D.days=D.days||{}; D.sessions=D.sessions||[]; D.lists=D.lists||[]; D.gram=D.gram||{};
+  saveNow();
+}
+let saveT; function save(){clearTimeout(saveT); saveT=setTimeout(saveNow,200)}
+function saveNow(){clearTimeout(saveT); store.set(KEY,JSON.stringify(D))}
+document.addEventListener('visibilitychange',()=>{if(document.hidden) saveNow()});
+window.addEventListener('pagehide',saveNow);
+
+function status(w){
+  const n=w.c+w.a+w.w; if(!n) return 'new';
+  const acc=(w.c+.5*w.a)/n;
+  if(w.last==='w'||acc<.5) return 'weak';
+  if(n>=2&&acc>=.8&&w.last==='c') return 'known';
+  return 'unsure';
+}
+const isDue=w=>(w.c+w.a+w.w)>0&&w.due<=Date.now();
+function countStatus(ws){const r={known:0,unsure:0,weak:0,new:0};ws.forEach(w=>r[status(w)]++);return r}
+function streak(){
+  let n=0,d=new Date(); const has=k=>{const x=D.days[k];return x&&(x.c+x.a+x.w)>0};
+  if(!has(dkey(d))) d.setDate(d.getDate()-1);
+  while(has(dkey(d))){n++;d.setDate(d.getDate()-1)}
+  return n;
+}
+const listById=id=>D.lists.find(l=>l.id===id);
+
+/* ===================== TÉMA / TOAST / SHEET ===================== */
+const mq=matchMedia('(prefers-color-scheme: dark)');
+function applyTheme(){
+  const t=D.settings.theme, dark=t==='dark'||(t==='auto'&&mq.matches);
+  document.documentElement.dataset.theme=dark?'dark':'light';
+  $('meta[name=theme-color]').content=dark?'#0C1128':'#F3F5FA';
+  document.documentElement.style.setProperty('--fs',D.settings.fontScale);
+}
+mq.addEventListener?.('change',()=>D&&applyTheme());
+let toastT; function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2200)}
+function openSheet(html,mount){const sh=$('#sheet');$('#sheetBody').innerHTML=html;sh.hidden=false;$('.sheet-panel').scrollTop=0;requestAnimationFrame(()=>requestAnimationFrame(()=>sh.classList.add('open')));mount&&mount($('#sheetBody'))}
+function closeSheet(){const sh=$('#sheet');sh.classList.remove('open');setTimeout(()=>{if(!sh.classList.contains('open'))sh.hidden=true},280)}
+$('#sheet .scrim').onclick=closeSheet;
+
+/* ===================== VÝSLOVNOST ===================== */
+let esVoice=null;
+function loadVoices(){const v=speechSynthesis.getVoices();esVoice=v.find(x=>x.lang==='es-ES')||v.find(x=>/^es/i.test(x.lang))||null}
+if('speechSynthesis' in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices}
+function speak(t){
+  if(!('speechSynthesis' in window)) return toast('Výslovnost tu není dostupná');
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t.replace(/[¿¡]/g,'').replace(/\([^)]*\)/g,''));
+  u.lang='es-ES'; if(esVoice) u.voice=esVoice; u.rate=D.settings.ttsRate; speechSynthesis.speak(u);
+}
+
+/* ===================== SPECIÁLNÍ ZNAKY ===================== */
+const CHARS=['á','é','í','ó','ú','ü','ñ','¿','¡'];
+function charbarHTML(){return `<div class="charbar">${CHARS.map(c=>`<button type="button" data-ch="${c}">${c}</button>`).join('')}<button type="button" class="shift" aria-label="Velká písmena">⇧</button></div>`}
+function bindCharbar(root,getInput){
+  $$('.charbar',root).forEach(bar=>{
+    let upper=false;
+    $$('button',bar).forEach(b=>{
+      b.addEventListener('pointerdown',e=>e.preventDefault());
+      b.addEventListener('mousedown',e=>e.preventDefault());
+      b.addEventListener('click',()=>{
+        if(b.classList.contains('shift')){upper=!upper;b.classList.toggle('on',upper);$$('[data-ch]',bar).forEach(x=>x.textContent=upper?x.dataset.ch.toUpperCase():x.dataset.ch);return}
+        const inp=getInput(); if(!inp||inp.readOnly) return;
+        const ch=upper?b.dataset.ch.toUpperCase():b.dataset.ch;
+        const s=inp.selectionStart??inp.value.length, e2=inp.selectionEnd??inp.value.length;
+        inp.setRangeText(ch,s,e2,'end'); inp.focus(); inp.dispatchEvent(new Event('input',{bubbles:true}));
+        if(upper){upper=false;bar.querySelector('.shift').classList.remove('on');$$('[data-ch]',bar).forEach(x=>x.textContent=x.dataset.ch)}
+      });
+    });
+  });
+}
+function keepFocus(el){el.addEventListener('pointerdown',e=>e.preventDefault());el.addEventListener('mousedown',e=>e.preventDefault())}
+
+/* ===================== HODNOCENÍ ODPOVĚDI ===================== */
+const ART=/^(el|la|los|las|un|una|unos|unas|lo)\s+/;
+const norm=s=>(s||'').toLowerCase().normalize('NFC').replace(/[¿¡!?.,;:"'«»()]/g,' ').replace(/\s+/g,' ').trim();
+const variants=ans=>ans.split(/[,;\/]/).map(x=>x.replace(/\([^)]*\)/g,'')).map(norm).filter(Boolean);
+function levMarks(a,b){
+  const m=a.length,n=b.length,dp=Array.from({length:m+1},(_,i)=>{const r=new Array(n+1).fill(0);r[0]=i;return r});
+  for(let j=0;j<=n;j++)dp[0][j]=j;
+  for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)dp[i][j]=Math.min(dp[i-1][j]+1,dp[i][j-1]+1,dp[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+  const marks=new Array(n).fill(false);let i=m,j=n;
+  while(i>0||j>0){
+    if(i>0&&j>0&&dp[i][j]===dp[i-1][j-1]+(a[i-1]===b[j-1]?0:1)){if(a[i-1]!==b[j-1])marks[j-1]=true;i--;j--}
+    else if(j>0&&dp[i][j]===dp[i][j-1]+1){marks[j-1]=true;j--}
+    else{if(j>0)marks[j-1]=true;else if(n>0)marks[0]=true;i--}
+  }
+  return{d:dp[m][n],marks};
+}
+function grade(input,answer,go={}){
+  const st=D.settings,u=norm(input),ign=go.articles===false?false:st.ignoreArticles;
+  const ts=new Set([...variants(answer),norm(answer.replace(/\([^)]*\)/g,''))]);
+  if(!u) return{res:'w',d:99,target:[...ts][0]||'',user:''};
+  const us=new Set([u]);
+  if(ign){[...us].forEach(x=>us.add(x.replace(ART,'')));[...ts].forEach(x=>ts.add(x.replace(ART,'')))}
+  let best={d:99,t:'',u:''};
+  for(const t of ts)for(const x of us){const d=st.tolerant?levMarks(fold(x),fold(t)).d:levMarks(x,t).d;if(d<best.d)best={d,t,u:x}}
+  const len=best.t.length;let res='w';
+  if(best.d===0)res='c';else if((best.d===1&&len>=2)||(best.d===2&&len>=5))res='a';
+  return{res,d:best.d,target:best.t,user:best.u};
+}
+function diffHTML(user,target){const{marks}=levMarks(user,target);return [...target].map((ch,i)=>marks[i]?`<mark>${esc(ch)}</mark>`:esc(ch)).join('')}
+
+/* ===================== VÝBĚR SLOV ===================== */
+function sources(){
+  const smart=[['all','📚','Všechna slovíčka'],['due','🔁','K opakování dnes'],['problem','⚠️','Neumím + nejistá'],['weak','❌','Neumím'],['unsure','🤔','Nejistá'],['new','🆕','Nová (neprocvičená)'],['star','⭐','Oblíbená']].map(([id,emoji,label])=>({id,emoji,label}));
+  const lists=D.lists.map(l=>({id:'list:'+l.id,emoji:l.emoji||'📁',label:l.name,builtin:l.builtin}));
+  return{smart,lists};
+}
+function srcInfo(id){const s=sources();return [...s.smart,...s.lists].find(x=>x.id===id)||s.smart[0]}
+function poolFor(src){
+  const W=D.words;
+  if(src.startsWith('list:')){const id=src.slice(5);return W.filter(w=>w.lists.includes(id))}
+  switch(src){
+    case 'due':return W.filter(isDue);
+    case 'problem':return W.filter(w=>['weak','unsure'].includes(status(w)));
+    case 'weak':return W.filter(w=>status(w)==='weak');
+    case 'unsure':return W.filter(w=>status(w)==='unsure');
+    case 'new':return W.filter(w=>status(w)==='new');
+    case 'star':return W.filter(w=>w.star);
+    default:return W;
+  }
+}
+function pickWords(pool,len){
+  const n=len>0?Math.min(len,pool.length):pool.length;
+  if(!D.settings.smart) return shuffle(pool).slice(0,n);
+  const now=Date.now();
+  const scored=pool.map(w=>{const tot=w.c+w.a+w.w,st=status(w);let p=(5-w.box)*2;if(!tot)p+=3;if(tot&&w.due<=now)p+=4;if(st==='weak')p+=5;if(st==='unsure')p+=2;return{w,p:p+Math.random()*5}});
+  scored.sort((a,b)=>b.p-a.p);
+  return shuffle(scored.slice(0,n).map(x=>x.w));
+}
+
+/* ===================== DOMŮ ===================== */
+function greeting(){const h=new Date().getHours();return h<10?'Buenos días':h<18?'Buenas tardes':'Buenas noches'}
+function wordOfDay(){const ws=D.words;if(!ws.length)return null;const h=[...dkey()].reduce((a,c)=>(a*31+c.charCodeAt(0))>>>0,7);return ws[h%ws.length]}
+function segHTML(key,opts){return `<div class="seg" data-key="${key}">${opts.map(([v,l])=>`<button type="button" data-v="${v}" class="${String(D.settings[key])===String(v)?'on':''}">${l}</button>`).join('')}</div>`}
+function bindSegs(root,cb){$$('.seg[data-key]',root).forEach(seg=>{$$('button',seg).forEach(b=>b.onclick=()=>{const v=b.dataset.v;D.settings[seg.dataset.key]=isNaN(+v)?v:+v;save();$$('button',seg).forEach(x=>x.classList.toggle('on',x===b));cb&&cb(seg.dataset.key)})})}
+
+function renderHome(){
+  const s=D.settings,t=D.days[dkey()]||{c:0,a:0,w:0},done=t.c+t.a+t.w,goal=s.dailyGoal,pct=Math.min(1,done/goal);
+  const cs=countStatus(D.words),due=D.words.filter(isDue).length,prob=cs.weak+cs.unsure;
+  if(s.source.startsWith('list:')&&!listById(s.source.slice(5))) s.source='all';
+  const src=srcInfo(s.source),srcN=poolFor(s.source).length,wod=wordOfDay();
+  const C=2*Math.PI*33;
+  $('#view-home').innerHTML=`
+  <header class="top"><div><div class="sub">${greeting()}</div><h1>Španělština</h1></div><div class="streak" title="Dní v řadě">🔥 ${streak()}</div></header>
+  <div class="card goal">
+    <svg class="ring" viewBox="0 0 78 78"><circle cx="39" cy="39" r="33" stroke="var(--surface2)"/><circle cx="39" cy="39" r="33" stroke="${pct>=1?'var(--good)':'var(--accent)'}" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-pct)}" transform="rotate(-90 39 39)"/><text x="39" y="44" text-anchor="middle" font-size="16" font-weight="800" fill="var(--text)">${Math.round(pct*100)}%</text></svg>
+    <div><h2>${pct>=1?'Dnešní cíl splněn 🎉':'Dnešní cíl'}</h2><div class="sub">${done} z ${goal} odpovědí · úspěšnost ${done?Math.round((t.c+.5*t.a)/done*100):0} %</div></div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><b>${D.words.length}</b><span>slovíček</span></div>
+    <div class="kpi"><b style="color:var(--good)">${cs.known}</b><span>umím</span></div>
+    <div class="kpi"><b style="color:var(--accent)">${due}</b><span>k opakování</span></div>
+  </div>
+  <div class="card">
+    <div class="lbl">Co procvičit</div>
+    <button class="srcbtn" id="srcBtn"><span>${src.emoji}</span><span>${esc(src.label)}</span><span class="n">${srcN} ›</span></button>
+    <div class="lbl">Způsob</div>
+    ${segHTML('mode',[['cards','🃏 Kartičky'],['type','⌨️ Psaní'],['choice','🔘 Výběr']])}
+    <div class="lbl">Směr</div>
+    ${segHTML('dir',[['es-cz','🇪🇸 → 🇨🇿'],['cz-es','🇨🇿 → 🇪🇸'],['mix','🔀 Mix']])}
+    <div class="lbl">Počet slovíček</div>
+    ${segHTML('len',[[10,'10'],[20,'20'],[50,'50'],[0,'Vše']])}
+    <button class="btn primary big" id="startBtn">Začít procvičovat</button>
+  </div>
+  <div class="quick">
+    <button class="qbtn" data-q="due"><b>🔁 Opakování</b><span>${due} ${plural(due,'slovo čeká','slova čekají','slov čeká')}</span></button>
+    <button class="qbtn" data-q="problem"><b>⚠️ Slabá místa</b><span>${prob} neumím / nejistých</span></button>
+    <button class="qbtn" data-q="new"><b>🆕 Nová slova</b><span>${cs.new} ještě neprocvičených</span></button>
+    <button class="qbtn" data-q="star"><b>⭐ Oblíbená</b><span>${D.words.filter(w=>w.star).length} označených</span></button>
+  </div>
+  ${wod?`<div class="card wod tile"><div style="opacity:.85;font-size:.9rem">Slovo dne</div><div class="w">${esc(wod.es)}</div><div>${esc(wod.cz)}</div><button class="spk" id="wodSpk" aria-label="Přehrát">🔊</button></div>`:''}`;
+  bindSegs($('#view-home'));
+  $('#srcBtn').onclick=sourceSheet;
+  $('#startBtn').onclick=()=>startSession();
+  $$('.qbtn').forEach(b=>b.onclick=()=>startSession({src:b.dataset.q}));
+  if(wod) $('#wodSpk').onclick=()=>speak(wod.es);
+}
+function sourceSheet(){
+  const s=sources(),cur=D.settings.source;
+  const btn=x=>`<button data-src="${x.id}" class="${x.id===cur?'on':''}"><span>${x.emoji}</span><span>${esc(x.label)}</span><span class="n">${poolFor(x.id).length}</span></button>`;
+  const mine=s.lists.filter(x=>!x.builtin),themes=s.lists.filter(x=>x.builtin);
+  openSheet(`<h3>Co procvičit</h3>
+    <div class="opt-list">${s.smart.map(btn).join('')}</div>
+    <div class="gtitle">Moje seznamy</div>
+    ${mine.length?`<div class="opt-list">${mine.map(btn).join('')}</div>`:`<div class="sub" style="padding:0 4px">Zatím žádné. Vytvoř si seznam v záložce Slovník → Seznamy.</div>`}
+    <div class="gtitle">Témata</div><div class="opt-list">${themes.map(btn).join('')}</div>`,
+  r=>$$('[data-src]',r).forEach(b=>b.onclick=()=>{D.settings.source=b.dataset.src;save();closeSheet();renderHome()}));
+}
+
+/* ===================== PROCVIČOVÁNÍ ===================== */
+let S=null;
+const lbl=l=>l==='es'?'🇪🇸 Španělsky':'🇨🇿 Česky';
+function startSession(o={}){
+  const s=D.settings,src=o.src||s.source,mode=o.mode||s.mode,dir=o.dir||s.dir,len=o.len??s.len;
+  const pool=o.words||poolFor(src);
+  if(!pool.length) return toast(src==='due'?'Dnes nic k opakování nečeká 👌':'V tomto výběru nejsou žádná slovíčka');
+  if(mode==='choice'&&D.words.length<4) return toast('Pro výběr ze 4 potřebuješ aspoň 4 slovíčka');
+  const words=pickWords(pool,len);
+  S={mode,src,dir,items:words.map(w=>({w,dir:dir==='mix'?(Math.random()<.5?'es-cz':'cz-es'):dir})),i:0,cnt:{c:0,a:0,w:0},results:[],undo:null,busy:false,t:Date.now(),retry:!!o.words};
+  $('#practice').hidden=false; document.body.classList.add('lock');
+  updateScore(); renderItem();
+}
+function updateScore(){if(!S)return;$('#scC').textContent=S.cnt.c;$('#scA').textContent=S.cnt.a;$('#scW').textContent=S.cnt.w;$('#pUndo').disabled=!S.undo||S.mode!=='cards'}
+function record(item,res){
+  const w=item.w;
+  S.undo={item,res,idx:S.i,snap:w?{c:w.c,a:w.a,w:w.w,box:w.box,due:w.due,recent:[...w.recent],last:w.last}:null};
+  if(w){
+    w[res]++; w.recent=[...w.recent,res].slice(-6); w.last=res;
+    w.box=res==='c'?Math.min(5,w.box+1):res==='w'?0:Math.max(0,w.box-1);
+    w.due=Date.now()+INTERVALS[w.box]*864e5;
+  }
+  const k=dkey(); (D.days[k]||(D.days[k]={c:0,a:0,w:0}))[res]++;
+  S.cnt[res]++; S.results.push({w,item,res,dir:item.dir,given:item.given||''});
+  save(); updateScore();
+}
+function unrecord(){
+  if(!S||!S.undo) return null;
+  const{item,res,idx,snap}=S.undo; if(item.w)Object.assign(item.w,snap);
+  const d=D.days[dkey()]; if(d&&d[res]>0)d[res]--;
+  S.cnt[res]--; S.results.pop(); S.undo=null; save(); updateScore(); return idx;
+}
+function closePractice(){
+  if(S&&S.results.length&&!S.saved) saveSession();
+  S=null; $('#practice').hidden=true; if($('#lesson').hidden)document.body.classList.remove('lock'); lessonFoot();
+  if('speechSynthesis' in window) speechSynthesis.cancel();
+  renderCurrent();
+}
+function saveSession(){S.saved=true;D.sessions.unshift({t:Date.now(),mode:S.mode,src:S.src,retry:S.retry,label:S.label||'',...S.cnt});D.sessions=D.sessions.slice(0,60);save()}
+$('#pClose').onclick=closePractice;
+$('#pUndo').onclick=()=>{if(S?.busy)return;const idx=unrecord();if(idx!=null){S.i=idx;renderItem()}};
+
+function renderItem(){
+  const n=S.items.length;
+  $('#pBar').style.width=(S.i/n*100)+'%';
+  $('#pCount').textContent=S.i<n?`${S.i+1} / ${n}`:`${n} / ${n}`;
+  if(S.i>=n) return finish();
+  if(S.mode==='gram'){S.busy=false;renderGram(S.items[S.i]);updateScore();return}
+  const item=S.items[S.i],w=item.w,pl=item.dir==='es-cz'?'es':'cz',al=pl==='es'?'cz':'es';
+  item.prompt=pl==='es'?w.es:w.cz; item.answer=al==='es'?w.es:w.cz; item.pl=pl; item.al=al; item.given='';
+  S.busy=false;
+  if(S.mode==='cards') renderCard(item); else if(S.mode==='type') renderType(item); else renderChoice(item);
+  updateScore();
+}
+
+/* --- kartičky se swipem --- */
+function renderCard(item){
+  const w=item.w,hasNext=S.i<S.items.length-1;
+  $('#pBody').innerHTML=`
+  <div class="edge l" id="edL"></div><div class="edge r" id="edR"></div><div class="edge u" id="edU"></div>
+  <div class="stage"><div class="deck">
+    ${hasNext?'<div class="peek"></div>':''}
+    <div class="fcard" id="fc">
+      <div class="stamp bad" id="stW">✗ ŠPATNĚ</div><div class="stamp good" id="stC">✓ SPRÁVNĚ</div><div class="stamp unsure" id="stA">? NEJISTÉ</div>
+      <div class="fc-inner">
+        <div class="face front"><div class="lang">${lbl(item.pl)}</div><div class="word">${esc(item.prompt)}</div>${item.pl==='es'?'<button class="spk nodrag" data-say="es">🔊</button>':''}<div class="hint">Klepnutím otočíš</div></div>
+        <div class="face back"><div class="lang">${lbl(item.al)}</div><div class="word">${esc(item.answer)}</div><div class="orig">${esc(item.prompt)}</div>${w.note?`<div class="note">${esc(w.note)}</div>`:''}<button class="spk nodrag" data-say="es">🔊</button></div>
+      </div>
+    </div>
+  </div></div>
+  <div class="legend"><span class="bad">← Špatně</span><span class="warn">↑ Nejisté</span><span class="good">Správně →</span></div>
+  <div class="actions"><button class="round bad" data-r="w" aria-label="Špatně">✗</button><button class="round warn sm" data-r="a" aria-label="Nejisté">?</button><button class="round good" data-r="c" aria-label="Správně">✓</button></div>`;
+  const fc=$('#fc');
+  $$('[data-say]',fc).forEach(b=>{b.addEventListener('pointerdown',e=>e.stopPropagation());b.onclick=e=>{e.stopPropagation();speak(w.es)}});
+  $$('.actions [data-r]').forEach(b=>b.onclick=()=>fly(b.dataset.r));
+  bindDrag(fc);
+  if(D.settings.autoSpeak&&item.pl==='es') speak(w.es);
+}
+function flip(){const fc=$('#fc');if(!fc)return;fc.classList.toggle('flipped');const it=S.items[S.i];if(fc.classList.contains('flipped')&&D.settings.autoSpeak&&it.al==='es')speak(it.w.es)}
+function setDragFx(dx,dy){
+  const T=110,r=Math.max(0,Math.min(1,dx/T)),l=Math.max(0,Math.min(1,-dx/T)),u=(-dy>Math.abs(dx))?Math.max(0,Math.min(1,-dy/T)):0;
+  $('#stC').style.opacity=r;$('#stW').style.opacity=l;$('#stA').style.opacity=u;
+  $('#edR').style.opacity=r;$('#edL').style.opacity=l;$('#edU').style.opacity=u;
+}
+function bindDrag(fc){
+  let sx=0,sy=0,dx=0,dy=0,down=false,pid=null;
+  fc.addEventListener('pointerdown',e=>{if(S.busy||e.target.closest('.nodrag'))return;down=true;pid=e.pointerId;try{fc.setPointerCapture(pid)}catch(_){}sx=e.clientX;sy=e.clientY;dx=dy=0;fc.style.transition='none'});
+  fc.addEventListener('pointermove',e=>{if(!down||e.pointerId!==pid)return;dx=e.clientX-sx;dy=e.clientY-sy;fc.style.transform=`translate(${dx}px,${dy}px) rotate(${dx/18}deg)`;setDragFx(dx,dy)});
+  const end=()=>{
+    if(!down)return;down=false;fc.style.transition='';
+    const T=100;
+    if(Math.abs(dx)<8&&Math.abs(dy)<8){fc.style.transform='';setDragFx(0,0);flip();return}
+    if(dx>T&&Math.abs(dx)>=-dy)fly('c',dx,dy);
+    else if(dx<-T&&Math.abs(dx)>=-dy)fly('w',dx,dy);
+    else if(-dy>T&&-dy>Math.abs(dx))fly('a',dx,dy);
+    else{fc.style.transform='';setDragFx(0,0)}
+  };
+  fc.addEventListener('pointerup',end);
+  fc.addEventListener('pointercancel',()=>{down=false;fc.style.transition='';fc.style.transform='';setDragFx(0,0)});
+}
+function fly(res,dx=0,dy=0){
+  if(S.busy)return;S.busy=true;
+  const fc=$('#fc'),W=innerWidth*1.3;
+  setDragFx(res==='c'?200:res==='w'?-200:0,res==='a'?-200:0);
+  const x=res==='c'?W:res==='w'?-W:dx,y=res==='a'?-innerHeight:dy;
+  fc.style.transition='transform .38s ease-in,opacity .38s';
+  fc.style.transform=`translate(${x}px,${y}px) rotate(${x/22}deg)`;fc.style.opacity='0';
+  record(S.items[S.i],res);
+  setTimeout(()=>{if(!S)return;S.i++;renderItem()},300);
+}
+
+/* --- psaní --- */
+function renderType(item){
+  typingUI(item,{card:`<div class="tcard"><div class="lang">${lbl(item.pl)}</div><div class="word">${esc(item.prompt)}</div>${item.pl==='es'?'<button class="spk" id="tSpk" aria-label="Přehrát">🔊</button>':''}</div>`,
+    answer:item.answer,placeholder:`Napiš ${item.al==='es'?'španělsky':'česky'}…`,say:item.w.es});
+}
+function typingUI(item,o){
+  $('#pBody').innerHTML=`${o.card}
+  <input id="ans" class="ans" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="go" placeholder="${esc(o.placeholder)}">
+  ${charbarHTML()}
+  <div class="fb" id="fb"></div>
+  <div class="t-actions"><button class="btn" id="dunno">Nevím</button><button class="btn primary" id="check">Zkontrolovat</button></div>
+  <button class="btn ghost block" id="accept" hidden>Uznat jako správně</button>`;
+  const inp=$('#ans'),chk=$('#check'),dn=$('#dunno'),acc=$('#accept');let done=false,g=null;
+  const note=o.note?`<div class="gnote">${o.note}</div>`:'';
+  bindCharbar($('#pBody'),()=>inp);
+  [chk,dn,acc].forEach(keepFocus);
+  if($('#tSpk')){keepFocus($('#tSpk'));$('#tSpk').onclick=()=>speak(o.say)}
+  const next=()=>{S.i++;renderItem()};
+  const show=()=>{
+    const fb=$('#fb'),ans=esc(o.answer);
+    inp.classList.remove('ok','almost','wrong');
+    if(g.res==='c'){inp.classList.add('ok');fb.innerHTML=`<span class="v good">✓ Správně!</span>${o.answer!==inp.value.trim()?`<span class="sub">${ans}</span>`:''}${note}`}
+    else if(g.res==='a'){inp.classList.add('almost');fb.innerHTML=`<span class="v warn">≈ Skoro! Překlep v ${g.d} ${plural(g.d,'znaku','znacích','znacích')}</span>Správně: <b>${diffHTML(g.user,g.target)}</b>${variants(o.answer).length>1?`<div class="sub">${ans}</div>`:''}${note}`}
+    else{inp.classList.add('wrong');fb.innerHTML=`<span class="v bad">✗ ${inp.value.trim()?'Špatně':'Nevadí, příště'}</span>Správně: <b>${ans}</b>${note}`}
+    chk.textContent='Další'; dn.hidden=true; acc.hidden=g.res==='c';
+    if(o.say&&D.settings.autoSpeak) speak(o.say);
+  };
+  const check=()=>{if(done)return next();done=true;item.given=inp.value;g=grade(inp.value,o.answer,o.gopts);record(item,g.res);show()};
+  chk.onclick=check;
+  dn.onclick=()=>{if(done)return;inp.value='';check()};
+  acc.onclick=()=>{unrecord();record(item,'c');g={...g,res:'c'};acc.hidden=true;inp.classList.remove('almost','wrong');inp.classList.add('ok');$('#fb').innerHTML=`<span class="v good">✓ Uznáno</span><span class="sub">${esc(o.answer)}</span>${note}`};
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();check()}});
+  inp.focus();
+}
+
+/* --- výběr ze 4 --- */
+function renderChoice(item){
+  const w=item.w,f=item.al==='es'?'es':'cz';
+  const cand=D.words.filter(x=>x.id!==w.id&&norm(x[f])!==norm(w[f]));
+  const same=cand.filter(x=>x.lists.some(l=>w.lists.includes(l)));
+  const src=same.length>=3?same:cand;
+  const opts=shuffle([w,...shuffle(src).slice(0,3)]);
+  $('#pBody').innerHTML=`
+  <div class="tcard"><div class="lang">${lbl(item.pl)}</div><div class="word">${esc(item.prompt)}</div>${item.pl==='es'?'<button class="spk" id="tSpk">🔊</button>':''}</div>
+  <div class="opts">${opts.map(o=>`<button class="opt" data-id="${o.id}">${esc(o[f])}</button>`).join('')}</div>
+  <div class="fb" id="fb" style="margin-top:12px"></div>
+  <button class="btn primary block" id="cNext" hidden>Další</button>`;
+  if($('#tSpk'))$('#tSpk').onclick=()=>speak(w.es);
+  if(D.settings.autoSpeak&&item.pl==='es')speak(w.es);
+  const next=()=>{S.i++;renderItem()};
+  $$('.opt').forEach(b=>b.onclick=()=>{
+    if(S.busy)return;S.busy=true;
+    const ok=b.dataset.id===w.id;
+    $$('.opt').forEach(x=>{x.disabled=true;if(x.dataset.id===w.id)x.classList.add('good')});
+    if(!ok)b.classList.add('bad');
+    item.given=b.textContent; record(item,ok?'c':'w');
+    if(ok){setTimeout(()=>{if(S&&S.items[S.i]===item)next()},750)}
+    else{$('#fb').innerHTML=`<span class="v bad">✗ Správně je: ${esc(item.answer)}</span>`;$('#cNext').hidden=false;$('#cNext').onclick=next}
+  });
+}
+
+/* --- konec session --- */
+function finish(){
+  const{c,a,w}=S.cnt,tot=c+a+w,pct=tot?Math.round((c+.5*a)/tot*100):0,isG=S.mode==='gram';
+  if(!S.saved&&tot) saveSession();
+  if(isG&&S.lid&&!S.retry&&!S.progSaved){S.progSaved=true;const g=D.gram[S.lid]||{best:0,n:0};g.best=Math.max(g.best,pct);g.last=pct;g.n++;D.gram[S.lid]=g;save()}
+  S.undo=null; updateScore();
+  const miss=[],seen=new Set();
+  S.results.filter(r=>r.res!=='c').forEach(r=>{const k=r.w?r.w.id:r.item.key;if(!seen.has(k)){seen.add(k);miss.push(r)}});
+  const emoji=pct>=90?'🏆':pct>=70?'🎉':pct>=50?'💪':'📚';
+  const msg=pct>=90?'¡Excelente!':pct>=70?'¡Muy bien!':pct>=50?'Dobrá práce':'Opakování dělá mistra';
+  const row=r=>isG?`<div class="mini"><span><span class="dot ${r.res==='a'?'unsure':'weak'}" style="display:inline-block;margin-right:8px"></span>${esc(r.item.plain)}</span><span><b style="color:var(--text)">${esc(r.item.a)}</b></span></div>`
+    :`<div class="mini"><span><span class="dot ${r.res==='a'?'unsure':'weak'}" style="display:inline-block;margin-right:8px"></span><b>${esc(r.w.es)}</b></span><span>${esc(r.w.cz)}</span></div>`;
+  $('#pBody').innerHTML=`<div class="result">
+    <div class="big">${emoji}</div><h1 style="font-size:1.9rem;margin:6px 0 2px">${msg}</h1>
+    <div class="sub">Úspěšnost ${pct} % z ${tot} ${isG?plural(tot,'cvičení','cvičení','cvičení'):plural(tot,'slovíčka','slovíček','slovíček')}</div>
+    <div class="p-score" style="margin:16px 0"><span class="pill good">✓ ${c} správně</span><span class="pill warn">≈ ${a}</span><span class="pill bad">✗ ${w} špatně</span></div>
+    ${miss.length?`<div class="card res-list"><h2>K zopakování</h2>${miss.map(row).join('')}</div>`:''}
+    ${miss.length?`<button class="btn primary big" id="rMiss">Procvičit chyby (${miss.length})</button>`:''}
+    <button class="btn block" id="rAgain" style="margin-top:10px">Nové kolo</button>
+    <button class="btn ghost block" id="rDone">Hotovo</button>
+  </div>`;
+  const mode=S.mode,src=S.src,dir=S.dir,regen=S.regen,label=S.label;
+  if(miss.length)$('#rMiss').onclick=()=>isG?startGram(miss.map(r=>r.item),{src,label,regen,retry:true}):startSession({words:miss.map(r=>r.w),len:0,mode,dir,src});
+  $('#rAgain').onclick=()=>isG?regen():startSession({src,mode,dir});
+  $('#rDone').onclick=closePractice;
+}
+document.addEventListener('keydown',e=>{
+  if(!S||$('#practice').hidden||!$('#sheet').hidden)return;
+  if(S.mode==='cards'&&$('#fc')){
+    if(e.key==='ArrowRight')fly('c');else if(e.key==='ArrowLeft')fly('w');else if(e.key==='ArrowUp')fly('a');else if(e.key===' '){e.preventDefault();flip()}
+  }
+  if(e.key==='Escape')closePractice();
+});
+
+/* ===================== SLOVNÍK ===================== */
+const dict={tab:'words',filter:'all',q:'',sort:'az',sel:false,picked:new Set(),limit:150};
+const sortKey=s=>fold(s.replace(/^[¿¡]/,'').replace(ART,''));
+function filteredWords(){
+  let ws=D.words;const f=dict.filter;
+  if(f==='star')ws=ws.filter(w=>w.star);
+  else if(f==='none')ws=ws.filter(w=>!w.lists.length);
+  else if(f.startsWith('st:'))ws=ws.filter(w=>status(w)===f.slice(3));
+  else if(f.startsWith('l:'))ws=ws.filter(w=>w.lists.includes(f.slice(2)));
+  if(dict.q){const q=fold(dict.q.trim());ws=ws.filter(w=>fold(w.es).includes(q)||fold(w.cz).includes(q))}
+  const acc=w=>{const n=w.c+w.a+w.w;return n?(w.c+.5*w.a)/n:2};
+  if(dict.sort==='az')ws=[...ws].sort((a,b)=>sortKey(a.es).localeCompare(sortKey(b.es),'es'));
+  else if(dict.sort==='cz')ws=[...ws].sort((a,b)=>a.cz.localeCompare(b.cz,'cs'));
+  else if(dict.sort==='worst')ws=[...ws].sort((a,b)=>acc(a)-acc(b)||b.w-a.w);
+  else if(dict.sort==='new')ws=[...ws].sort((a,b)=>b.t-a.t);
+  return ws;
+}
+function renderDict(){
+  const v=$('#view-dict');
+  if(dict.filter.startsWith('l:')&&!listById(dict.filter.slice(2)))dict.filter='all';
+  v.innerHTML=`<header class="top"><h1>Slovník</h1></header>
+  <div class="seg" id="dictSeg" style="margin-bottom:12px"><button data-t="words" class="${dict.tab==='words'?'on':''}">Slovíčka</button><button data-t="lists" class="${dict.tab==='lists'?'on':''}">Seznamy</button></div>
+  <div id="dictBody"></div>`;
+  $$('#dictSeg button').forEach(b=>b.onclick=()=>{dict.tab=b.dataset.t;dict.sel=false;dict.picked.clear();renderDict()});
+  dict.tab==='words'?renderWordsTab():renderListsTab();
+}
+function renderWordsTab(){
+  const chips=[['all','Vše'],['star','⭐ Oblíbená'],['st:weak','❌ Neumím'],['st:unsure','🤔 Nejistá'],['st:known','✅ Umím'],['st:new','🆕 Nová'],...D.lists.filter(l=>!l.builtin).map(l=>['l:'+l.id,(l.emoji||'📁')+' '+l.name]),...D.lists.filter(l=>l.builtin).map(l=>['l:'+l.id,(l.emoji||'📁')+' '+l.name])];
+  $('#dictBody').innerHTML=`
+  <input type="search" id="q" placeholder="Hledat španělsky nebo česky" value="${esc(dict.q)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <div class="chips" id="chips" style="margin-top:10px">${chips.map(([id,l])=>`<button class="chip ${dict.filter===id?'on':''}" data-f="${id}">${esc(l)}</button>`).join('')}</div>
+  <div class="toolbar"><span id="wcount"></span><span style="display:flex;gap:6px;align-items:center">
+    <select id="sort" aria-label="Řazení"><option value="az">A–Z 🇪🇸</option><option value="cz">A–Z 🇨🇿</option><option value="worst">Nejhorší</option><option value="new">Nejnovější</option></select>
+    <button class="linkbtn" id="selBtn">${dict.sel?'Zrušit':'Vybrat'}</button></span></div>
+  <div id="wlist"></div>
+  ${dict.sel?'':'<button class="fab" id="fab" aria-label="Přidat slovíčko">+</button>'}
+  <div id="selbarWrap"></div>`;
+  $('#sort').value=dict.sort;
+  $('#sort').onchange=e=>{dict.sort=e.target.value;renderWordList()};
+  $('#q').oninput=e=>{dict.q=e.target.value;dict.limit=150;renderWordList()};
+  $$('#chips .chip').forEach(b=>b.onclick=()=>{dict.filter=b.dataset.f;dict.limit=150;$$('#chips .chip').forEach(x=>x.classList.toggle('on',x===b));renderWordList()});
+  $('#selBtn').onclick=()=>{dict.sel=!dict.sel;dict.picked.clear();renderWordsTab()};
+  if($('#fab'))$('#fab').onclick=()=>addSheet();
+  renderWordList();
+}
+function renderWordList(){
+  const ws=filteredWords(),box=$('#wlist');if(!box)return;
+  $('#wcount').textContent=`${ws.length} ${plural(ws.length,'slovíčko','slovíčka','slovíček')}`;
+  if(!ws.length){box.innerHTML=`<div class="empty">${dict.q?'Nic nenalezeno. Zkus jiné slovo nebo ho přidej tlačítkem +.':'Tady zatím nic není.'}</div>`;renderSelbar();return}
+  const shown=ws.slice(0,dict.limit);
+  box.innerHTML=`<div class="wlist">${shown.map(w=>`<div class="wrow ${dict.picked.has(w.id)?'picked':''}" data-id="${w.id}">${dict.sel?'<span class="chk">✓</span>':`<span class="dot ${status(w)}"></span>`}<div class="wt"><b>${esc(w.es)}</b><span>${esc(w.cz)}</span></div>${dict.sel?'':`<button class="star ${w.star?'on':''}" data-star="${w.id}" aria-label="Oblíbené">★</button>`}</div>`).join('')}</div>
+  ${ws.length>dict.limit?`<button class="btn block" id="more">Zobrazit další (${ws.length-dict.limit})</button>`:''}`;
+  $$('.wrow',box).forEach(r=>r.onclick=e=>{
+    const id=r.dataset.id;
+    if(e.target.closest('[data-star]')){const w=D.words.find(x=>x.id===id);w.star=!w.star;save();e.target.classList.toggle('on',w.star);return}
+    if(dict.sel){dict.picked.has(id)?dict.picked.delete(id):dict.picked.add(id);r.classList.toggle('picked');renderSelbar();return}
+    editSheet(id);
+  });
+  if($('#more'))$('#more').onclick=()=>{dict.limit+=300;renderWordList()};
+  renderSelbar();
+}
+function renderSelbar(){
+  const wrap=$('#selbarWrap');if(!wrap)return;
+  if(!dict.sel){wrap.innerHTML='';return}
+  const n=dict.picked.size,inList=dict.filter.startsWith('l:');
+  wrap.innerHTML=`<div class="selbar"><b>${n} vybráno</b><button id="sAll">Vše</button><button id="sList" ${n?'':'disabled'}>Do seznamu</button>${inList?`<button id="sRem" ${n?'':'disabled'}>Odebrat</button>`:''}<button id="sPlay" ${n?'':'disabled'}>▶</button><button id="sDel" ${n?'':'disabled'}>🗑</button></div>`;
+  $('#sAll').onclick=()=>{const ws=filteredWords();if(dict.picked.size===ws.length)dict.picked.clear();else ws.forEach(w=>dict.picked.add(w.id));renderWordList()};
+  $('#sList').onclick=()=>pickListSheet([...dict.picked]);
+  $('#sPlay').onclick=()=>startSession({words:D.words.filter(w=>dict.picked.has(w.id)),len:0});
+  $('#sDel').onclick=()=>{if(!confirm(`Opravdu smazat ${n} ${plural(n,'slovíčko','slovíčka','slovíček')}?`))return;D.words=D.words.filter(w=>!dict.picked.has(w.id));dict.picked.clear();save();toast('Smazáno');renderWordList()};
+  if(inList)$('#sRem').onclick=()=>{const lid=dict.filter.slice(2);D.words.forEach(w=>{if(dict.picked.has(w.id))w.lists=w.lists.filter(x=>x!==lid)});dict.picked.clear();save();toast('Odebráno ze seznamu');renderWordList()};
+}
+function pickListSheet(ids){
+  openSheet(`<h3>Přidat ${ids.length} do seznamu</h3>
+  <div class="row" style="margin-bottom:12px"><input type="text" id="nlName" placeholder="Nový seznam, např. Test pátek"><button class="btn primary" id="nlGo" style="flex:none">Vytvořit</button></div>
+  <div class="opt-list">${D.lists.map(l=>`<button data-l="${l.id}"><span>${l.emoji||'📁'}</span><span>${esc(l.name)}</span></button>`).join('')}</div>`,r=>{
+    const add=lid=>{D.words.forEach(w=>{if(ids.includes(w.id)&&!w.lists.includes(lid))w.lists.push(lid)});save();closeSheet();dict.sel=false;dict.picked.clear();toast(`Přidáno do „${listById(lid).name}“`);renderDict()};
+    $$('[data-l]',r).forEach(b=>b.onclick=()=>add(b.dataset.l));
+    $('#nlGo',r).onclick=()=>{const n=$('#nlName').value.trim();if(!n)return toast('Napiš název seznamu');const l={id:uid(),name:n,emoji:'📝'};D.lists.push(l);add(l.id)};
+  });
+}
+function listChipsHTML(sel){return `<div class="lchips" id="lchips">${D.lists.map(l=>`<button type="button" data-l="${l.id}" class="${sel.includes(l.id)?'on':''}">${l.emoji||'📁'} ${esc(l.name)}</button>`).join('')}</div>`}
+function bindListChips(r){$$('#lchips button',r).forEach(b=>b.onclick=()=>b.classList.toggle('on'))}
+const chosenLists=r=>$$('#lchips button.on',r).map(b=>b.dataset.l);
+function wordForm(w){return `
+  <div class="lbl">Španělsky</div><input type="text" id="eEs" value="${esc(w?.es)}" placeholder="např. el perro" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <div class="lbl">Česky</div><input type="text" id="eCz" value="${esc(w?.cz)}" placeholder="např. pes" autocomplete="off" spellcheck="false">
+  ${charbarHTML()}
+  <div class="sub">Víc významů odděl čárkou (dům, domov). Text v závorce je jen nápověda a při psaní se nekontroluje.</div>
+  <div class="lbl">Poznámka</div><input type="text" id="eNote" value="${esc(w?.note)}" placeholder="nepovinné, např. nepravidelné sloveso">
+  <div class="lbl">Seznamy</div>${listChipsHTML(w?w.lists:(dict.filter.startsWith('l:')?[dict.filter.slice(2)]:[]))}`}
+function bindWordForm(r){let last=$('#eEs',r);['#eEs','#eCz','#eNote'].forEach(s=>$(s,r).addEventListener('focus',e=>last=e.target));bindCharbar(r,()=>last);bindListChips(r)}
+function addSheet(){
+  openSheet(`<h3>Nové slovíčko</h3>${wordForm(null)}
+  <div class="t-actions" style="margin-top:18px"><button class="btn" id="aMore">Uložit a další</button><button class="btn primary" id="aSave">Uložit</button></div>
+  <button class="btn ghost block" id="aBulk">Přidat víc najednou (vložit seznam)</button>`,r=>{
+    bindWordForm(r);
+    const save1=()=>{const es=$('#eEs').value.trim(),cz=$('#eCz').value.trim();if(!es||!cz){toast('Vyplň španělsky i česky');return false}
+      const ex=D.words.find(w=>w.es.toLowerCase()===es.toLowerCase());
+      if(ex&&!confirm(`„${ex.es}“ už ve slovníku je (${ex.cz}). Přidat i tak?`))return false;
+      D.words.push(newWord(es,cz,$('#eNote').value,chosenLists(r)));save();toast('Uloženo ✓');return true};
+    $('#aSave').onclick=()=>{if(save1()){closeSheet();renderCurrent()}};
+    $('#aMore').onclick=()=>{if(save1()){$('#eEs').value='';$('#eCz').value='';$('#eNote').value='';$('#eEs').focus();renderWordList()}};
+    $('#aBulk').onclick=()=>bulkSheet(dict.filter.startsWith('l:')?dict.filter.slice(2):'');
+  });
+}
+function editSheet(id){
+  const w=D.words.find(x=>x.id===id);if(!w)return;
+  const n=w.c+w.a+w.w,st={known:'✅ Umím',unsure:'🤔 Nejisté',weak:'❌ Neumím',new:'🆕 Nové'}[status(w)];
+  openSheet(`<div class="row" style="align-items:center"><h3 style="flex:1;margin:4px 0">Upravit slovíčko</h3><button class="star ${w.star?'on':''}" id="eStar" style="flex:none;font-size:1.6rem">★</button><button class="icon-btn" id="eSpk" style="flex:none">🔊</button></div>
+  ${wordForm(w)}
+  <div class="wstats"><span class="pill">${st}</span><span class="pill good">✓ ${w.c}</span><span class="pill warn">≈ ${w.a}</span><span class="pill bad">✗ ${w.w}</span>${n?`<span class="pill">${Math.round((w.c+.5*w.a)/n*100)} %</span>`:''}</div>
+  <div class="t-actions" style="margin-top:18px"><button class="btn danger" id="eDel">Smazat</button><button class="btn primary" id="eSave">Uložit</button></div>
+  ${n?'<button class="btn ghost block" id="eReset">Vynulovat statistiku slovíčka</button>':''}`,r=>{
+    bindWordForm(r);
+    $('#eStar').onclick=e=>{w.star=!w.star;e.target.classList.toggle('on',w.star);save()};
+    $('#eSpk').onclick=()=>speak($('#eEs').value||w.es);
+    $('#eSave').onclick=()=>{const es=$('#eEs').value.trim(),cz=$('#eCz').value.trim();if(!es||!cz)return toast('Vyplň španělsky i česky');Object.assign(w,{es,cz,note:$('#eNote').value.trim(),lists:chosenLists(r)});save();closeSheet();toast('Uloženo ✓');renderCurrent()};
+    $('#eDel').onclick=()=>{if(!confirm(`Smazat „${w.es}“?`))return;D.words=D.words.filter(x=>x!==w);save();closeSheet();toast('Smazáno');renderCurrent()};
+    if($('#eReset'))$('#eReset').onclick=()=>{Object.assign(w,{c:0,a:0,w:0,box:0,due:0,recent:[],last:null});save();closeSheet();toast('Statistika vynulována');renderCurrent()};
+  });
+}
+function parseBulk(txt){
+  const out=[];
+  txt.split(/\r?\n/).forEach(line=>{
+    line=line.trim();if(!line)return;
+    let m=line.match(/^(.+?)\s*(?:\t|\s[-–—]\s|\s*=\s*|\s*;\s*|\s*:\s+)\s*(.+)$/);
+    if(!m)m=line.match(/^(.+?)\s*[-–—]\s*(.+)$/);
+    if(m&&m[1].trim()&&m[2].trim())out.push([m[1].trim(),m[2].trim()]);
+  });
+  return out;
+}
+function bulkSheet(preList='',newMode=false){
+  openSheet(`<h3>${newMode?'Nový seznam':'Přidat víc slovíček'}</h3>
+  ${newMode?`<div class="lbl">Název seznamu</div><div class="row"><input type="text" id="bEmoji" value="📝" style="flex:0 0 64px;text-align:center" maxlength="4"><input type="text" id="bName" placeholder="např. Slovíčka na test"></div>`
+  :`<div class="lbl">Do seznamu</div><select id="bList"><option value="">Bez seznamu</option>${D.lists.map(l=>`<option value="${l.id}" ${l.id===preList?'selected':''}>${l.emoji||'📁'} ${esc(l.name)}</option>`).join('')}</select>`}
+  <div class="lbl">Slovíčka – každé na nový řádek</div>
+  <textarea id="bTxt" placeholder="el perro - pes&#10;la casa - dům, domov&#10;hablar = mluvit" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+  ${charbarHTML()}
+  <div class="sub" id="bPrev">Formát: španělsky - česky. Oddělovač může být i =, ; nebo tabulátor (kopie z Excelu).${newMode?' Seznam můžeš vytvořit i prázdný a slova do něj přidat později.':''}</div>
+  <button class="btn primary big" id="bGo">${newMode?'Vytvořit seznam':'Přidat slovíčka'}</button>`,r=>{
+    const ta=$('#bTxt');bindCharbar(r,()=>ta);
+    ta.oninput=()=>{const n=parseBulk(ta.value).length;$('#bPrev').textContent=n?`Rozpoznáno ${n} ${plural(n,'slovíčko','slovíčka','slovíček')}`:'Formát: španělsky - česky'};
+    $('#bGo').onclick=()=>{
+      let lid='';
+      if(newMode){const name=$('#bName').value.trim();if(!name)return toast('Napiš název seznamu');const l={id:uid(),name,emoji:$('#bEmoji').value.trim()||'📝'};D.lists.push(l);lid=l.id}
+      else lid=$('#bList').value;
+      const pairs=parseBulk(ta.value);
+      if(!newMode&&!pairs.length)return toast('Nic nerozpoznáno – zkontroluj formát');
+      let added=0,linked=0;
+      pairs.forEach(([es,cz])=>{const ex=D.words.find(w=>w.es.toLowerCase()===es.toLowerCase()&&fold(w.cz)===fold(cz))||D.words.find(w=>w.es.toLowerCase()===es.toLowerCase());
+        if(ex){if(lid&&!ex.lists.includes(lid)){ex.lists.push(lid);linked++}}else{D.words.push(newWord(es,cz,'',lid?[lid]:[]));added++}});
+      save();closeSheet();
+      toast(newMode&&!pairs.length?'Seznam vytvořen':`Přidáno ${added} nových${linked?`, ${linked} existujících přiřazeno`:''}`);
+      if(newMode){dict.tab='lists'}
+      renderCurrent();
+    };
+  });
+}
+function renderListsTab(){
+  const card=l=>{const ws=D.words.filter(w=>w.lists.includes(l.id)),c=countStatus(ws),n=ws.length||1;
+    return `<div class="lcard"><div class="lemoji">${l.emoji||'📁'}</div>
+    <button class="lbody" data-open="${l.id}"><span class="lname">${esc(l.name)}</span><span class="lmeta">${ws.length} ${plural(ws.length,'slovíčko','slovíčka','slovíček')} · umím ${c.known}</span>
+    <span class="mbar"><i style="width:${c.known/n*100}%;background:var(--good)"></i><i style="width:${c.unsure/n*100}%;background:var(--warn)"></i><i style="width:${c.weak/n*100}%;background:var(--bad)"></i></span></button>
+    <button class="lplay" data-play="${l.id}" aria-label="Procvičit">▶</button><button class="lmore" data-more="${l.id}" aria-label="Možnosti">⋯</button></div>`};
+  const mine=D.lists.filter(l=>!l.builtin),themes=D.lists.filter(l=>l.builtin);
+  $('#dictBody').innerHTML=`
+  <button class="btn primary block" id="newList" style="margin:0 0 6px">+ Nový seznam</button>
+  <div class="gtitle">Moje seznamy</div>
+  ${mine.length?mine.map(card).join(''):'<div class="card sub" style="margin-top:0">Vytvoř si seznam třeba „Slovíčka na test“ – vložíš do něj slova najednou, nebo je ve Slovíčkách označíš přes „Vybrat“.</div>'}
+  <div class="gtitle">Témata</div>${themes.map(card).join('')}`;
+  $('#newList').onclick=()=>bulkSheet('',true);
+  $$('[data-open]').forEach(b=>b.onclick=()=>{dict.tab='words';dict.filter='l:'+b.dataset.open;dict.q='';renderDict()});
+  $$('[data-play]').forEach(b=>b.onclick=()=>startSession({src:'list:'+b.dataset.play}));
+  $$('[data-more]').forEach(b=>b.onclick=()=>listSheet(b.dataset.more));
+}
+function listSheet(id){
+  const l=listById(id);if(!l)return;
+  openSheet(`<h3>${l.emoji||'📁'} ${esc(l.name)}</h3>
+  <div class="lbl">Název</div><div class="row"><input type="text" id="lEmoji" value="${esc(l.emoji||'📁')}" style="flex:0 0 64px;text-align:center" maxlength="4"><input type="text" id="lName" value="${esc(l.name)}"></div>
+  <button class="btn primary block" id="lSave">Uložit název</button>
+  <button class="btn block" id="lBulk">+ Vložit slovíčka do seznamu</button>
+  <button class="btn block" id="lShow">Zobrazit slovíčka</button>
+  <button class="btn block" id="lReset">Vynulovat statistiku seznamu</button>
+  <button class="btn danger block" id="lDel">Smazat seznam</button>`,r=>{
+    $('#lSave').onclick=()=>{const n=$('#lName').value.trim();if(!n)return;l.name=n;l.emoji=$('#lEmoji').value.trim()||'📁';save();closeSheet();renderDict()};
+    $('#lBulk').onclick=()=>bulkSheet(id);
+    $('#lShow').onclick=()=>{closeSheet();dict.tab='words';dict.filter='l:'+id;renderDict()};
+    $('#lReset').onclick=()=>{if(!confirm('Vynulovat statistiku všech slovíček v seznamu?'))return;D.words.forEach(w=>{if(w.lists.includes(id))Object.assign(w,{c:0,a:0,w:0,box:0,due:0,recent:[],last:null})});save();closeSheet();toast('Vynulováno');renderDict()};
+    $('#lDel').onclick=()=>{if(!confirm(`Smazat seznam „${l.name}“?`))return;
+      const alsoWords=confirm('Smazat i slovíčka, která nejsou v žádném jiném seznamu?\n\nOK = smazat i je, Zrušit = ponechat je ve slovníku');
+      const was=new Set(D.words.filter(w=>w.lists.includes(id)).map(w=>w.id));
+      D.words.forEach(w=>w.lists=w.lists.filter(x=>x!==id));
+      if(alsoWords)D.words=D.words.filter(w=>w.lists.length||!was.has(w.id));
+      D.lists=D.lists.filter(x=>x!==l);if(D.settings.source==='list:'+id)D.settings.source='all';save();closeSheet();toast('Seznam smazán');renderDict()};
+  });
+}
+
+/* ===================== STATISTIKY ===================== */
+function renderStats(){
+  const W=D.words,cs=countStatus(W),n=W.length||1;
+  const tot=Object.values(D.days).reduce((a,d)=>({c:a.c+d.c,a:a.a+d.a,w:a.w+d.w}),{c:0,a:0,w:0}),T=tot.c+tot.a+tot.w;
+  const days=[];for(let i=13;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const k=dkey(d),x=D.days[k]||{c:0,a:0,w:0};days.push({d,x,s:x.c+x.a+x.w,today:i===0})}
+  const max=Math.max(5,...days.map(d=>d.s)),DN=['Ne','Po','Út','St','Čt','Pá','So'];
+  const accW=w=>{const t=w.c+w.a+w.w;return t?Math.round((w.c+.5*w.a)/t*100):0};
+  const grp=(st,title,emoji,sortFn)=>{const ws=W.filter(w=>status(w)===st).sort(sortFn);return `<details class="grp"><summary>${emoji} ${title}<span class="n">${ws.length}</span></summary><div class="grp-body">
+    ${ws.length?`${ws.slice(0,60).map(w=>`<div class="mini"><span><b>${esc(w.es)}</b> <span class="muted">– ${esc(w.cz)}</span></span><span>${w.c}✓ ${w.w}✗</span></div>`).join('')}${ws.length>60?`<div class="sub" style="padding-top:8px">…a ${ws.length-60} dalších</div>`:''}<button class="btn primary block" data-prac="${st}">▶ Procvičit (${ws.length})</button>`:'<div class="sub">Zatím prázdné.</div>'}</div></details>`};
+  const top=W.filter(w=>w.w>0).sort((a,b)=>b.w-a.w||accW(a)-accW(b)).slice(0,8);
+  const MODE={cards:'🃏 Kartičky',type:'⌨️ Psaní',choice:'🔘 Výběr',gram:''};
+  $('#view-stats').innerHTML=`<header class="top"><h1>Statistiky</h1></header>
+  <div class="grid2">
+    <div class="kpi"><b>${T}</b><span>odpovědí celkem</span></div>
+    <div class="kpi"><b>${T?Math.round((tot.c+.5*tot.a)/T*100):0} %</b><span>úspěšnost</span></div>
+    <div class="kpi"><b>🔥 ${streak()}</b><span>${plural(streak(),'den','dny','dní')} v řadě</span></div>
+    <div class="kpi"><b>${D.sessions.length}</b><span>odehraných kol</span></div>
+  </div>
+  <div class="card"><h2>Posledních 14 dní</h2><div class="sub">správně ${tot.c} · skoro ${tot.a} · špatně ${tot.w}</div>
+    <div class="chart">${days.map(d=>`<div class="col ${d.today?'today':''}"><div class="colbar"><div class="stack" style="height:${d.s/max*100}%" title="${d.s}">${d.s?`<i style="flex:${d.x.c};background:var(--good)"></i><i style="flex:${d.x.a};background:var(--warn)"></i><i style="flex:${d.x.w};background:var(--bad)"></i>`:''}</div></div><small>${DN[d.d.getDay()]}</small></div>`).join('')}</div>
+  </div>
+  <div class="card"><h2>Stav slovní zásoby</h2>
+    <div class="bigbar"><i style="width:${cs.known/n*100}%;background:var(--good)"></i><i style="width:${cs.unsure/n*100}%;background:var(--warn)"></i><i style="width:${cs.weak/n*100}%;background:var(--bad)"></i></div>
+    <div class="legend2"><span style="--c:var(--good)">Umím ${cs.known}</span><span style="--c:var(--warn)">Nejistá ${cs.unsure}</span><span style="--c:var(--bad)">Neumím ${cs.weak}</span><span style="--c:var(--surface2)">Nová ${cs.new}</span></div>
+  </div>
+  ${grp('weak','Neumím','❌',(a,b)=>b.w-a.w)}
+  ${grp('unsure','Nejistá','🤔',(a,b)=>accW(a)-accW(b))}
+  ${grp('known','Umím','✅',(a,b)=>b.c-a.c)}
+  ${top.length?`<div class="card"><h2>Nejčastější chyby</h2>${top.map(w=>`<div class="mini"><span><b>${esc(w.es)}</b> <span class="muted">– ${esc(w.cz)}</span></span><span>${w.w}× špatně</span></div>`).join('')}<button class="btn block" id="topPrac" style="margin-top:10px">▶ Procvičit tyto</button></div>`:''}
+  ${D.sessions.length?`<div class="card"><h2>Poslední kola</h2>${D.sessions.slice(0,10).map(s=>{const t=s.c+s.a+s.w;return `<div class="sess"><span>${new Date(s.t).toLocaleDateString('cs-CZ',{day:'numeric',month:'numeric'})} ${new Date(s.t).toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})} · ${MODE[s.mode]||''}${s.label?esc(s.label):''}${s.retry?' · chyby':''}</span><b>${s.c}/${t} ${t?`(${Math.round((s.c+.5*s.a)/t*100)} %)`:''}</b></div>`}).join('')}</div>`:''}`;
+  $$('[data-prac]').forEach(b=>b.onclick=()=>startSession({src:b.dataset.prac,len:0}));
+  if($('#topPrac'))$('#topPrac').onclick=()=>startSession({words:top,len:0});
+}
+
+/* ===================== NASTAVENÍ ===================== */
+function sw(k){return `<label class="switch"><input type="checkbox" data-k="${k}" ${D.settings[k]?'checked':''}><i></i></label>`}
+function renderSettings(){
+  const s=D.settings;
+  $('#view-settings').innerHTML=`<header class="top"><h1>Nastavení</h1></header>
+  <div class="set-title">Vzhled</div>
+  <div class="set-group">
+    <div class="set-row col"><div class="t">Režim</div>${segHTML('theme',[['auto','Podle systému'],['light','☀️ Světlý'],['dark','🌙 Tmavý']])}</div>
+    <div class="set-row col"><div style="display:flex;justify-content:space-between"><span class="t">Velikost písma</span><span class="muted" id="fsVal">${Math.round(s.fontScale*100)} %</span></div>
+      <div class="row" style="gap:12px"><span style="flex:none;font-size:14px">A</span><input type="range" id="fs" min="0.85" max="1.4" step="0.05" value="${s.fontScale}"><span style="flex:none;font-size:24px;font-weight:700">A</span></div></div>
+  </div>
+  <div class="set-title">Procvičování</div>
+  <div class="set-group">
+    <div class="set-row"><div><div class="t">Chytré opakování</div><div class="d">Častěji dává slova, co neumíš nebo dlouho neviděl</div></div>${sw('smart')}</div>
+    <div class="set-row"><div><div class="t">Ignorovat členy</div><div class="d">„perro“ se uzná za „el perro“</div></div>${sw('ignoreArticles')}</div>
+    <div class="set-row"><div><div class="t">Tolerovat diakritiku</div><div class="d">Chybějící čárky a háčky nebudou brát jako chybu</div></div>${sw('tolerant')}</div>
+    <div class="set-row"><div><div class="t">Automatická výslovnost</div><div class="d">Přečte španělské slovo nahlas</div></div>${sw('autoSpeak')}</div>
+    <div class="set-row col"><div style="display:flex;justify-content:space-between"><span class="t">Rychlost výslovnosti</span><button class="linkbtn" id="ttsTest">🔊 Vyzkoušet</button></div><input type="range" id="tts" min="0.5" max="1.2" step="0.05" value="${s.ttsRate}"></div>
+    <div class="set-row col"><div class="t">Denní cíl (odpovědí)</div>${segHTML('dailyGoal',[[10,'10'],[20,'20'],[50,'50'],[100,'100']])}</div>
+  </div>
+  <div class="set-title">Data a záloha</div>
+  <div class="set-group">
+    <button class="set-btn" id="exp">📤 Exportovat zálohu (.json)</button>
+    <button class="set-btn" id="imp">📥 Obnovit ze zálohy</button>
+    <button class="set-btn" id="merge">📚 Doplnit chybějící výchozí slovíčka</button>
+    <button class="set-btn danger" id="resetStats">Vynulovat všechny statistiky</button>
+    <button class="set-btn danger" id="wipe">Smazat vše a začít znovu</button>
+  </div>
+  <div class="sub" style="padding:8px 6px">Data se ukládají jen v tomto telefonu. Zálohu občas exportuj, ať o pokrok nepřijdeš.</div>
+  <div class="set-title">Instalace na iPhone</div>
+  <div class="set-group"><div class="howto"><ol style="margin-top:14px"><li>Otevři stránku v Safari.</li><li>Klepni na tlačítko Sdílet (čtvereček se šipkou).</li><li>Zvol „Přidat na plochu“.</li></ol>Pak se aplikace spouští přes celou obrazovku jako normální apka.</div></div>
+  <div class="sub" style="text-align:center;padding:18px 0 6px">¡Buena suerte! · verze 1.1</div>`;
+  bindSegs($('#view-settings'),k=>{if(k==='theme')applyTheme()});
+  $$('input[data-k]').forEach(i=>i.onchange=()=>{s[i.dataset.k]=i.checked;save()});
+  $('#fs').oninput=e=>{s.fontScale=+e.target.value;$('#fsVal').textContent=Math.round(s.fontScale*100)+' %';applyTheme();save()};
+  $('#tts').onchange=e=>{s.ttsRate=+e.target.value;save()};
+  $('#ttsTest').onclick=()=>speak('¿Hola, qué tal? Me llamo Pedro.');
+  $('#exp').onclick=exportData;
+  $('#imp').onclick=()=>$('#importFile').click();
+  $('#merge').onclick=()=>{const s2=buildSeed();let a=0;s2.lists.forEach(l=>{if(!listById(l.id))D.lists.push(l)});s2.words.forEach(w=>{const ex=D.words.find(x=>x.es.toLowerCase()===w.es.toLowerCase());if(!ex){D.words.push(w);a++}else w.lists.forEach(l=>{if(!ex.lists.includes(l))ex.lists.push(l)})});save();toast(a?`Doplněno ${a} slovíček`:'Nic nechybělo');renderCurrent()};
+  $('#resetStats').onclick=()=>{if(!confirm('Vynulovat všechny statistiky? Slovíčka a seznamy zůstanou.'))return;D.words.forEach(w=>Object.assign(w,{c:0,a:0,w:0,box:0,due:0,recent:[],last:null}));D.days={};D.sessions=[];D.gram={};save();toast('Statistiky vynulovány')};
+  $('#wipe').onclick=()=>{if(!confirm('Opravdu smazat úplně vše včetně vlastních slovíček? Obnoví se výchozí slovník.'))return;const st=D.settings;const s2=buildSeed();D={v:1,words:s2.words,lists:s2.lists,settings:st,days:{},sessions:[],gram:{}};saveNow();toast('Hotovo, začínáš znovu');renderCurrent()};
+}
+async function exportData(){
+  saveNow();
+  const json=JSON.stringify(D),name=`spanelsky-slovnik-${dkey()}.json`;
+  try{const file=new File([json],name,{type:'application/json'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'Záloha slovníku'});return}}
+  catch(e){if(e.name==='AbortError')return}
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([json],{type:'application/json'}));a.download=name;document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);toast('Záloha stažena');
+}
+$('#importFile').onchange=async e=>{
+  const f=e.target.files[0];if(!f)return;
+  try{const d=JSON.parse(await f.text());if(!Array.isArray(d.words)||!Array.isArray(d.lists))throw 0;
+    if(!confirm(`Záloha obsahuje ${d.words.length} slovíček. Nahradit současná data?`))return;
+    D=d;D.gram=d.gram||{};D.settings={...DEF,...(d.settings||{})};D.days=d.days||{};D.sessions=d.sessions||[];saveNow();applyTheme();toast('Obnoveno ze zálohy ✓');renderCurrent()}
+  catch(_){toast('Tohle není platná záloha slovníku')}
+  finally{e.target.value=''}
+};
+
+/* ===================== GRAMATIKA ===================== */
+const P=s=>`<p>${s}</p>`,H=s=>`<h4>${s}</h4>`,TIP=s=>`<div class="tip">💡 ${s}</div>`,UL=a=>`<ul>${a.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+const T=(head,rows)=>`<div class="tw"><table class="gt"><thead><tr>${head.split('|').map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.trim().split('\n').map(r=>`<tr>${r.split('|').map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+const E=rows=>`<div class="gex">${rows.trim().split('\n').map(r=>{const[a,b]=r.split('|');return `<div><b>${a}</b><span>${b}</span></div>`}).join('')}</div>`;
+const LESSONS=[
+{id:'pron',emoji:'🗣️',level:'A1',title:'Výslovnost a přízvuk',intro:'Jak číst španělská písmena a kam dát přízvuk.',
+html:[H('Písmena, která se čtou jinak'),T('písmeno|výslovnost|příklad',`
+h|nečte se|<b>h</b>ola → „ola“
+j|jako české ch|<b>j</b>amón → „chamón“
+g + e, i|jako ch|<b>g</b>ente → „chente“
+g + a, o, u|jako g|<b>g</b>ato
+gue, gui|„ge“, „gi“ (u se nečte)|<b>gu</b>itarra
+c + e, i|jako anglické th (v Lat. Americe s)|<b>c</b>ena
+c + a, o, u|jako k|<b>c</b>asa
+z|jako anglické th (v Lat. Americe s)|<b>z</b>apato
+qu|jako k|<b>qu</b>eso
+ll, y|jako j|<b>ll</b>amar, <b>y</b>o
+ñ|jako ň|Espa<b>ñ</b>a
+ch|jako č|<b>ch</b>ocolate
+v|jako b|<b>v</b>ino → „bino“
+r / rr|r krátké / rr vibrované|pe<b>r</b>o × pe<b>rr</b>o`),
+TIP('Na začátku slova se <b>r</b> vždy vibruje silně jako rr: <b>r</b>ojo, <b>R</b>oma.'),
+H('Kam dát přízvuk'),UL(['Slovo končí na <b>samohlásku, -n nebo -s</b> → přízvuk na předposlední slabice: <b>CA</b>-sa, <b>HA</b>-blan.','Končí na <b>jinou souhlásku</b> → přízvuk na poslední slabice: ha-<b>BLAR</b>, ciu-<b>DAD</b>.','Když je ve slově <b>čárka</b>, přízvuk je tam: ca-<b>FÉ</b>, te-<b>LÉ</b>-fo-no.']),
+P('Čárka neprodlužuje samohlásku jako v češtině, jen ukazuje přízvuk. Někdy rozlišuje význam:'),
+T('s čárkou|bez čárky',`
+sí = ano|si = jestli
+tú = ty|tu = tvůj
+él = on|el = člen (ten)
+más = více|mas = ale (knižně)
+qué = co? (v otázce)|que = že, který`)].join(''),
+ex:`Jak se čte „h“ ve slově „hola“?|nečte se|nečte se;jako české h;jako ch
+Jak se čte „j“ ve slově „jamón“?|jako ch|jako ch;jako j;jako ž
+Jak zní „ll“ ve slově „llamar“?|jako j|jako j;jako l;jako dvojité l
+Jak zní „g“ ve slově „gente“?|jako ch|jako ch;jako g;jako dž
+Kde je přízvuk ve slově „hablan“?|HA-blan|HA-blan;ha-BLAN|končí na -n → předposlední slabika
+Kde je přízvuk ve slově „ciudad“?|ciu-DAD|CIU-dad;ciu-DAD|končí na -d → poslední slabika
+Co znamená „tú“ (s čárkou)?|ty|ty;tvůj
+Co znamená „él“ (s čárkou)?|on|on;ten (člen)
+Jak se čte „v“ ve slově „vino“?|jako b|jako b;jako v;jako f`},
+
+{id:'art',emoji:'📰',level:'A1',title:'Členy a rod',intro:'el, la, los, las, un, una – a jak poznat rod.',
+html:[P('Španělština má jen dva rody: <b>mužský</b> a <b>ženský</b>. Člen stojí před podstatným jménem a musí s ním souhlasit v rodě i čísle.'),
+T('|mužský|ženský',`
+určitý (ten) – j. č.|el libro|la casa
+určitý – mn. č.|los libros|las casas
+neurčitý (nějaký) – j. č.|un libro|una casa
+neurčitý – mn. č.|unos libros|unas casas`),
+H('Jak poznat rod'),UL(['Na <b>-o</b> obvykle mužský: el perro, el vaso.','Na <b>-a</b> obvykle ženský: la mesa, la playa.','Na <b>-ción, -sión, -dad, -tad</b> vždy ženský: la canción, la ciudad, la libertad.','Na <b>-e</b> a souhlásku se rod musí naučit: el coche, la calle, el amor, la flor.']),
+P('Nejčastější výjimky:'),E(`el día|den (mužský, i když končí na -a)
+el mapa, el problema, el idioma, el tema|mužské na -a
+la mano, la foto, la radio|ženské na -o`),
+H('Stažení členu'),T('spojení|výsledek|příklad',`
+a + el|al|Voy <b>al</b> cine.
+de + el|del|La casa <b>del</b> profesor.`),
+TIP('S „la“ se nic nestahuje: voy a la playa, la casa de la abuela.'),
+P('Ženská slova začínající přízvučným <b>a-</b> mají v jednotném čísle člen <b>el</b>: <b>el agua</b> fría, ale <b>las aguas</b>.')].join(''),
+ex:`___ libro (ten)|el
+___ casa (ta)|la
+___ problema (ten)|el
+___ mano (ta)|la
+___ ciudad (to)|la
+___ canción (ta)|la
+___ día (ten)|el
+___ coches (ty)|los
+___ mesas (ty)|las
+___ perro (nějaký)|un
+___ manzana (nějaké)|una
+Voy ___ cine. (a + el)|al
+La casa ___ profesor. (de + el)|del`},
+
+{id:'plur',emoji:'👥',level:'A1',title:'Množné číslo a přídavná jména',intro:'casa → casas, rojo → roja, rojos, rojas.',
+html:[H('Množné číslo'),T('slovo končí na|přidáš|příklad',`
+samohlásku|-s|casa → casa<b>s</b>
+souhlásku|-es|ciudad → ciudad<b>es</b>, flor → flor<b>es</b>
+-z|z → -ces|lápiz → lápi<b>ces</b>, luz → lu<b>ces</b>`),
+TIP('Přízvuk zůstává na stejné slabice, proto čárka někdy zmizí nebo přibude: canción → canciones, joven → jóvenes.'),
+H('Přídavná jména'),P('Stojí většinou <b>za</b> podstatným jménem a shodují se s ním v rodě i čísle.'),
+T('zakončení|m. j.|ž. j.|m. mn.|ž. mn.',`
+-o|rojo|roja|rojos|rojas
+-e|grande|grande|grandes|grandes
+souhláska|azul|azul|azules|azules
+národnost|español|española|españoles|españolas`),
+E(`un coche rojo|červené auto
+las casas blancas|bílé domy
+unas chicas inteligentes|nějaké inteligentní dívky`),
+H('Zkrácené tvary'),P('Před podstatným jménem mužského rodu v j. č. se zkracují: <b>bueno → buen</b>, <b>malo → mal</b>, <b>primero → primer</b>. <b>Grande → gran</b> před jakýmkoli podstatným jménem a znamená „skvělý“.'),
+E(`un buen día|dobrý den
+un gran hombre|skvělý muž
+un hombre grande|velký muž`)].join(''),
+ex:`casa → mn. č.: ___|casas
+ciudad → mn. č.: ___|ciudades
+lápiz → mn. č.: ___|lápices
+canción → mn. č.: ___|canciones
+flor → mn. č.: ___|flores
+joven → mn. č.: ___|jóvenes
+la casa ___ (blanco)|blanca
+los coches ___ (rojo)|rojos
+las chicas ___ (inteligente)|inteligentes
+las flores ___ (azul)|azules
+Es un ___ día. (bueno)|buen
+una chica ___ (español)|española`},
+
+{id:'pers',emoji:'🙋',level:'A1',title:'Osobní zájmena',intro:'yo, tú, él… a kdy vykat.',
+html:[T('osoba|jednotné číslo|množné číslo',`
+1.|yo – já|nosotros / nosotras – my
+2.|tú – ty|vosotros / vosotras – vy (tykání)
+3.|él – on, ella – ona|ellos – oni, ellas – ony
+vykání|usted – Vy (jednomu)|ustedes – Vy (více lidem)`),
+UL(['Zájmena se často <b>vynechávají</b>, osobu pozná podle slovesa: <b>Hablo</b> español. = Mluvím španělsky.','<b>Usted</b> a <b>ustedes</b> mají sloveso ve 3. osobě: ¿Cómo está usted?','Tvary na <b>-as</b> (nosotras, vosotras, ellas) se použijí, když jde jen o ženy. Ve smíšené skupině je mužský tvar.']),
+TIP('V Latinské Americe se „vosotros“ nepoužívá – místo něj se vždy říká <b>ustedes</b>, i kamarádům.')].join(''),
+ex:`Jak vykáš jednomu člověku?|usted|tú;usted;vosotros
+já = ___|yo
+ty = ___|tú
+ona = ___|ella
+oni = ___|ellos
+my (jen ženy) = ___|nosotras
+Místo „vosotros“ se v Latinské Americe používá:|ustedes|nosotros;ustedes;ellos`},
+
+{id:'reg',emoji:'⚙️',level:'A1',title:'Přítomný čas – pravidelná slovesa',intro:'hablo, comes, vivimos – tři skupiny sloves.',
+html:[P('Slovesa končí na <b>-ar</b>, <b>-er</b> nebo <b>-ir</b>. Koncovku odtrhneš a přidáš novou podle osoby.'),
+T('osoba|hablar|comer|vivir',`
+yo|habl<b>o</b>|com<b>o</b>|viv<b>o</b>
+tú|habl<b>as</b>|com<b>es</b>|viv<b>es</b>
+él / ella / usted|habl<b>a</b>|com<b>e</b>|viv<b>e</b>
+nosotros|habl<b>amos</b>|com<b>emos</b>|viv<b>imos</b>
+vosotros|habl<b>áis</b>|com<b>éis</b>|viv<b>ís</b>
+ellos / ustedes|habl<b>an</b>|com<b>en</b>|viv<b>en</b>`),
+TIP('Slovesa na -er a -ir se liší jen v tvarech <b>nosotros</b> a <b>vosotros</b>.'),
+E(`Trabajo en una oficina.|Pracuji v kanceláři.
+Comemos a las dos.|Obědváme ve dvě.
+¿Dónde vives?|Kde bydlíš?
+Mis padres hablan inglés.|Moji rodiče mluví anglicky.`)].join(''),
+ex:`Yo ___ español. (hablar)|hablo
+Tú ___ mucho. (trabajar)|trabajas
+Ella ___ pan. (comer)|come
+Nosotros ___ en Praga. (vivir)|vivimos
+Vosotros ___ inglés. (estudiar)|estudiáis
+Ellos ___ agua. (beber)|beben
+Usted ___ muy bien. (escribir)|escribe
+Nosotras ___ música. (escuchar)|escuchamos
+¿Tú ___ el periódico? (leer)|lees
+Mis padres ___ en Madrid. (vivir)|viven
+Yo ___ una carta. (escribir)|escribo
+Nosotros ___ mucho. (aprender)|aprendemos`},
+
+{id:'irr',emoji:'🌀',level:'A1',title:'Nepravidelná slovesa',intro:'ser, estar, tener, ir a slovesa s nepravidelným „yo“.',
+html:[H('Čtyři nejdůležitější'),T('osoba|ser|estar|tener|ir',`
+yo|soy|estoy|tengo|voy
+tú|eres|estás|tienes|vas
+él / usted|es|está|tiene|va
+nosotros|somos|estamos|tenemos|vamos
+vosotros|sois|estáis|tenéis|vais
+ellos / ustedes|son|están|tienen|van`),
+H('Nepravidelné jen v „yo“'),P('Ostatní osoby se časují pravidelně.'),
+T('sloveso|yo|tú',`
+hacer – dělat|hago|haces
+poner – položit|pongo|pones
+salir – odejít|salgo|sales
+traer – přinést|traigo|traes
+saber – vědět|sé|sabes
+conocer – znát|conozco|conoces
+ver – vidět|veo|ves
+dar – dát|doy|das`),
+H('Další časté'),T('osoba|venir|decir',`
+yo|vengo|digo
+tú|vienes|dices
+él / usted|viene|dice
+nosotros|venimos|decimos
+vosotros|venís|decís
+ellos / ustedes|vienen|dicen`),
+TIP('<b>Tener</b> se používá i tam, kde v češtině říkáme „být“: tengo 20 años (je mi 20), tengo hambre (mám hlad), tengo frío (je mi zima).')].join(''),
+ex:`Yo ___ checo. (ser)|soy
+Nosotros ___ en casa. (estar)|estamos
+Ella ___ dos hermanos. (tener)|tiene
+¿Adónde ___ tú? (ir)|vas
+Yo ___ los deberes. (hacer)|hago
+Yo no lo ___. (saber)|sé
+Yo ___ a las ocho. (salir)|salgo
+Ellos ___ mañana. (venir)|vienen
+Yo ___ a Pedro. (conocer)|conozco
+Tú siempre ___ la verdad. (decir)|dices
+Vosotros ___ estudiantes. (ser)|sois
+Yo ___ la mesa. (poner)|pongo
+Yo te ___ un regalo. (dar)|doy
+Yo ___ veinte años. (tener)|tengo`},
+
+{id:'stem',emoji:'🔀',level:'A1',title:'Slovesa se změnou kmene',intro:'quiero, puedo, pido, juego.',
+html:[P('Některá slovesa mění samohlásku v kmeni. Změna nastává ve všech osobách <b>kromě nosotros a vosotros</b>.'),
+T('změna|slovesa',`
+e → ie|querer, pensar, empezar, entender, cerrar, preferir, sentir
+o → ue|poder, volver, dormir, encontrar, recordar, costar
+u → ue|jugar
+e → i|pedir, repetir, servir, vestirse`),
+T('osoba|querer|poder|pedir|jugar',`
+yo|qu<b>ie</b>ro|p<b>ue</b>do|p<b>i</b>do|j<b>ue</b>go
+tú|qu<b>ie</b>res|p<b>ue</b>des|p<b>i</b>des|j<b>ue</b>gas
+él / usted|qu<b>ie</b>re|p<b>ue</b>de|p<b>i</b>de|j<b>ue</b>ga
+nosotros|queremos|podemos|pedimos|jugamos
+vosotros|queréis|podéis|pedís|jugáis
+ellos / ustedes|qu<b>ie</b>ren|p<b>ue</b>den|p<b>i</b>den|j<b>ue</b>gan`),
+TIP('Když si zakroužkuješ změněné tvary v tabulce, vznikne tvar boty – proto se jim říká „botová slovesa“.')].join(''),
+ex:`Yo ___ un café. (querer)|quiero
+¿___ (tú) ayudarme? (poder)|puedes
+Nosotros ___ ir al cine. (querer)|queremos
+Ella ___ ocho horas. (dormir)|duerme
+Ellos ___ al fútbol. (jugar)|juegan
+La clase ___ a las nueve. (empezar)|empieza
+Yo ___ una pizza. (pedir)|pido
+¿Cuánto ___? (costar)|cuesta
+No ___ nada. (entender, yo)|entiendo
+Nosotros ___ a casa. (volver)|volvemos
+Tú ___ mucho. (pensar)|piensas`},
+
+{id:'serestar',emoji:'⚖️',level:'A1',title:'Ser vs. estar',intro:'Dvě slovesa „být“ a kdy které použít.',
+html:[H('SER – kdo a jaký kdo je'),UL(['totožnost a povolání: <b>Soy</b> Pedro. <b>Es</b> médico.','původ a národnost: <b>Somos</b> de Praga.','trvalé vlastnosti: Mi casa <b>es</b> grande.','čas a datum: <b>Son</b> las tres. Hoy <b>es</b> lunes.','materiál a vlastnictví: <b>Es</b> de madera. <b>Es</b> de Ana.','kde se koná událost: La fiesta <b>es</b> en mi casa.']),
+H('ESTAR – kde a jak se kdo má'),UL(['poloha: Madrid <b>está</b> en España.','nálada a stav: <b>Estoy</b> cansado. <b>Está</b> enferma.','dočasný stav: El café <b>está</b> frío.','průběh děje: <b>Estoy</b> comiendo.']),
+TIP('Pomůcka: <b>ser</b> = co to <b>je</b> (podstata), <b>estar</b> = jak to <b>teď je</b> nebo <b>kde</b> to je.'),
+H('Změna významu'),T('ser|estar',`
+ser aburrido – být nudný|estar aburrido – nudit se
+ser listo – být chytrý|estar listo – být připravený
+ser malo – být zlý / špatný|estar malo – být nemocný / zkažený
+ser rico – být bohatý|estar rico – být chutný`)].join(''),
+ex:`Yo ___ de Chequia.|soy|soy;estoy|původ → ser
+Madrid ___ en España.|está|es;está|poloha → estar
+Mi hermano ___ médico.|es|es;está|povolání → ser
+Hoy ___ muy cansada.|estoy|soy;estoy|momentální stav → estar
+___ las tres de la tarde.|Son|Son;Están|čas → ser
+La sopa ___ fría.|está|es;está|dočasný stav → estar
+Mis padres ___ simpáticos.|son|son;están|vlastnost → ser
+¿Dónde ___ el baño?|está|es;está|poloha → estar
+La mesa ___ de madera.|es|es;está|materiál → ser
+Nosotros ___ contentos hoy.|estamos|somos;estamos|nálada → estar
+La fiesta ___ en mi casa.|es|es;está|místo události → ser
+¿___ listo? Nos vamos.|Estás|Eres;Estás|estar listo = být připravený`},
+
+{id:'hay',emoji:'📍',level:'A1',title:'Hay vs. estar',intro:'„Je tu banka?“ × „Kde je ta banka?“',
+html:[UL(['<b>hay</b> = je / jsou / existuje. Používá se s <b>neurčitým</b> členem, číslovkou nebo bez členu. Nemění se: hay un banco, hay dos bancos.','<b>estar</b> = kde se nachází <b>konkrétní</b> věc – s určitým členem, jménem nebo přivlastňovacím zájmenem.']),
+E(`Hay un banco cerca.|Blízko je (nějaká) banka.
+El banco está en la plaza.|Ta banka je na náměstí.
+Hay muchos turistas.|Je tu hodně turistů.
+Mis llaves están en la mesa.|Moje klíče jsou na stole.`),
+TIP('<b>Hay que</b> + infinitiv = musí se, je třeba: Hay que estudiar.')].join(''),
+ex:`¿___ un supermercado por aquí?|Hay|Hay;Está
+El supermercado ___ a la derecha.|está|hay;está
+En mi ciudad ___ dos museos.|hay|hay;están
+Los niños ___ en el parque.|están|hay;están
+___ que estudiar mucho.|Hay|Hay;Está
+¿Dónde ___ mis llaves?|están|hay;están
+No ___ leche en la nevera.|hay|hay;está
+Mi casa ___ lejos del centro.|está|hay;está`},
+
+{id:'gustar',emoji:'❤️',level:'A1',title:'Gustar – líbit se',intro:'me gusta, me gustan, le gusta…',
+html:[P('<b>Gustar</b> funguje jako české „líbit se“: to, co se líbí, je podmět. Proto <b>gusta</b> u jedné věci a u infinitivu, <b>gustan</b> u více věcí.'),
+T('komu|zájmeno|jedna věc|více věcí',`
+(a mí) mně|me|me gusta el café|me gustan los perros
+(a ti) tobě|te|te gusta|te gustan
+(a él / ella / usted)|le|le gusta|le gustan
+(a nosotros) nám|nos|nos gusta|nos gustan
+(a vosotros) vám|os|os gusta|os gustan
+(a ellos / ustedes)|les|les gusta|les gustan`),
+E(`Me gusta bailar.|Rád tancuji.
+A María le gustan las flores.|Marii se líbí květiny.
+No nos gusta el frío.|Nemáme rádi zimu.`),
+H('Stejně fungují'),UL(['<b>encantar</b> – moc se líbit: Me encanta España.','<b>doler</b> – bolet: Me duele la cabeza.','<b>interesar</b> – zajímat: Te interesa el arte?']),
+TIP('Souhlas: <b>A mí también</b> (mně taky). U záporu: <b>A mí tampoco</b> (mně taky ne).')].join(''),
+ex:`Me ___ el chocolate.|gusta
+Me ___ los gatos.|gustan
+¿Te ___ bailar?|gusta
+A ella ___ gusta el té.|le
+A nosotros ___ gusta viajar.|nos
+A mis padres ___ gusta el cine.|les
+Me ___ la cabeza. (doler)|duele
+Me ___ las películas españolas. (encantar)|encantan
+¿A vosotros ___ gusta el fútbol?|os
+No me gusta. – A mí ___. (taky ne)|tampoco`},
+
+{id:'refl',emoji:'🪞',level:'A2',title:'Zvratná slovesa',intro:'me llamo, te levantas, se ducha.',
+html:[P('Zvratná slovesa mají v infinitivu <b>-se</b>: llamarse, levantarse, ducharse. Zájmeno se dává <b>před</b> časované sloveso.'),
+T('osoba|zájmeno|levantarse',`
+yo|me|me levanto
+tú|te|te levantas
+él / usted|se|se levanta
+nosotros|nos|nos levantamos
+vosotros|os|os levantáis
+ellos / ustedes|se|se levantan`),
+E(`Me despierto a las siete.|Probouzím se v sedm.
+Nos acostamos tarde.|Chodíme spát pozdě.
+Voy a ducharme.|Jdu se osprchovat.`),
+TIP('S infinitivem se zájmeno může připojit na konec: Voy a <b>ducharme</b> = <b>Me</b> voy a duchar.'),
+P('Časté: despertarse (e→ie), acostarse (o→ue), vestirse (e→i), lavarse, sentarse (e→ie), llamarse.')].join(''),
+ex:`Yo ___ llamo Ana.|me
+¿Cómo ___ llamas?|te
+Nosotros ___ levantamos a las siete.|nos
+Ella ___ ducha por la mañana.|se
+Yo me ___ a las once. (acostarse)|acuesto
+Tú ___ despiertas temprano.|te
+Ellos ___ visten rápido.|se
+Voy a ___ ahora. (ducharse, yo – jedno slovo)|ducharme`},
+
+{id:'neg',emoji:'❓',level:'A1',title:'Otázky a zápor',intro:'no, nada, nadie, nunca a tázací slova.',
+html:[H('Zápor'),P('<b>No</b> stojí před slovesem: <b>No</b> hablo alemán. Dvojí zápor je ve španělštině správně, stejně jako v češtině.'),
+T('slovo|význam|příklad',`
+nada|nic|No tengo nada.
+nadie|nikdo|No veo a nadie.
+nunca|nikdy|No voy nunca. = Nunca voy.
+ninguno / ninguna|žádný|No hay ningún problema.
+tampoco|také ne|Yo tampoco.`),
+H('Otázky'),P('Otázka začíná obráceným otazníkem <b>¿</b> a končí <b>?</b>. Slovosled se měnit nemusí: <b>¿Hablas español?</b>'),
+T('tázací slovo|význam',`
+¿qué?|co?
+¿quién? / ¿quiénes?|kdo?
+¿dónde? / ¿adónde? / ¿de dónde?|kde? / kam? / odkud?
+¿cuándo?|kdy?
+¿cómo?|jak?
+¿cuánto? / ¿cuánta?|kolik?
+¿cuál?|který?
+¿por qué?|proč?`),
+TIP('<b>¿Por qué?</b> (proč, dvě slova, čárka) × <b>porque</b> (protože, jedno slovo). Tázací slova mají vždy čárku.')].join(''),
+ex:`___ hablo alemán. (zápor)|No
+No tengo ___. (nic)|nada
+No veo a ___. (nikoho)|nadie
+¿___ te llamas? (jak)|Cómo
+¿___ vives? (kde)|Dónde
+¿___ cuesta? (kolik)|Cuánto
+¿___ estudias español? (proč)|Por qué
+Estudio español ___ me gusta. (protože)|porque
+¿De ___ eres? (odkud)|dónde
+¿___ es tu cumpleaños? (kdy)|Cuándo
+No voy ___ al cine. (nikdy)|nunca`},
+
+{id:'poss',emoji:'👜',level:'A1',title:'Přivlastňovací a ukazovací zájmena',intro:'mi, tu, su… a este, ese, aquel.',
+html:[H('Přivlastňovací'),T('|j. č.|mn. č.',`
+můj|mi casa|mis casas
+tvůj|tu casa|tus casas
+jeho / její / Váš|su casa|sus casas
+náš|nuestro coche / nuestra casa|nuestros / nuestras
+váš|vuestro coche / vuestra casa|vuestros / vuestras
+jejich / Váš (pl.)|su casa|sus casas`),
+TIP('Shodují se s <b>věcí</b>, ne s majitelem: <b>mis</b> libros (moje knihy), <b>nuestra</b> casa (náš dům).'),
+H('Ukazovací'),T('|m. j.|ž. j.|m. mn.|ž. mn.',`
+tento (u mě)|este|esta|estos|estas
+tenhle / ten (u tebe)|ese|esa|esos|esas
+tamten (daleko)|aquel|aquella|aquellos|aquellas`),
+P('<b>Esto</b> a <b>eso</b> znamenají neurčité „to“: ¿Qué es <b>esto</b>? – Co je tohle?')].join(''),
+ex:`___ casa (můj)|mi
+___ libros (moje)|mis
+___ hermana (tvoje)|tu
+___ padres (naši)|nuestros
+___ ciudad (naše)|nuestra
+Pedro y ___ perro (jeho)|su
+___ chico (tento)|este
+___ mesas (tyto)|estas
+¿Qué es ___? (tohle, neurčité)|esto
+___ montañas allí (tamty daleko)|aquellas`},
+
+{id:'future',emoji:'🔮',level:'A1',title:'Budoucnost: ir a + infinitiv',intro:'voy a estudiar – budu studovat.',
+html:[P('Nejjednodušší způsob, jak mluvit o budoucnosti: <b>ir</b> (časované) + <b>a</b> + <b>infinitiv</b>.'),
+T('osoba|ir|+ a + infinitiv',`
+yo|voy|a estudiar
+tú|vas|a comer
+él / usted|va|a salir
+nosotros|vamos|a viajar
+vosotros|vais|a ver
+ellos / ustedes|van|a trabajar`),
+E(`Mañana voy a llamar a mi madre.|Zítra zavolám mámě.
+¿Qué vas a hacer el fin de semana?|Co budeš dělat o víkendu?
+Vamos a ver.|Uvidíme.`),
+P('Časté výrazy: mañana, esta tarde, esta noche, la semana que viene, el año próximo.'),
+TIP('<b>¡Vamos a…!</b> může znamenat i „pojďme“: ¡Vamos a bailar!')].join(''),
+ex:`Yo ___ a estudiar.|voy
+¿Qué ___ a hacer tú mañana?|vas
+Nosotros ___ a viajar a México.|vamos
+Ellos ___ a comer en casa.|van
+Ella va ___ llamar.|a
+Mañana voy a ___ al cine. (jít)|ir
+Vosotros ___ a ver la película.|vais`},
+
+{id:'prog',emoji:'⏳',level:'A2',title:'Průběhový čas: estar + gerundium',intro:'estoy hablando – právě mluvím.',
+html:[P('Pro děj, který probíhá <b>právě teď</b>: <b>estar</b> + <b>gerundium</b>.'),
+T('sloveso|gerundium',`
+-ar: hablar|habl<b>ando</b>
+-er: comer|com<b>iendo</b>
+-ir: vivir|viv<b>iendo</b>`),
+P('Nepravidelná gerundia:'),T('infinitiv|gerundium',`
+leer|leyendo
+oír|oyendo
+ir|yendo
+dormir|durmiendo
+decir|diciendo
+pedir|pidiendo
+sentir|sintiendo`),
+E(`Estoy hablando por teléfono.|Právě telefonuji.
+¿Qué estás haciendo?|Co děláš?
+Los niños están durmiendo.|Děti spí.`)].join(''),
+ex:`Estoy ___. (hablar)|hablando
+Ella está ___. (comer)|comiendo
+¿Qué estás ___? (hacer)|haciendo
+Los niños están ___. (dormir)|durmiendo
+Estoy ___ un libro. (leer)|leyendo
+Nosotros ___ trabajando. (estar)|estamos
+Está ___ la verdad. (decir)|diciendo
+¿Estás ___ música? (escuchar)|escuchando`},
+
+{id:'pret',emoji:'⏮️',level:'A2',title:'Minulý čas (pretérito indefinido)',intro:'hablé, comiste, fue – ukončený děj v minulosti.',
+html:[P('Používá se pro <b>ukončený děj</b> v minulosti, často s výrazy: ayer, anoche, el año pasado, la semana pasada, en 2020.'),
+H('Pravidelná slovesa'),T('osoba|hablar|comer|vivir',`
+yo|habl<b>é</b>|com<b>í</b>|viv<b>í</b>
+tú|habl<b>aste</b>|com<b>iste</b>|viv<b>iste</b>
+él / usted|habl<b>ó</b>|com<b>ió</b>|viv<b>ió</b>
+nosotros|habl<b>amos</b>|com<b>imos</b>|viv<b>imos</b>
+vosotros|habl<b>asteis</b>|com<b>isteis</b>|viv<b>isteis</b>
+ellos / ustedes|habl<b>aron</b>|com<b>ieron</b>|viv<b>ieron</b>`),
+TIP('Čárka mění význam: <b>hablo</b> = mluvím, <b>habló</b> = mluvil. Tvar „nosotros“ u -ar a -ir je stejný jako v přítomném čase.'),
+H('Nejčastější nepravidelná'),T('osoba|ser / ir|tener|hacer|estar',`
+yo|fui|tuve|hice|estuve
+tú|fuiste|tuviste|hiciste|estuviste
+él / usted|fue|tuvo|hizo|estuvo
+nosotros|fuimos|tuvimos|hicimos|estuvimos
+vosotros|fuisteis|tuvisteis|hicisteis|estuvisteis
+ellos / ustedes|fueron|tuvieron|hicieron|estuvieron`),
+P('Podobně (koncovky -e, -iste, -o, -imos, -isteis, -ieron, bez čárek): poder → <b>pude</b>, poner → <b>puse</b>, venir → <b>vine</b>, querer → <b>quise</b>, saber → <b>supe</b>, decir → <b>dije</b> (dijeron), traer → <b>traje</b>. Krátké: dar → <b>di, dio</b>, ver → <b>vi, vio</b>.'),
+H('Pravopisné změny v „yo“'),E(`llegar → llegué|g → gu
+buscar → busqué, tocar → toqué|c → qu
+empezar → empecé|z → c
+leer → leyó, leyeron|i → y`)].join(''),
+ex:`Ayer ___ con mi madre. (hablar, yo)|hablé
+Ella ___ en Madrid. (vivir)|vivió
+¿Qué ___ tú ayer? (comer)|comiste
+Nosotros ___ la película. (ver)|vimos
+El año pasado ___ a España. (ir, yo)|fui
+Ellos ___ mucho. (trabajar)|trabajaron
+¿Dónde ___ tú? (estar)|estuviste
+Yo ___ los deberes. (hacer)|hice
+Ella ___ un accidente. (tener)|tuvo
+La fiesta ___ genial. (ser)|fue
+Yo ___ tarde. (llegar)|llegué
+¿Qué ___ él? (decir)|dijo
+Vosotros ___ una carta. (escribir)|escribisteis`},
+
+{id:'porpara',emoji:'🎯',level:'A2',title:'Por vs. para',intro:'Dvě slova pro „pro“, „za“, „kvůli“, „přes“.',
+html:[H('PARA – cíl, směr dopředu'),UL(['účel: Estudio <b>para</b> aprender. (abych se naučil)','příjemce: Es <b>para</b> ti.','cíl cesty: El tren <b>para</b> Madrid.','termín: <b>para</b> el lunes','názor: <b>Para</b> mí, es fácil.']),
+H('POR – příčina, cesta, výměna'),UL(['důvod: <b>por</b> la lluvia, gracias <b>por</b> todo','pohyb skrz / po: Paseamos <b>por</b> el parque.','část dne: <b>por</b> la mañana','prostředek: <b>por</b> teléfono','cena a výměna: Lo compré <b>por</b> diez euros.']),
+TIP('Pomůcka: <b>para</b> míří k cíli (→), <b>por</b> hledá důvod nebo cestu (←, ~).')].join(''),
+ex:`Este regalo es ___ ti.|para|por;para
+Gracias ___ todo.|por|por;para
+Estudio ___ aprender.|para|por;para
+Paseamos ___ el parque.|por|por;para
+Trabajo ___ la mañana.|por|por;para
+Hablo ___ teléfono.|por|por;para
+El tren ___ Madrid sale a las diez.|para|por;para
+Necesito el informe ___ el lunes.|para|por;para
+Lo compré ___ diez euros.|por|por;para
+___ mí, es fácil.|Para|Por;Para`},
+
+{id:'obj',emoji:'🧩',level:'A2',title:'Předmětová zájmena',intro:'lo veo, le doy, se lo digo.',
+html:[T('|přímý předmět (koho, co)|nepřímý (komu)',`
+já|me|me
+ty|te|te
+on / ona / Vy|lo / la|le
+my|nos|nos
+vy|os|os
+oni / ony / Vy|los / las|les`),
+E(`¿Ves el coche? – Sí, lo veo.|Vidíš to auto? – Ano, vidím ho.
+¿Tienes las llaves? – Sí, las tengo.|Máš klíče? – Ano, mám je.
+Le doy el libro a Juan.|Dávám Juanovi knihu.`),
+UL(['Stojí <b>před</b> časovaným slovesem: <b>Lo</b> compro.','S infinitivem nebo gerundiem se mohou připojit na konec: Quiero <b>verlo</b> = <b>Lo</b> quiero ver.','Když se potkají le/les a lo/la, z le se stane <b>se</b>: <b>Se lo</b> doy.'])].join(''),
+ex:`¿Ves a María? Sí, ___ veo.|la
+¿Compras el pan? Sí, ___ compro.|lo
+¿Tienes los billetes? Sí, ___ tengo.|los
+¿Me llamas? Sí, ___ llamo. (tebe)|te
+___ doy un regalo a mi madre. (jí)|Le
+¿Nos ayudas? Sí, ___ ayudo. (vás)|os
+Quiero ___. (vidět ho – jedno slovo)|verlo
+El libro para Juan: ___ lo doy.|se`}
+];
+function parseEx(L){return L.ex.trim().split('\n').map((line,i)=>{const[q,a,o,note]=line.split('|');return{kind:'ex',key:L.id+':'+i,q:q.trim(),a:a.trim(),opts:o?o.split(';').map(x=>x.trim()):null,note:note?esc(note.trim()):'',label:L.emoji+' '+L.title,plain:q.trim()}})}
+
+/* --- časování --- */
+const PERS=['yo','tú','él / ella / usted','nosotros','vosotros','ellos / ustedes'];
+const IRR={pres:{},pret:{}};
+`ser:soy,eres,es,somos,sois,son
+estar:estoy,estás,está,estamos,estáis,están
+tener:tengo,tienes,tiene,tenemos,tenéis,tienen
+ir:voy,vas,va,vamos,vais,van
+hacer:hago,haces,hace,hacemos,hacéis,hacen
+poder:puedo,puedes,puede,podemos,podéis,pueden
+querer:quiero,quieres,quiere,queremos,queréis,quieren
+decir:digo,dices,dice,decimos,decís,dicen
+venir:vengo,vienes,viene,venimos,venís,vienen
+salir:salgo,sales,sale,salimos,salís,salen
+poner:pongo,pones,pone,ponemos,ponéis,ponen
+saber:sé,sabes,sabe,sabemos,sabéis,saben
+conocer:conozco,conoces,conoce,conocemos,conocéis,conocen
+ver:veo,ves,ve,vemos,veis,ven
+dar:doy,das,da,damos,dais,dan
+dormir:duermo,duermes,duerme,dormimos,dormís,duermen
+jugar:juego,juegas,juega,jugamos,jugáis,juegan
+pensar:pienso,piensas,piensa,pensamos,pensáis,piensan
+empezar:empiezo,empiezas,empieza,empezamos,empezáis,empiezan
+volver:vuelvo,vuelves,vuelve,volvemos,volvéis,vuelven
+pedir:pido,pides,pide,pedimos,pedís,piden
+entender:entiendo,entiendes,entiende,entendemos,entendéis,entienden
+encontrar:encuentro,encuentras,encuentra,encontramos,encontráis,encuentran
+oír:oigo,oyes,oye,oímos,oís,oyen
+traer:traigo,traes,trae,traemos,traéis,traen`.split('\n').forEach(l=>{const[v,f]=l.split(':');IRR.pres[v]=f.split(',')});
+`ser:fui,fuiste,fue,fuimos,fuisteis,fueron
+ir:fui,fuiste,fue,fuimos,fuisteis,fueron
+estar:estuve,estuviste,estuvo,estuvimos,estuvisteis,estuvieron
+tener:tuve,tuviste,tuvo,tuvimos,tuvisteis,tuvieron
+hacer:hice,hiciste,hizo,hicimos,hicisteis,hicieron
+poder:pude,pudiste,pudo,pudimos,pudisteis,pudieron
+poner:puse,pusiste,puso,pusimos,pusisteis,pusieron
+venir:vine,viniste,vino,vinimos,vinisteis,vinieron
+decir:dije,dijiste,dijo,dijimos,dijisteis,dijeron
+querer:quise,quisiste,quiso,quisimos,quisisteis,quisieron
+saber:supe,supiste,supo,supimos,supisteis,supieron
+dar:di,diste,dio,dimos,disteis,dieron
+ver:vi,viste,vio,vimos,visteis,vieron
+traer:traje,trajiste,trajo,trajimos,trajisteis,trajeron
+leer:leí,leíste,leyó,leímos,leísteis,leyeron
+dormir:dormí,dormiste,durmió,dormimos,dormisteis,durmieron
+pedir:pedí,pediste,pidió,pedimos,pedisteis,pidieron
+llegar:llegué,llegaste,llegó,llegamos,llegasteis,llegaron
+buscar:busqué,buscaste,buscó,buscamos,buscasteis,buscaron
+empezar:empecé,empezaste,empezó,empezamos,empezasteis,empezaron
+jugar:jugué,jugaste,jugó,jugamos,jugasteis,jugaron
+pagar:pagué,pagaste,pagó,pagamos,pagasteis,pagaron`.split('\n').forEach(l=>{const[v,f]=l.split(':');IRR.pret[v]=f.split(',')});
+const REG_PRES='hablar trabajar estudiar escuchar mirar comprar llamar llegar tomar llevar esperar preguntar ayudar necesitar caminar nadar viajar cocinar limpiar usar cambiar bailar cantar ganar buscar pagar tocar terminar comer beber aprender vender correr responder creer leer comprender vivir escribir abrir recibir decidir subir'.split(' ');
+const REG_PRET='hablar trabajar estudiar escuchar mirar comprar llamar tomar llevar esperar preguntar ayudar necesitar caminar nadar viajar cocinar limpiar usar cambiar bailar cantar ganar terminar comer beber aprender vender correr responder comprender vivir escribir abrir recibir decidir subir'.split(' ');
+const ENDS={pres:{ar:['o','as','a','amos','áis','an'],er:['o','es','e','emos','éis','en'],ir:['o','es','e','imos','ís','en']},pret:{ar:['é','aste','ó','amos','asteis','aron'],er:['í','iste','ió','imos','isteis','ieron'],ir:['í','iste','ió','imos','isteis','ieron']}};
+function conjugate(v,t){if(IRR[t][v])return IRR[t][v];const st=v.slice(0,-2),g=v.slice(-2);return ENDS[t][g].map(e=>st+e)}
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+function genConj(n=20){
+  const s=D.settings,tenses=s.conjTense==='both'?['pres','pret']:[s.conjTense],items=[],used=new Set();let guard=0;
+  const persons=[0,1,2,3,4,5].filter(p=>s.vosotros||p!==4);
+  while(items.length<n&&guard++<800){
+    const t=rnd(tenses),reg=t==='pres'?REG_PRES:REG_PRET,irr=Object.keys(IRR[t]);
+    const v=rnd(s.conjSet==='reg'?reg:s.conjSet==='irr'?irr:[...reg,...irr,...irr]),p=rnd(persons),k=v+t+p;
+    if(used.has(k))continue;used.add(k);
+    const forms=conjugate(v,t),cz=(D.words.find(w=>w.es===v)||{}).cz||'',tl=t==='pres'?'Přítomný čas':'Minulý čas';
+    items.push({kind:'conj',key:k,v,p,a:forms[p],cz,label:tl,plain:`${v} · ${PERS[p]} (${t==='pres'?'přítomný':'minulý'})`,
+      note:forms.map((f,i)=>(s.vosotros||i!==4)?`<span class="${i===p?'hl':''}">${PERS[i].split(' ')[0]} <b>${f}</b></span>`:'').join('')});
+  }
+  return items;
+}
+
+/* --- běh cvičení --- */
+function startGram(items,meta={}){
+  if(!items.length)return toast('Žádná cvičení');
+  S={mode:'gram',src:meta.src||'gram',dir:'',items:(meta.keepOrder?items:shuffle(items)).map(x=>({...x})),i:0,cnt:{c:0,a:0,w:0},results:[],undo:null,busy:false,t:Date.now(),retry:!!meta.retry,lid:meta.lid,label:meta.label,regen:meta.regen};
+  $('#practice').hidden=false;document.body.classList.add('lock');updateScore();renderItem();
+}
+function renderGram(item){
+  let card;
+  if(item.kind==='conj')card=`<div class="tcard"><div class="lang">${item.label}</div><div class="word">${esc(item.v)}</div>${item.cz?`<div class="sub">${esc(item.cz)}</div>`:''}<div class="gperson">${esc(PERS[item.p])}</div></div>`;
+  else card=`<div class="tcard"><div class="lang">${esc(item.label)}</div><div class="gqt">${esc(item.q).replace(/_{2,}/g,'<span class="blank"></span>')}</div></div>`;
+  if(item.opts)choiceUI(item,card);
+  else typingUI(item,{card,answer:item.a,placeholder:'Doplň…',gopts:{articles:false},note:item.note});
+}
+function choiceUI(item,card){
+  $('#pBody').innerHTML=`${card}<div class="opts">${item.opts.map(o=>`<button class="opt" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div><div class="fb" id="fb" style="margin-top:12px"></div><button class="btn primary block" id="cNext" hidden>Další</button>`;
+  $$('.opt').forEach(b=>b.onclick=()=>{
+    if(S.busy)return;S.busy=true;const ok=b.dataset.v===item.a;
+    $$('.opt').forEach(x=>{x.disabled=true;if(x.dataset.v===item.a)x.classList.add('good')});
+    if(!ok)b.classList.add('bad');item.given=b.dataset.v;record(item,ok?'c':'w');
+    $('#fb').innerHTML=`<span class="v ${ok?'good':'bad'}">${ok?'✓ Správně':'✗ Správně je: '+esc(item.a)}</span>${item.note?`<div class="gnote">${item.note}</div>`:''}`;
+    $('#cNext').hidden=false;$('#cNext').onclick=()=>{S.i++;renderItem()};
+  });
+}
+
+/* --- záložka a lekce --- */
+function renderGrammar(){
+  const s=D.settings,done=LESSONS.filter(l=>D.gram[l.id]).length;
+  const lcard=l=>{const g=D.gram[l.id],n=parseEx(l).length;return `<button class="gl" data-l="${l.id}"><span class="lemoji">${l.emoji}</span><span class="lbody2"><b>${l.title}</b><span>${l.intro}</span></span>${g?`<span class="badge ${g.best>=80?'ok':''}">${g.best} %</span>`:`<span class="badge">${n} cv.</span>`}</button>`};
+  $('#view-gram').innerHTML=`<header class="top"><div><div class="sub">${done} z ${LESSONS.length} lekcí procvičeno</div><h1>Gramatika</h1></div></header>
+  <div class="card"><h2>🔤 Trenažér časování</h2><div class="sub">Dostaneš sloveso a osobu, napíšeš správný tvar.</div>
+    <div class="lbl">Čas</div>${segHTML('conjTense',[['pres','Přítomný'],['pret','Minulý'],['both','Oba']])}
+    <div class="lbl">Slovesa</div>${segHTML('conjSet',[['reg','Pravidelná'],['irr','Nepravidelná'],['all','Vše']])}
+    <div class="set-row" style="padding:16px 0 0;border:0"><div><div class="t">Včetně „vosotros“</div><div class="d">V Latinské Americe se nepoužívá</div></div>${sw('vosotros')}</div>
+    <button class="btn primary big" id="conjGo">Začít časovat</button></div>
+  <button class="qbtn" id="gMix" style="width:100%"><b>🎲 Gramatický mix</b><span>20 náhodných cvičení ze všech lekcí</span></button>
+  <div class="gtitle">A1 · úplné základy</div>${LESSONS.filter(l=>l.level==='A1').map(lcard).join('')}
+  <div class="gtitle">A2 · další krok</div>${LESSONS.filter(l=>l.level==='A2').map(lcard).join('')}`;
+  bindSegs($('#view-gram'));
+  $$('#view-gram input[data-k]').forEach(i=>i.onchange=()=>{s[i.dataset.k]=i.checked;save()});
+  $('#conjGo').onclick=()=>{const regen=()=>startGram(genConj(20),{src:'conj',label:'🔤 Časování',regen,keepOrder:true});regen()};
+  $('#gMix').onclick=()=>{const regen=()=>startGram(shuffle(LESSONS.flatMap(parseEx)).slice(0,20),{src:'gmix',label:'🎲 Gramatický mix',regen});regen()};
+  $$('.gl').forEach(b=>b.onclick=()=>openLesson(b.dataset.l));
+}
+let curLesson=null;
+function lessonFoot(){if(!curLesson)return;const g=D.gram[curLesson.id],n=parseEx(curLesson).length;$('#lGo').textContent=`Procvičit (${n} cvičení)${g?` · nejlépe ${g.best} %`:''}`}
+function openLesson(id){
+  const L=LESSONS.find(l=>l.id===id);if(!L)return;curLesson=L;
+  $('#lTitle').textContent=L.emoji+' '+L.title;
+  $('#lBody').innerHTML=`<div class="g"><span class="pill">${L.level}</span><p class="lead">${L.intro}</p>${L.html}</div>`;
+  lessonFoot();$('#lesson').hidden=false;document.body.classList.add('lock');$('#lBody').scrollTop=0;
+  $('#lGo').onclick=()=>{const regen=()=>startGram(parseEx(L),{src:'lesson:'+L.id,lid:L.id,label:L.emoji+' '+L.title,regen});regen()};
+}
+$('#lClose').onclick=()=>{$('#lesson').hidden=true;curLesson=null;document.body.classList.remove('lock');renderCurrent()};
+
+/* ===================== NAVIGACE ===================== */
+let tab='home';
+function renderCurrent(){({home:renderHome,dict:renderDict,gram:renderGrammar,stats:renderStats,settings:renderSettings})[tab]()}
+$$('#tabbar button').forEach(b=>b.onclick=()=>{
+  tab=b.dataset.tab;$$('#tabbar button').forEach(x=>x.classList.toggle('on',x===b));
+  $$('.view').forEach(v=>v.hidden=v.id!=='view-'+tab);
+  if(tab!=='dict'){dict.sel=false;dict.picked.clear()}
+  renderCurrent();window.scrollTo(0,0);
+});
+
+load();applyTheme();renderHome();
+if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
