@@ -194,7 +194,7 @@ mark{background:color-mix(in srgb,var(--warn) 45%,transparent);color:inherit;bor
 .lcard{display:flex;align-items:center;gap:12px;padding:13px;background:var(--surface);border:1px solid var(--border);border-radius:20px;margin-bottom:10px}
 .lemoji{font-size:1.5rem;width:46px;height:46px;border-radius:14px;background:var(--surface2);display:grid;place-items:center;flex:none}
 .lbody{flex:1;min-width:0;background:none;border:0;text-align:left;padding:0}
-.lname{font-weight:700;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lname{font-weight:700;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .lmeta{font-size:.8rem;color:var(--muted);margin:1px 0 7px;display:block}
 .mbar{display:flex;height:6px;border-radius:9px;overflow:hidden;background:var(--surface2)}
 .mbar i{display:block;height:100%}
@@ -277,6 +277,8 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .gperson{margin-top:14px;display:inline-block;background:var(--accent);color:#fff;font-weight:750;padding:6px 16px;border-radius:99px}
 .gnote{margin-top:10px;font-size:.9rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px;justify-content:center}
 .gnote .hl{color:var(--accent)}.gnote .hl b{text-decoration:underline}
+.gvoc{width:100%;display:flex;justify-content:space-between;align-items:center;padding:12px 14px;margin:0 0 10px;border-radius:16px;border:1.5px dashed var(--accent);background:color-mix(in srgb,var(--accent) 8%,var(--surface));color:var(--accent);font-weight:700}
+#view-gram details.grp .gl{margin-bottom:8px;background:var(--bg)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -1003,10 +1005,2684 @@ la guitarra|kytara
 el gimnasio|posilovna`]
 ];
 
+/* ===================== SLOVÍČKA Z UČEBNICE ===================== */
+const BOOK=[
+['L1','📗',"Lekce 1 · ¡Hola! Yo soy Pedro",`el amable|ilý, -á, příjemný, -á, laskavý, -á
+antipático, -a|nesympatický, -á, protivný, -á
+aquí|zde, tady
+de aquí|odsud
+bonito, -a|hezký, -á, pěkný, -á
+el/la cantante|zpěvák, zpěvačka
+la checa|Češka
+el checo|Čech; čeština
+checo, -a|český, -á
+la chica|dívka
+el chico|chlapec, kluk
+la ciudad|město
+¿cómo?|jak, jaký, -á
+de|z, ze, od
+¿de dónde?|odkud
+el día|den
+difícil|nesnadný, -á, obtížný, -á
+el/la economista|ekonom/ka
+el ejercicio|cvičení
+el encuentro|setkání
+enfermo, -a|nemocný, -á
+España|Španělsko
+español, -a|španělský, -á
+el español|Španěl; španělština
+la española|Španělka
+el/la estudiante|student/ka
+extranjero, -a|cizí, zahraniční
+el extranjero|cizinec; cizina
+fácil|lehký, -á, snadný, -á
+famoso, -a|slavný, -á
+la foto(grafía)|fotografie
+la gente|lidé|jen v sg.
+guapo, -a|hezký, -á, pěkný, -á (o osobě)
+histórico, -a|historický, -á
+el idioma|jazyk, řeč
+la lección|lekce
+la lengua|jazyk (i přen.), řeč
+mañana|zítra
+la mañana|ráno, dopoledne
+la médica|lékařka
+el médico|lékař
+mi|můj, má
+mucho|mnoho, velmi, hodně (u sloves a podst. jmen)
+muy|velmi, hodně, mnoho (před příd. jménem nebo příslovcem)
+no|ne
+la noche|noc, večer
+el nombre|jméno
+la operaria|dělnice
+el operario|dělník
+Pedro|Petr
+el/la periodista|novinář/ka
+pero|ale
+la playa|pláž
+precioso, -a|nádherný, -á, překrásný, -á, skvělý, -á
+el problema|problém
+el profesor|profesor
+la profesora|profesorka
+¿qué?|jaký?, který?, co?
+¿quién?|kdo?
+la República Checa|Česká republika
+el señor|pán
+la señora|paní
+ser|být
+sí|ano
+simpático, -a|sympatický, -á
+súper|super, skvělý, -á, výborný, -á
+también|také
+tarde|pozdě
+la tarde|odpoledne
+el texto|text`],
+['L2','📗',"Lekce 2 · De vacaciones en España",`la abuela|babička
+¿adónde?|kam
+el agosto|srpen
+la amiga|přítelkyně
+el amigo|přítel
+el año (académico)|rok (školní)
+así que|takže
+la biblioteca|knihovna
+la calle|ulice
+cansado, -a|unavený, -á
+la casa|dům, byt
+cerca (de)|blízko (čeho)
+la cervecería|pivnice, hospoda
+el cine|kino
+con|s, se
+contento, -a|spokojený, -á
+la copa|sklenička, pohár, panák
+cuando|když
+¿cuándo?|kdy
+curioso, -a|zvědavý, -á, zvídavý, -á; zvláštní
+despierto, -a|čilý, -á, bystrý, -á
+¿dónde?|kde
+durante|během
+en|v, na
+la escuela|škola
+eso|to
+estar|být
+la excursión|výlet
+el familiar|příbuzný
+grande|velký, -á
+el hospital|nemocnice
+importante|důležitý, -á
+ir|jít, jet
+la juerga|flám
+el julio|červenec
+juntos, -as|spolu, společně
+lleno, -a (de)|plný, -á (čeho)
+el lugar|místo
+la madre|matka
+el mar|moře
+más|více
+mayor|starší
+la medicina|medicína
+la montaña|hora
+el norte|sever
+el padre|otec
+para|pro
+¿por qué?|proč?
+por supuesto|ovšem, jistě, samozřejmě, jasně
+porque|protože
+preferido, -a (por)|oblíbený (kým)
+pues|tedy, no (hovorový uvozovací výraz na začátku věty)
+que|že
+el regalo|dárek
+sin embargo|avšak, přesto, nicméně
+solo|jen, pouze
+solo, a|sám, -a
+su|jeho, její, jejich, Váš, Vaše
+el sur|jih
+el teatro|divadlo
+todavía|ještě
+todo, -a|celý, -á
+un poco|trochu
+las vacaciones|prázdniny, dovolená
+el verano|léto
+la visita|návštěva
+y|a
+ya|už`],
+['L3','📗',"Lekce 3 · La abuela de Alicia",`la América Latina|Latinská Amerika
+además (de)|kromě (čeho)
+ahora|nyní, teď
+aprender|učit se
+las Baleares|Baleárské ostrovy
+bastante|dost, docela
+bien|dobře; hodně, velmi
+la carta|dopis
+catalán, -ana|katalánský, -á
+el catalán|Katalánec; katalánština
+la Cataluña|Katalánsko
+checo|česky
+claro, -a|jasný, světlý
+clásico, -a|klasický, -á
+como|jako
+la comunidad|autonomní oblast
+autónoma|(ve Španělsku)
+conocer (zc)|znát, poznat
+el corazón|srdce
+la cosa|věc
+desconocer (zc)|neznat
+desear|přát si, chtít
+el Dios|bůh
+dos|dva, dvě
+duro, -a|tvrdý; nesnadný, obtížný
+el ejemplo|příklad
+por ejemplo|například
+entonces|tedy, tak; tehdy, tenkrát
+escribir|psát
+escuchar|poslouchat
+este|tento, zde; tohle
+estudiar|studovat, učit se
+el euskera|baskičtina
+existir|existovat
+francés, -esa|francouzský, -á
+el francés|Francouz; francouzština
+la Galicia|Galicie
+gallego, -a|galicijský, -á
+el gallego|Galicijec; galicijština
+hablar|mluvit
+joven|mladý, -á
+inactivo, -a|nečinný, lenošivý
+interesante|zajímavý, -á
+el jardín|zahrada (okrasná)
+el/la joven|mladík; děvče, dívka
+junto (con)|spolu/společně (s)
+leer|číst
+el libro|kniha
+llevar (a)|vést, přivést, vézt (někam)
+mandar|posílat, poslat
+mejor (que)|lépe (než)
+mientras (que)|zatím(co)
+mirar|dívat se, podívat se
+moderno, -a|moderní
+la música|hudba
+notar|všimnout si, zpozorovat, vidět
+el novio|snoubenec, kluk (se kterým dívka chodí)
+nuevo, -a|nový, -á
+oficial|oficiální, úřední
+el origen|původ
+otro, -a|jiný, -á
+el país|země
+el País Vasco|Baskicko
+el poema|báseň
+por eso|proto
+la pregunta|otázka
+preguntar (a)|ptát se (koho)
+que|který, -á
+la revista (del corazón)|bulvární časopis
+románico, -a|románský, -á
+la telenovela|televizní seriál
+la tele(visión)|televize
+trabajar|pracovat
+traducir (zc)|překládat
+ver|vidět`],
+['L4','📗',"Lekce 4 · Pedro va al bar con su amigo Carlos",`a veces|někdy, občas
+abrir|otevřít
+adivinar|hádat, uhodnout
+alguno, a|nějaký, -á
+el alivio|úleva
+el año|rok
+apasionado, -a|vášnivý, -á
+bajo, -a|malý, -á (o lidech), nízký, -á
+el banco|banka; lavička
+el bar|bar
+blanco, -a|bílý, -á
+brindar|připít
+el cabello|vlasy
+el calor|horko
+castaño, -a|hnědý, kaštanový
+celta|keltský, -á
+la cerveza|pivo
+cierto, -a|jistý, -á, určitý, -á
+la clase|třída
+tener clases|mít školu/vyučování
+creer|myslet, domnívat se, věřit
+¿cuánto, -a, -os, -as?|kolik
+de|o (kom, čem)
+desconocido, -a|neznámý, -á
+dramático, -a|dramatický, -á
+la envidia|závist
+la familia|rodina
+el frío|zima, chlad
+las gafas|brýle
+generalmente|(vše)obecně, obvykle
+hablador, -a|upovídaný, -á
+el hambre (el)|hlad
+el hombre|člověk, muž
+hoy|dnes
+la imagen|představa, obraz, image
+impuntual|nedochvilný, -á
+más bien|spíš(e)
+más o menos|víceméně
+moreno, -a|tmavý, -á, černý, -á (o vlasech); snědý, -á; opálený. -á
+negro, -a|černý, -á
+o|nebo
+el ojo|oko
+opinar|mínit, soudit
+los padres|rodiče
+el pelo|vlasy
+perezoso, -a|lenivý, -á, nedbalý, -á
+poco|málo
+un poco|trochu
+el pueblo|národ; vesnice, obec
+rubio, -a|světlovlasý, -á
+ruidoso, -a|hlučný, -á
+la salud|zdraví
+la sed|žízeň
+la semana|týden
+sociable|společenský, -á (člověk), družný
+sordo, -a|hluchý, -á
+el sueño|spánek; sen
+tener sueño|chtít se (někomu) spát
+tener|mít
+el tiempo|čas, doba
+tomar|dát si (o jídle a pití), pít
+tópico, -a|ustálený, -á, vžitý, -á (představa apod.)
+trabajador, -a|pracovitý, -á
+el trabajo|práce
+tranquilo, -a|klidný, -á
+usar|(po)užívat
+usar gafas|nosit brýle
+la vida|život
+vario, -a|různý, -á
+varios, varias (v pl.)|několik, někteří, některé
+la verdad|pravda
+vivir|bydlet, žít`],
+['L5','📗',"Lekce 5 · Estás en tu casa",`allí|tam
+alquilar|pronajmout (si), najmout si
+el apartamento|malý (jednopokojový) byt
+el ascensor|výtah
+barato, -a|laciný, -á, levný, -á
+el barco|loď
+el barrio|čtvrť
+la belleza|krása, nádhera
+bienvenido, -a|vítaný, -á
+ser bienvenido (a)|být vítaný (v)
+el bloque|blok
+bloque de pisos|bytový dům, činžák, panelák
+el campo|venkov; pole
+la casa de campo|venkovský dům, chalupa
+el centro|centrum, střed
+caracterizado, -a (por)|charakteristický, -á (čím)
+caro, -a|drahý, -á
+el chalé|rodinný dům (ve Španělsku)
+cerca (de)|blízko (čeho)
+el cielo|nebe
+la cocina|kuchyně
+el comedor|jídelna
+comprar|koupit
+contra|proti
+el cuarto|pokoj
+cuarto de baño|koupelna
+deber|muset, mít (povinnost)
+delante de|před (místně)
+depender (de)|záviset/záležet (na)
+la derecha|pravá strana
+a la derecha|napravo
+descansar|odpočívat
+desde|od (časově i místně), z
+desde allí|odtamtud
+detrás de|za (místně)
+la diferencia|rozdíl
+donde|kde
+dormir (ue)|spát
+el dormitorio|ložnice
+entre|mezi
+eso|to
+el estudio|garsoniéra
+al fondo|vzadu, v pozadí
+hay|je/jsou, vyskytuje/ vyskytují se, existuje/ existují
+hoy|dnes
+inteligente|inteligentní
+la izquierda|levá strana
+a la izquierda|nalevo
+junto a|u, vedle
+el lado|strana (ne politická)
+al lado (de)|vedle (čeho)
+lejos (de)|daleko (od)
+llover (ue)|pršet
+maravilloso, -a|nádherný, -á
+la mayoría|většina
+la minoría|menšina
+nada|nic
+el niño|dítě
+pasar|stát / dít / přihodit se; (s)trávit (čas)
+el pasillo|chodba
+la paz|mír, klid
+pequeño, -a|malý, -á
+la periferia|okraj (města)
+periférico, -a|okrajový, -á
+el piso|byt; poschodí, patro
+piso compartido|společný/sdílený byt
+la planta baja|přízemí
+poder (ue)|moct, smět
+el poema|báseň
+por el contrario|naopak
+proteger (contra)|chránit (před)
+el puerto|přístav
+querer (ie)|chtít; milovat
+el rato|chvíle
+al rato|po/za chvíli
+la región|kraj, krajina, oblast
+relativamente|poměrně, relativně
+saber|vědět, umět
+la sala de estar, salón m|obývací pokoj
+siempre|vždy(cky)
+la siesta|siesta, odpočinek po obědě
+la terraza|terasa; zahrádka (restaurace)
+típico, -a|typický, -á
+todo|všechno
+el trastero|komora
+la tumba|hrob
+el vecino|soused
+la vista|pohled, výhled
+vivo, -a|živý, -á
+estar vivo|být naživu, žít
+el fin(al)|konec
+al final|na konci, koncem`],
+['L6','📗',"Lekce 6 · Alicia busca piso para una amiga inglesa",`el acceso (a)|přístup (na)
+la acción|akcie; akce
+el acuerdo|souhlas, dohoda
+estar de acuerdo (con)|souhlasit (s)
+ahora mismo|hned (teď)
+alguno|nějaký
+el alojamiento|ubytování
+el anuncio|inzerát, oznámení
+amueblado|zařízený (nábytkem)
+aparecer (zc)|objevit se
+el armario (empotrado)|(vestavěná) skříň
+(boli – hovor.)|propisovačka
+bueno|dobrý, hodný
+buscar|hledat
+la cama|postel
+la casualidad|náhoda
+por casualidad|náhodou
+compartir|sdílet
+compartir el piso|bydlet společně
+conveniente|vhodný
+la copa|sklenice, sklenička
+ir de copas|jít na tah
+el cuadro|obraz
+¿cuál?|jaký?, který?
+el cuarto|pokoj
+dar|dát, dávat
+danés|dánský
+el danés|Dán; dánština
+debajo (de)|pod (čím)
+decidir|rozhodnout (se)
+dentro (de)|uvnitř (čeho)
+después|potom
+detrás (de)|za (čím)
+el diccionario|slovník
+el dueño|majitel, pán, vlastník
+la economía|ekonomie; ekonomika, hospodářství
+encima (de)|nad (čím)
+encontrar (ue)|najít
+encontrarse (ue)|nacházet se; setkat se
+enseguida|(i)hned
+la estantería|police
+la fiesta|oslava, mejdan; svátek
+fuera|venku
+fuera (de)|mimo (co)
+el gato|kocour
+la habitación|pokoj
+hacer|dělat
+el hermano|bratr
+la hija|dcera; (oslovení mladé dívky) děvče, dcerka
+inglés|anglický
+el inglés|Angličan; angličtina
+internacional|mezinárodní
+junto (a)|u, vedle (čeho)
+la lámpara|lampa
+libre|volný; svobodný (ne rodinný stav)
+llamar|(za)volat
+malo|špatný, zlý
+el mapa|mapa
+el marco|rámec; rám
+la mesa (de trabajo)|(pracovní) stůl
+el mes|měsíc (kalendářní)
+necesitar|potřebovat
+ninguno|žádný
+el ordenador|počítač
+parecer (zc)|zdát se, vypadat
+el patio|dvůr
+el perro|pes
+la persona|osoba, člověk
+por fin|konečně
+el portátil|notebook
+el precio|cena
+primero|první
+el programa|program
+próximo|příští, následující, další
+la puerta|dveře
+de estudiantes|studentská kolej
+si|jestli(že)
+la silla|židle
+el sillón|křeslo
+sobre|na (čem), nad (čím); o (čem)
+el sofá|pohovka
+el tablón (de anuncios)|nástěnka, vývěsní deska
+tercero|třetí
+único|jediný; jedinečný
+la universidad|univerzita
+venir|přijít, přijet
+la ventana|okno`],
+['L7','📗',"Lekce 7 · Una tarde con Alicia",`a partir de|od
+acostarse (ue)|jít spát, jít si lehnout
+acostumbrarse (a)|zvyknout si (na)
+afeitarse|holit se
+el almuerzo|oběd
+aprovechar|využít
+el ave (el)|pták
+ave nocturna|noční pták
+beber|pít
+la bici(cleta)|kolo
+el café|káva; kavárna
+la cafetería|bistro, bar
+caminar|procházet se, kráčet
+cantar|zpívat
+cenar|večeřet
+centroeuropeo|středoevropský
+la clase|třída, hodina (vyučovací)
+clases fp|vyučování
+el coche|auto (ve Španělsku), vůz
+el colegio|škola
+ir al colegio|chodit do školy
+colegio de enseñanza primaria|základní škola
+colegio de enseñanza secundaria|střední škola
+comer|jíst; obědvat (ve Španělsku)
+como|zde: přibližně, asi, kolem
+concentrarse (en)|soustředit se (na)
+correr|běhat; jet (auto apod.)
+el correo|pošta
+costar (ue)|stát (o penězích); stát / dát hodně námahy
+cotidiano|každodenní
+el deber|úkol; povinnost
+decir|říct, říkat
+dedicar(se) (a)|věnovat (se)
+el deporte|sport
+desayunar|snídat, nasnídat se
+el desayuno|snídaně
+desconectar|vypnout
+despertar(se) (ie)|probudit (se)
+después de|po (časově)
+el diente|zub
+ducharse|sprchovat se
+empezar (ie)|začínat
+encontrarse (ue) (con)|setkat se (s)
+encender (ie)|zapnout (přístroj), rozsvítit, zapálit
+la entidad|firma, společnost, podnik
+entidad administrativa|úřad, kancelář(e)
+fatal|hrozný, strašný
+favorito|oblíbený
+fijarse (en)|všimnout si (čeho)
+en fin|zkrátka (a dobře)
+la gallina|slepice
+la guitarra|kytara
+hasta|až do
+el helado|zmrzlina
+la hora|hodina
+el horario|rozvrh (ve škole apod.); pracovní/ otvírací doba; úřední hodiny
+horario partido|rozvrh / pracovní doba s polední pauzou
+el instituto|gymnázium, střední škola
+limpiar(se)|čistit (si)
+levantarse|vstávat
+luego|potom, pak
+la madrugada|časné ráno
+por la madrugada|časně ráno
+maquillarse|malovat se, dělat si make-up
+el marítimo|přímořský, pobřežní
+matar|zabít
+las matemáticas|matematika
+la medianoche|půlnoc
+mejorar|zlepšit (se)
+el mensaje|zpráva (např. sms), vzkaz
+el miércoles|středa
+el minuto|minuta
+montar (en)|jezdit (na)
+el móvil|mobil
+nadar|plavat
+navegar (por)|(inform.) surfovat (po)
+por la noche|večer (přísl.)
+la noticia|zpráva (ve sdělovacích prostředcích apod.)
+la novia|snoubenka; dívka (se kterou chlapec chodí)
+observar|pozorovat
+la oficina|kancelář
+parar|zastavit (se)
+sin parar|bez přestávky, nepřetržitě
+pasar|(s)trávit; přecházet, přejít
+el paseo|promenáda, procházka
+la pausa|přestávka, pauza
+peinarse|česat se
+peor|horší; hůře
+el periódico|noviny
+el pie|noha (chodidlo)
+a pie|pěšky
+por lo general|většinou, obecně
+quedarse|zůstat
+tener razón|mít pravdu
+la red|síť
+redes sociales|sociální sítě
+relajado|uvolněný, oddechový
+el reloj|hodiny, hodinky
+la rutina|rutina
+el sábado|sobota
+salir (con)|vyjít, jít ven, vyrazit si; chodit (s kým)
+la semana|týden
+fin de semana|víkend
+estar sentado, -a|sedět
+simplemente|prostě, jednoduše, jen
+sin|bez
+soler (ue) + inf.|mít ve zvyku (obvykle něco dělat)
+la suerte|štěstí
+por la tarde|odpoledne (přísl.)
+temprano|brzy, časně
+terminar|končit
+el turno|směna; řada, pořadí
+universitario|univerzitní
+el vapor|pára, parník
+a todo vapor|na plný plyn (přeneseně)
+el verbo|sloveso
+el viernes|pátek
+volver (ue)|vrátit se`],
+['R1','🔁',"Opakování I · España",`a menudo|často
+administrativo|správní, administrativní
+la África (el)|Afrika
+africano|africký
+la asignatura|předmět (ve škole)
+asistir (a)|chodit (do, na), zúčastnit se (čeho)
+el Asturias|Asturie
+bañado (por)|omývaný (čím)
+bañar(se)|koupat (se)
+el bosque|les
+caluroso|horký, teplý
+las Canarias (las islas Canarias)|Kanárské ostrovy
+la capital|hlavní město
+la causa|příčina, důvod
+por causa de|kvůli (čemu), z důvodu (čeho)
+central|centrální, ústřední
+el clima|podnebí, klima
+la competencia|kompetence, pravomoc, oprávnění
+conocido|známý
+constantemente|stále, nepřetržitě
+contar (ue) (con)|mít (co)
+continental|kontinentální, vnitrozemský
+la costa|pobřeží
+crecer (zc)|růst, zvětšovat se
+la defensa|obrana
+defensa nacional|národní obrana
+democrático|demokratický
+el deporte|sport
+deporte de invierno|zimní sport
+desarrollado|rozvinutý
+divertido|zábavný
+dividirse (en)|dělit se (na)
+económicamente|ekonomicky
+el estado de ánimo|nálada, duševní rozpoložení
+el este|východ (světová strana)
+estupendo|nádherný, skvělý, báječný
+exclusivo|výhradní
+el exrey|bývalý král
+extenso|rozlehlý, rozsáhlý
+la frontera|hranice
+futuro|budoucí
+el gobierno|vláda
+el grado|stupeň
+el hijo|syn, dítě (vlastní)
+la humedad|vlhkost
+el infierno|peklo
+el invierno|zima (roční období)
+la isla|ostrov
+el kilómetro|kilometr
+lindar|sousedit, hraničit
+llamado|zvaný, nazývaný
+el llamado, la llamada|takzvaný, -á
+llamarse|jmenovat se
+pasado mañana|pozítří
+la maravilla|nádhera
+mediterráneo|středozemský, středomořský; vnitrozemský
+el Mediterráneo (mar Mediterráneo)|Středozemní moře
+la meseta|náhorní rovina/ planina, vysočina
+el metro|metr; metro
+la microeconomía|mikroekonomie
+el miembro|člen
+mil|tisíc
+moderado|mírný
+la monarquía|monarchie
+monarquía parlamentaria|parlamentní monarchie
+montañoso|hornatý
+el más montañoso|nejhornatější
+la nevada|sněžení
+nevado|zasněžený
+nevar (ie)|sněžit
+la nieve|sníh
+el nivel|hladina; úroveň
+sobre el nivel del mar|nad mořem / hladinou moře
+el océano|oceán
+océano Atlántico|Atlantský oceán
+ocupar|zaujímat, zabírat
+el oeste|západ (světová strana)
+el otoño|podzim
+el parlamento|parlament
+pasear|procházet se
+la península|poloostrov
+península Ibérica|Pyrenejský/Iberský poloostrov
+pertenecer (zc)|patřit
+el pico|vrchol(ek)
+los Picos de Europa|pohoří v severním Španělsku
+los Pirineos|Pyreneje
+la política|politika
+política exterior|zahraniční politika
+el Portugal|Portugalsko
+practicar|provozovat, praktikovat
+practicar deportes|provozovat/dělat sporty
+el prado|louka
+la primavera|jaro
+prolongado|dlouhý, dlouhotrvající
+el punto de vista|hledisko
+el refrán|přísloví
+el repaso|opakování
+el rey|král
+seco|suchý
+seiscientos|šest set
+sentarse (ie)|sednout si
+sentirse (ie)|cítit se
+la sierra|pohoří
+situado|umístěný, položený
+el sol|slunce
+la Suiza|Švýcarsko
+el supermercado|samoobsluha, supermarket
+tarado|bláznivý, hloupý
+el territorio|území
+el tiempo|počasí; doba, čas
+tiempo de perros|psí počasí; počasí, že by psa nevyhnal
+el tío|strýc
+el/la turista|turista, -ka
+la Unión Europea|Evropská unie
+la vainilla|vanilka
+verde|zelený
+viajar|cestovat
+el viento|vítr`],
+['L8','📗',"Lekce 8 · Y aquel señor, ¿quién es?",`acabar|(s)končit
+la actualidad|současnost
+adelante|vpřed, dopředu
+ahorrar|(u)šetřit
+antes|dříve
+aquel|tamten, onen
+aunque|ačkoliv
+la barba|brada; vousy, bradka
+cantar|zpívat
+casarse (con)|vdát se (za), oženit se (s)
+casi|téměř, skoro
+celebrar|slavit
+la coma|čárka (ve větě)
+contar (ue)|počítat; vyprávět
+despedirse (i) (de)|rozloučit se (s)
+el dinero|peníze|jen v sg.
+divorciado|rozvedený
+divorciarse|rozvést se
+dormirse (ue)|usnout
+el empleo|zaměstnání, místo
+entender (ie)|rozumět
+entrar (en)|vstoupit (do)
+estable|stálý
+la fiesta|oslava, svátek, slavnost
+el hijo|syn, dítě (vlastní)
+el hijo mayor|nejstarší syn
+hispanoamericano|hispanoamerický, španělskoamerický
+independizarse|osamostatnit se, stát se nezávislým
+el índice|index, ukazatel
+índice de natalidad|míra porodnosti
+irse|odejít, odjet
+el lado|strana
+latinoamericano|latinskoamerický
+la mamá|maminka
+(jako tener)|udržovat (se)
+mayor, el / la mayor|starší, nejstarší
+menor, el / la menor|mladší, nejmladší
+menos|méně
+al / por lo menos|aspoň, přinejmenším
+el modelo|model
+muerto|mrtvý
+la mujer|žena, manželka
+la natalidad|porodnost, natalita
+la Navidad|Vánoce
+ni|ani
+nocturno|noční
+nostálgico|nostalgický
+numeroso|početný
+ojalá|kéž (by)
+el padrastro|nevlastní otec
+el papá|tatínek
+la pareja|pár, dvojice
+pasar (por)|procházet (kudy); stavět / zastavit se (u někoho / někde)
+pensar (ie) (en)|myslet (na)
+pensar + inf.|zamýšlet, hodlat
+poner|položit, dát (co kam)
+protestar|protestovat
+el secreto|tajemství
+segundo|druhý
+sentir(se) (ie)|cítit (se)
+sino|nýbrž (po záporné větě)
+(mucho) más tarde|(mnohem) později
+tradicional|tradiční
+triste|smutný
+último|poslední
+unido|jednotný, spojený, pospolu
+verse|vidět se, setkat se, sejít se
+el vestido|šaty (dámské)
+vestir (i)|nosit, mít na sobě (šaty)
+vestirse (i)|obléci se
+por última vez|naposledy
+una vez|jednou
+la vivienda|obydlí, byt
+segunda vivienda|rekreační obydlí / byt
+volver (ue)|vrátit se`],
+['L9','📗',"Lekce 9 · De compras",`el abrigo|kabát
+aguantar|vydržet, snést
+algo|něco
+amarillo|žlutý
+apretado|těsný, úzký
+los artículos de punto|pletené zboží
+el ayuntamiento|radnice
+azul|modrý
+azul oscuro|tmavěmodrý
+beis|béžový
+la blusa|blůza
+la boda|svatba
+el bolso|kabelka
+las botas|vysoké boty, kozačky
+los botines|kotníčkové boty
+la boutique|butik
+el caballero|pán (velmi zdvořile)
+la cafetería|bufet, bar
+la caja|pokladna
+el calzado|obuv
+la cazadora|bunda
+el centro comercial|nákupní centrum
+la chaqueta|sako
+el cliente|zákazník
+la cola|fronta
+hacer cola|stát ve frontě
+el color|barva
+de colores|barevný
+combinar|hodit se k sobě
+cómodo|pohodlný
+la compra|nákup
+ir de compras|jít nakupovat / na nákupy
+la confección|konfekce
+la dama|paní, dáma
+demasiado|příliš
+la dependienta|prodavačka
+desgastado|obnošený, ošoupaný
+en efectivo|v hotovosti, za hotové
+elegante|elegantní
+encantar|nadchnout, okouzlit, velice se líbit / chutnat
+enseñar|ukázat; učit (vyučovat)
+ensuciar(se)|(u)špinit (se)
+la época|doba, období
+exagerar|přehánět
+el euro|euro
+la falda|sukně
+el fallo|vada, chyba
+formal|formální, solidní, usedlý
+la fruta|ovoce
+el funcionario|úředník
+hasta|dokonce (i)
+importar|být důležitý
+invitar|zvát
+el jersey|svetr
+llevar|nosit
+las medias|punčochy, punčochové kalhoty
+el mercado|trh, tržnice
+la mercancía|zboží
+la moda|móda
+mostrar (ue)|ukázat
+el número|číslo, počet
+nunca|nikdy
+pagar|(za)platit
+los pantalones|kalhoty
+perfectamente|výborně, perfektně
+el pescado|ryba (potravina)
+el polo|polokošile
+práctico|praktický
+la prenda|část/kus oděvu
+el probador|zkušební kabina
+probar (ue)|(vy)zkoušet; ochutnat
+proponer (jako poner)|navrhovat
+quedar bien / mal|padnout/nepadnout (o šatech)
+quedarse con|vzít si, nechat si (co)
+raro|(po)divný
+la rebaja|sleva
+rebajado|zlevněný
+el regreso|návrat
+la ropa|oblečení; prádlo
+el ropero|šatník
+el ruido|hluk
+salvar|zachránit
+salvado|zachráněný
+las sandalias|sandále
+sentir (ie)|litovat
+serio|vážný
+en serio|vážně
+significar|znamenat
+sobre todo|hlavně, především
+la sudadera|mikina
+suficiente|dostatečný
+la talla|velikost (oděvů)
+tanto|tolik
+la tarjeta (de crédito)|(kreditní) karta
+la temporada|sezona
+la tienda|obchod
+el tipo|typ, druh
+el traje|oblek (pánský); dámský kostým
+los vaqueros (pantalones vaqueros)|džínsy
+valer|stát, mít cenu
+esta vez|tentokrát
+el vino|víno
+vino blanco|bílé víno
+vino tinto|červené víno
+las zapatillas|pantofle
+zapatillas deportivas|tenisky, sportovní boty
+los zapatos|boty
+zapatos de tacón|boty na podpatku`],
+['L10','📗',"Lekce 10 · En el mercado",`el aceite|olej
+aceite de oliva|olivový olej
+ahí|tam, tamhle
+la alita|křidýlko
+el ánimo|mysl, duch, duše
+el atasco|zácpa (dopravní)
+el bacalao|treska
+la bolsa|sáček, pytlík
+la botella|láhev
+la calidad|kvalita
+la carne|maso
+carne de cerdo|vepřové maso
+carne de res (LA)|hovězí maso
+la carnicería|řeznictví
+el carnicero|řezník
+el carrito|vozík
+la cebolla|cibule
+chistoso|vtipný
+completamente|úplně, zcela
+componer (jako poner)|složit, komponovat, sepsat
+el conejo|králík
+correr|běžet
+cortar|(na)krájet, (na)řezat
+el cuarto (de kilo)|čtvrt kila
+curado|vysušený, vyzrálý (o mase, sýru apod.)
+diferente|rozdílný, různý
+disgustar|znechutit, být protivný/odporný
+la docena|tucet, dvanáct
+la ensalada|salát
+es que|totiž (uvozuje vysvětlení)
+la espina|kost (rybí)
+el espejo|zrcadlo
+faltar|chybět
+el filete|řízek, plátek
+fino|jemný, tenký
+la fresa|jahoda
+fresco|čerstvý
+el fútbol|fotbal
+la galleta|sušenka, keks
+la gamba|garnát, kreveta
+el garbanzo|cizrna
+el gramo|gram
+el guisante|hrách
+la hortaliza|zelenina
+el huevo|vejce
+la idea|nápad, představa, myšlenka
+el jamón|šunka
+jamón cocido / (de)York|dušená šunka
+jamón serrano|sušená šunka
+la judía|fazole
+jugoso|šťavnatý
+justo|přesný
+justo como|přesně tak / právě tak / stejně jako
+el kilo|kilo
+la langosta|langusta
+la lata|plechovka, konzerva
+la leche|mléko
+la lechuga|salát (zelenina)
+la legumbre|luštěnina; zelenina
+el lenguado|mořský jazyk (ryba)
+la lista|seznam, list, lístek
+lista de la compra|nákupní seznam
+la loncha|plátek (masa apod.)
+maduro|zralý
+el marisco|mořské plody
+mejorar|zlepšit
+el melón|žlutý meloun
+el mero|kanic (mořská ryba)
+el moco|nudle (u nosu)
+el momento|okamžik, moment
+morir (ue) (de)|zemřít (na)
+la naranja|pomeranč
+la oda (a)|óda (na)
+oler (ue) (a)|být cítit (po čem, čím)
+oler bien / mal|vonět/páchnout
+el olor|pach, zápach; vůně
+pálido|bledý
+la papa (LA)|brambor
+la pata|noha (u zvířat, nábytku), kýta
+la pechuga|prsa, prsíčka (kuřecí apod.)
+el pepino|okurka
+el picadillo|mleté maso, sekaná
+el pollo|kuře
+producir (zc)|vyrábět
+producirse (zc)|přihodit se, nastat, vyskytnout se
+el puesto|místo; stánek, stanoviště
+el pulpo|chobotnice
+el queso|sýr
+queso manchego|sýr z kraje La Mancha
+redondo|kulatý
+la rima|rým
+rojo|červený
+salado|slaný
+sabroso|chutný
+la sandía|vodní (červený) meloun
+el sándwich|sendvič|pl. sándwiches
+la sardina|sardinka
+secado|sušený
+separado|oddělený, samostatný
+la sopa|polévka
+suave|jemný, mírný
+tardar|trvat; zpozdit se, mít zpoždění
+la tarta|dort
+tener en cuenta|vzít v úvahu
+el tomate|rajče
+la toronja|grep
+tremendo|hrozný, strašný
+el trozo|kus, kousek
+la trucha|pstruh
+la variedad|druh, odrůda
+la verdura|zelenina (zelená)
+el vinagre|ocet`],
+['L11','📗',"Lekce 11 · La cena de despedida",`acompañar|doprovázet
+acostumbrado|zvyklý
+estar acostumbrado (a)|být zvyklý (na)
+el agua (el)|voda
+agua mineral|minerální voda
+agua con gas|perlivá voda
+agua sin gas|neperlivá voda
+el ajo|česnek
+antes de|před (časově)
+apetecer (zc)|mít chuť (na něco; něco udělat)
+el arroz|rýže
+asado|pečený
+el asado|pečeně
+asturiano|asturský, z Asturie
+el atún|tuňák
+la barra|bar, barový pult
+la bebida|nápoj, pití
+el bocadillo|bageta (obložená)
+la brocheta|špíz
+la broma|vtip, žert
+el café con leche|káva s mlékem
+el camarero|číšník
+la caña|malé pivo (Šp.)
+la carta|jídelní lístek
+la casa|podnik, firma
+la cena|večeře
+cenar|večeřet
+el chocolate|čokoláda
+el chorizo|chorizo (šp. papriková klobása)
+la chuleta|kotleta
+por cierto|mimochodem
+el cochinillo|sele
+el cocido|šp. hustá polévka z luštěnin a masa
+la cocinera|kuchařka
+la comida|jídlo; oběd (ve Španělsku)
+conducir (zc)|řídit (auto apod.)
+continuar (ú)|pokračovat
+el cordero|jehně; jehněčí maso
+corriente|běžný, obvyklý
+la cortesía|zdvořilost, pozornost
+cortesía de la casa|pozornost podniku
+el cubierto|příbor
+la cuchara|lžíce
+el cuchillo|nůž
+la cuenta|účet
+de hecho|vlastně, doopravdy, skutečně
+dejar|nechat
+delicioso|chutný, delikátní, lahodný
+la despedida|(roz)loučení
+dulce|sladký
+engordar|(z)tloustnout
+la ensaladilla rusa|bramborový salát
+escoger (j)|vybrat
+la especialidad|specialita
+la estancia|pobyt
+explicar|vysvětlovat
+exquisito|vynikající, výtečný
+favorable|příznivý
+el flan|zapečený karamelový puding
+frío|studený
+el futuro|budoucnost
+la galleta|sušenka, oplatka
+gratis|zadarmo, zdarma
+la hamburguesa|hamburger
+la infusión|ovocný/bylinkový čaj
+el interior|vnitrozemí
+la jarra|džbánek, půllitr
+la lenteja|čočka (luštěnina)
+ligero|lehký
+el limón|citron
+la macedonia de frutas|ovocný salát
+madrileño|madridský
+la mantequilla|máslo
+la manzana|jablko
+el mejillón|slávka jedlá
+mejillónes a la vinagreta|slávky nakyselo
+el menú|menu
+la merluza|treska bezvousá
+la mermelada|marmeláda
+mientras tanto|mezitím
+mixto|míchaný
+la morcilla|jelito
+nadie|nikdo
+opulento|opulentní
+la paella|paella (šp. jídlo z rýže)
+el pan|chléb
+pasear (por)|procházet se (po)
+la pasta|těstoviny
+pecar|hřešit
+pedir (i)|žádat, objednávat
+la pera|hruška
+el pimiento|paprika (zelenina)
+la piña|ananas
+el plátano|banán
+el plato|talíř; jídlo, chod
+la plaza|náměstí
+el pórtico|podloubí, sloupořadí
+posible|možný
+el postre|moučník, zákusek, dezert
+la predicción|předpověď, předpovídání
+la propina|spropitné
+quedar|zůstávat, zbývat; dát si schůzku/ sraz
+rápido|rychlý
+recomendar (ie)|doporučit
+el restaurante|restaurace
+restaurante de comida rápida|rychlé občerstvení, fast food
+la rodaja|kolečko, plátek
+el sabor|(pří)chuť
+el sacrificio|oběť, obětování
+el salmón (a la plancha)|losos (na grilu / na tálu)
+la sangría|sangría (šp. nápoj z vína a ovoce)
+seguir (i) (sigo)|pokračovat
+seguro|jistý
+sensible (a)|citlivý (na)
+la servilleta|ubrousek
+similar (a)|podobný (čemu)
+el sistema|systém
+soportar|snést, vytrpět
+la sorpresa|překvapení
+tampoco|také ne
+la tapa|jednohubka, chuťovka
+la tarta (de la casa)|(domácí) dort
+el té|čaj
+el tenedor|vidlička
+a tiempo|včas
+al mismo tiempo|současně, zároveň
+tierno|křehký, měkký
+el tocino|špek
+la tortilla|tortilla, omeleta (Šp.); kukuřičná placka (LA)
+la tostada|toast, topinka
+traer|přinést, přivést; přivézt
+variado|různý, rozmanitý, pestrý
+el vaso|sklenice
+el viaje|cesta
+la vidente|věštkyně, jasnovidka
+el vino de la casa|víno od stálého dodavatele pro určitou restauraci
+el yogur|jogurt`],
+['L12','📗',"Lekce 12 · Alicia en Madrid (I)",`el abrazo|objetí
+acercar|přiblížit; dovézt
+acogedor|přívětivý, útulný
+acudir|přijít, dostavit se
+admirar|obdivovat
+agradable|příjemný
+alejarse (por)|vzdalovat se (kudy)
+alguien|někdo
+alucinar|trpět halucinacemi, mít přeludy
+el ambiente|prostředí, ovzduší
+ambos, -as|oba, obě
+anoche|včera večer
+anteayer|předevčírem
+apretar (ie)|(s)tisknout, mačkat; tlačit
+apuntar|poznamenat (si), zapsat (si)
+el árbol|strom
+la arquitectura|architektura
+el artículo|článek
+la atención|pozornost
+llamar la atención|upoutat pozornost
+el atentado|atentát
+el autobús|autobus
+la azafata|hosteska, letuška
+bajar|vystoupit (z dopr. prostředku); sejít dolů
+el billete|lístek, jízdenka
+billete de autobús|jízdenka na autobus
+billete de avión|letenka
+el bordo|paluba
+a bordo del tren|ve vlaku
+el botón|knoflík, tlačítko
+cambiar|změnit; přestoupit, přesednout
+el camino|cesta
+carnívoro|masožravý
+la carretera|silnice
+la cercanía|blízkost, blízké okolí
+la cita|schůzka, rande
+coger (j)|chytit, uchopit; jet (dopravním prostředkem)
+comenzar (ie)|začít
+el concierto|koncert
+conectado (con)|spojený/propojený (s)
+convertido (en)|přeměněný/ změněný (na)
+la continuación|pokračování
+a continuación|dále (v textu apod.)
+cruel|krutý
+cuadrado|čtvercový; čtvereční
+desactivar|deaktivovat, vyřadit z provozu
+declarado|prohlášený, vyhlášený
+declarar|prohlásit, vyhlásit
+desaparecer (zc)|zmizet
+descubrir|objevit, odkrýt
+desmayarse|omdlít
+desnudo|svlečený, nahý
+disfrutar (de)|mít radost/ potěšení (z); užívat si (něčeho)
+el escenario|scéna, jeviště
+la especie|druh
+el duque|vévoda
+el edificio|budova
+emprender|podniknout, podnikat
+enfrente (de)|naproti (čemu)
+la estación|nádraží, stanice (metra)
+estremecerse (zc)|(za)chvět se, (roz)třást se
+el fantasma|duch, přízrak, strašidlo
+los ferrocarriles|železnice
+ferroviario|železniční
+la guitarra|kytara
+el icono|ikona
+imaginar(se)|představovat si
+la importancia|význam, důležitost
+inaugurar|otevřít, zahájit
+inmenso|nesmírný, obrovský
+el instrumento|nástroj
+intentar|pokusit se
+el ladrón|zloděj
+lateral|postranní, vedlejší
+levantar|zvednout
+el libro de cocina|kuchařská kniha
+la llamada|volání, hovor (telefonický)
+atender la llamada|vzít hovor/ telefon
+llevarse|odnést si
+loco|bláznivý
+volverse loco|zbláznit se
+la maja|kráska (zastarale)
+el marciano|Marťan
+el Marte|Mars
+el medio|prostředek
+medio de transporte|dopravní prostředek
+mencionado|zmíněný
+el mensaje|sdělení, zpráva, vzkaz
+mensaje corto|zpráva SMS
+el monumento (a)|památka (historická), památník (koho), pomník
+la obra (maestra)|(mistrovské) dílo
+ocurrir|stát se, přihodit se
+ocurrirse|napadnout (někoho něco)
+ofrecer (zc)|nabízet
+orgulloso (de)|pyšný; hrdý (na)
+el palacio|palác
+la pantalla|obrazovka, displej
+la parada|zastávka (autobusu, tramvaje)
+el pasado|minulost
+el Patrimonio de la Humanidad|dědictví lidstva, světové kulturní dědictví
+perder (ie)|ztratit; zmeškat
+el periódico|noviny
+el pintor|malíř
+la pista|stopa; dráha
+el planeta|planeta
+la planta|rostlina
+por|po (městě apod.), kvůli
+por lo menos|alespoň
+la portada|titulní strana
+primaveral|jarní
+quedarse dormido|usnout
+real|královský
+el recorrido (por)|projížďka (po), procházka (po), prohlídka (čeho)
+la red|síť
+de repente|náhle, najednou
+la réplica|replika
+la residencia|sídlo, rezidence
+el retiro|odchod, stáhnutí se, ústraní
+robado|ukradený
+robar|(u)krást
+el rumbo|směr (cesty)
+el salto|skok
+dar un salto|vyskočit, nadskočit
+sentarse (ie)|sednout si
+el siglo|století
+el sistema de alarma|poplašné zařízení
+el sitio|místo
+el solista|sólista
+sonar (ue)|(za)znít, (za)zvonit
+subir|nastoupit; stoupat, jít/ vystoupit nahoru
+el susto|leknutí, úlek
+la taza|šálek, hrnek
+el teléfono (móvil)|(mobilní) telefon
+tocar|dotknout se, dotýkat se
+el transporte|doprava
+transporte público|veřejná doprava
+transporte urbano|městská doprava
+transportar|dopravit, přepravit
+el trayecto|trať, cesta (ujetá vzdálenost)
+el tren|vlak
+tren de alta velocidad (AVE)|vysokorychlostní vlak
+tren de cercanías|příměstský vlak
+tren de largo recorrido|dálkový vlak
+tropical|tropický
+el uso|užití, užívání
+el valor|cena, hodnota
+vestido|oblečený
+vestido de época|oblečený v dobovém oděvu
+otra vez|znovu, opět
+la vía|cesta
+vibrar|vibrovat
+visitar|navštívit
+la voz|hlas`],
+['L13','📗',"Lekce 13 · Por favor, ¿cómo voy al Rastro?",`abajo|dole
+absolutamente|absolutně, zcela
+el acceso|přístup, vjezd
+la acera|chodník
+acercarse (a)|přiblížit se / přistoupit (k)
+aconsejar|poradit
+el acto|akce, slavnost
+los alrededores|okolí
+ancho|široký
+animado|živý, rušný
+el ánimo|odvaha
+anticuado|starý (zastaralý)
+antiguo|starý, starobylý; bývalý
+arrepentirse (ie-i) (de)|litovat (čeho), mrzet (co)
+el arte|umění
+la arteria|tepna
+la aspirina|aspirin
+la avenida|ulice, třída
+el bikini|bikiny, dvojdílné plavky
+la cantidad|množství, spousta; částka
+cercano|blízký
+la chatarra|šrot; starý krám
+concurrido|navštěvovaný, živý (ulice apod.)
+el cruce|křižovatka
+deprimirse|cítit se deprimovaný/ sklíčený
+despedir (i) (a)|propustit (koho) (z práce)
+el disco|deska
+divertir(se) (ie-i)|(po)bavit (se)
+doblar|zahnout, zabočit
+emblemático|symbolický, emblematický
+encantador|okouzlující, kouzelný
+la encuesta|anketa
+enérgico|energický
+espléndido|nádherný, skvělý, velkolepý
+la esquina|roh (ulice)
+la estatua|socha
+evidente|zjevný, zřejmý, očividný
+evidentemente|zjevně, očividně
+la farmacia|lékárna
+formar|tvořit
+la fuente|fontána, kašna
+furioso|zuřivý, rozzuřený
+ganar|vydělat; vyhrát
+girar|zahnout, zatočit
+el grupo|skupina
+la historia|historie, dějiny; příběh, příhoda
+hoy día|v dnešní době
+inimaginable|nepředstavitelný
+el interés|zájem
+tener interés (por / en)|mít zájem (o)
+lentamente|pomalu
+lento|pomalý
+literario|literární
+lucir (zc)|zářit; dobře vypadat, vyniknout
+el madroño|planika, medvědice (keř, strom)
+la marca|značka
+de marca|značkový (oblečení apod.)
+mencionar|zmínit
+el museo|muzeum; galerie
+olvidado|zapomenutý
+olvidarse (de)|zapomenout (na)
+la ópera|opera
+orientarse|orientovat se
+el oriente|východ (světová strana)
+el oso|medvěd
+el pájaro|pták
+partir|vyjít, vycházet, odejít, odjet
+la pérdida|ztráta
+perdido|ztracený
+el personaje|osobnost, osoba, postava (literární apod.)
+popular|populární, známý; lidový
+porticado|s podloubím (náměstí apod.)
+principal|hlavní
+el público|veřejnost
+la puerta|dveře, brána
+rápidamente|rychle
+el Rastro|bleší trh (v Madridu)
+recto|rovný, přímý
+recuperar|znovu získat/nabýt
+la reina|královna
+el residuo|zbytek, (po)zůstatek
+sacar|vyndat, vytáhnout
+la sede|sídlo
+sentado|usazený, sedící
+estar sentado|sedět
+el símbolo|symbol
+social|společenský
+sorprendido|překvapený
+toparse (con)|srazit / setkat se (s), narazit (na)
+el traje de baño|plavky
+tratar (de + inf.)|snažit se (o), pokusit se (o)
+unir(se)|(s)pojit (se)
+valiente|statečný, odvážný
+vaquero|džínový
+la velocidad|rychlost
+el vendedor|prodavač
+vender|prodávat
+de vez en cuando|občas`],
+['L14','📗',"Lekce 14 · Una carta a América Latina",`aceptable|přijatelný
+por ahora|prozatím
+atrapado|zaskočený; (po)lapený
+atrás|vzadu, dozadu
+hacia atrás|zpět, směrem dozadu
+el beso|polibek
+el buzón|schránka (poštovní)
+chino|čínský
+el chino|čínština; Číňan
+la cita|schůzka
+cita de negocios|obchodní schůzka/ jednání
+conjugar|časovat
+el contacto|dotyk, kontakt
+contestar (a)|odpovídat (na)
+la conversación|konverzace, rozhovor
+corresponder (a)|příslušet, patřit (k); odpovídat (čemu)
+la costumbre|zvyk
+la cultura|kultura
+cultura de contacto|kontaktní kultura
+cuyo|jehož
+desgraciadamente|bohužel
+diferir (ie-i) (de)|lišit/odlišovat se (od)
+emplear|(po)užívat; zaměstnávat
+la empresa|podnik
+la espalda|záda
+especial|speciální, zvláštní
+específico|specifický, zvláštní
+estrechar|(s)tisknout, sevřít
+el examen|zkouška
+expresar(se)|vyjádřit (se)
+la expresión|výraz, vyjádření
+la fecha|datum
+la forma|forma, způsob
+frecuente|častý, běžný
+fuerte|silný
+gastar|utratit
+la gastronomía|gastronomie
+en general|(vše)obecně
+el gesto|gesto, posunek
+el grano|zrno
+ir al grano|jít k (jádru) věci
+habitual|obvyklý
+hispanohablante|mluvící španělsky
+el horizonte|obzor, horizont
+la independencia|nezávislost
+la invitación|pozvání; pozvánka
+la irregularidad|nepravidelnost
+largo|dlouhý
+en lugar de|místo (čeho)
+majo|sympatický, pohledný, bezvadný (o člověku)
+la manera|způsob
+la maravilla|nádhera, zázrak
+medio|poloviční; půl
+a lo mejor|možná
+el mundo|svět
+el negocio|obchod, podnikání
+obvio|zjevný, zřejmý, očividný
+la palmadita|poklepání, poplácání
+dar palmaditas|poklepávat
+de parte de|od (koho)
+el paso|krok
+dar un paso|udělat krok
+el plural|množné číslo
+ponerse de acuerdo (en)|dohodnout/ shodnout/domluvit se (na)
+la prisa|spěch
+la proximidad|blízkost
+puntual|přesný
+querido|milý
+la reacción|reakce
+recibir|dostat, obdržet; přijmout (hosty)
+recordar (ue)|připomenout; vzpomenout si
+respetar|respektovat, ctít
+la respuesta|odpověď
+el resto|zbytek
+del resto|jinak
+el retraso|zpoždění
+saludar|zdravit
+el saludo|pozdrav
+seguir en pie|(dále) trvat/platit, pokračovat
+el singular|jednotné číslo
+sino (que)|nýbrž
+la situación|situace
+de sobra|příliš, až moc (dobře)
+solo|sám, samotný
+sorprender|překvapit
+suceder|stát se, přihodit se
+sucio|špinavý
+suspender (a)|vyhodit od zkoušky (koho)
+suspender el examen|neudělat zkoušku
+tal vez|možná, snad
+el tema|téma, námět
+el tratamiento|oslovování; jednání, zacházení
+tratar|oslovovat
+tutear|tykat
+el tuteo|tykání
+utilizar|(po)užívat
+valorar|oceňovat, cenit si
+Venceslao|Václav
+la vuelta (a)|okruh, cesta kolem (čeho)
+vuelta (por)|procházka/projížďka (po)`],
+['R2','🔁',"Opakování II · América Latina",`abandonado|opuštěný, zapomenutý, zanedbaný
+la adelfa|oleandr
+la agricultura|zemědělství
+el aguacate|avokádo
+la altiplanicie|náhorní rovina
+amanecer (zc)|svítat, rozednívat se
+el amanecer|svítání, jitro, úsvit
+amazónico|amazonský
+americano|americký
+el analfabetismo|negramotnost, analfabetismus
+anochecer (zc)|stmívat / šeřit se
+el anochecer|soumrak, stmívání
+así como|jakož i
+austral|jižní
+el azúcar|cukr
+bailar|tančit
+basado (en)|založený (na)
+estar basado en|být založený na, opírat se o
+el cabo|mys
+la caña de azúcar|cukrová třtina
+el carbón|uhlí
+causar|způsobit, vyvolat
+cerrar (ie)|zavřít
+la cifra|číslo, číslice
+el cobre|měď
+la colonia|kolonie
+el colonizador|kolonizátor
+conquistar|dobývat
+considerable|značný, významný
+el continente|kontinent, světadíl
+continuo|nepřetržitý, trvalý, stálý
+la cordillera|pohoří
+el crecimiento|růst
+la criminalidad|kriminalita, zločinnost
+la crisis|krize
+Cristóbal Colón|Kryštof Kolumbus
+cruzar|přejít, přejet, přeplout
+cultivar|pěstovat, chovat
+debido a|díky/kvůli (čemu), z důvodu (čeho)
+el decenio|desetiletí
+el desempleo|nezaměstnanost
+el desierto|poušť
+despertar(se) (ie)|probudit (se)
+el deterioro|poškození, zhoršování
+dominar|(o)vládnout
+emprender|podniknout, podnikat
+englobar|zahrnovat
+enorme|ohromný, obrovský
+de América (EE. UU.)|Spojené státy americké (USA)
+el estaño|cín
+la explotación|těžba; využití; vykořisťování
+explotar|těžit; využívat; vykořisťovat
+extenderse (ie)|rozkládat se, táhnout se
+la extensión|rozloha
+europeo|evropský
+la fauna|fauna, zvířectvo
+firme|pevný
+la flora|flóra, rostlinstvo
+la fuente|zdroj, pramen
+la geografía|zeměpis, geografie
+el habitante|obyvatel
+hacia|k, do, směrem do/na
+hechizar|okouzlit, očarovat
+el hierro|železo
+la impresión|dojem
+la influencia|vliv
+instalarse|usadit/usídlit se
+intenso|intenzivní, silný, pronikavý
+lejano|vzdálený
+la lluvia|déšť
+la longitud|délka
+luchar (por)|bojovat (za)
+la madera|dřevo
+madera preciosa|vzácné dřevo
+el maíz|kukuřice
+la materia prima|surovina
+el medio ambiente|životní prostředí
+mineral|nerostný, minerální
+el mineral|ruda
+mineral de hierro|železná ruda
+la mortalidad|úmrtnost
+mortalidad infantil|dětská úmrtnost
+el narcotráfico|obchod s drogami
+natural|přirozený
+el neerlandés|nizozemština; Nizozemec
+el níquel|nikl
+omnipresente|všudypřítomný
+el oro|zlato
+el Pacífico|Tichý oceán, Pacifik
+la parte|(sou)část
+en buena parte|z velké části
+el petróleo|ropa, nafta
+la plata|stříbro
+pleno|plný, úplný (přen.)
+a pleno mediodía|v pravé poledne
+la población|obyvatelstvo
+la pobreza|bída
+el portugués|portugalština; Portugalec
+primero|zde: nejprve, nejdříve
+el principio|začátek
+a principios (de)|počátkem / na začátku (čeho)
+el rayo|paprsek
+respirar|dýchat, vdechovat
+el río|řeka
+la riqueza|bohatství
+el ritmo|rytmus
+la ruta|cesta, trať, směr
+la selva|prales
+la sobreexplotación|nadměrná těžba
+socioeconómico|společensko ekonomický
+sofocante|dusivý, dusný, úmorný
+superar|překonat
+la tensión|napětí
+la tierra|země
+tierra firme|pevnina
+torpe|nešikovný, těžkopádný
+el total|celkový počet, celková částka
+tratar (de + inf.)|snažit se, usilovat (o)
+viejo|starý
+la zona|oblast`],
+['L15','📗',"Lekce 15 · Memorias de un viejo funcionario de Correos",`a pesar de (eso)|přes (to), navzdory (tomu)
+abrir|otevřít, otevírat
+acceder (a)|postoupit (na); přistoupit (k)
+adjuntar|přiložit, připojit
+adquirir (ie-i)|dostat, získat, nabýt
+el análisis|rozbor, analýza
+apagar|zhasnout, vypnout
+el aparato|přístroj
+aprobar (ue)|udělat zkoušku, projít (u zkoušky)
+la aritmética|aritmetika
+arreglar|zařídit, vyřídit
+el asunto|záležitost, věc
+la aventura|dobrodružství
+el avión|letadlo
+el bachillerato|maturita
+básico|základní
+la basura|odpadky, smetí
+la bolígrafo (boli)|propisovačka
+el borracho|opilec
+el borrador|houba (na mazání tabule)
+cambiado|změněný
+cansarse (de)|unavit se (čím)
+el cañón (de proyección)|projektor
+la capulla|čúza (hovor.)|hovor.
+católico|katolický
+chatear|chatovat
+el ciclo|cyklus
+el cohete (espacial)|(kosmická) raketa
+el compacto|cédečko
+competir (i)|soutěžit, závodit; konkurovat (si)
+común|(vše)obecný; společný
+comunicarse|stýkat se, být ve spojení, hovořit spolu
+conectarse|připojit se; přihlásit se (k síti)
+el conocimiento|znalost, pozná(vá)ní
+consistir (en)|spočívat, tkvít (v)
+constar (de)|skládat se / sestávat (z)
+conversar|mluvit, hovořit, povídat si
+el coñazo|otrava, nuda, opruz, pruda (hovor.)|hovor.
+el Correos|pošta (úřad)
+correr|běžet; jet (závod)
+el cuaderno|sešit
+el cuidado|péče, starost, opatrnost
+tener (mucho) cuidado|dát si (velký) pozor
+el curso|kurz; ročník, rok (školní)
+los demás|ostatní
+descargar|stáhnout (soubor apod.)
+el diálogo|rozhovor, dialog
+dirigirse (j) (a)|obrátit se (na), směřovat (do, k)
+el doctorado|doktorát, doktorské studium
+echar de menos|postrádat, chybět
+la educación|vzdělávání, školství; výchova
+educación artística|výtvarná výchova
+educación física|tělesná výchova
+educación secundaria|střední školy / vzdělávání
+educación primaria|základní školství
+educación superior universitaria|vysoké školství
+la empollona|(hovor.) šprtka
+el encanto|kouzlo, půvab
+encender (ie)|rozsvítit; zapálit
+en fin|koneckonců
+enviar (í)|posílat
+la escritura|psaní; písmo
+la expresión|vyjadřování; výraz
+feliz|šťastný
+financiar|financovat
+la formación|vzdělání; odborné předpoklady
+FP (formación|odborná příprava
+la profesional)|odborné učiliště
+grabar|nahrát, natočit, pořídit záznam
+el grado|bakalářské studium
+gratuito|bezplatný
+el grito|křik
+guay (hovor.)|bezva, perfektní
+hacer pellas|novillos chodit za školu
+humano|lidský, humánní
+la iglesia|církev; kostel
+impartir (clases)|vyučovat
+la infancia|dětství
+(de educación|střední škola
+secundaria)|gymnázium
+interrumpir|přerušovat
+inundado (de)|zaplavený (čím)
+la investigación|výzkum, zkoumání; vyšetřování (policejní apod.)
+jubilado|v důchodu
+estar jubilado|být v důchodu
+el lápiz|tužka
+el lápiz de colores|pastelka, barevná tužka
+la lavadora|pračka
+el lector de libros|čtečka
+la lectura|četba
+la lengua castellana|španělský jazyk
+llenarse (de)|naplnit se (čím)
+la luz|světlo
+la mancha|skvrna
+el mando a distancia|dálkový ovladač
+tener la manía|zasednout si
+mantener (jako tener)|živit
+el máster|magisterské studium
+la materia|látka, téma, věc
+la matrícula|školné, zápisné
+máximo|maximální, nejvyšší, největší
+el medio|prostředí
+la memoria|paměť, vzpomínka
+mismo|(ten)týž
+al mismo tiempo (que)|současně, ve stejné době (jako)
+la moto(cicleta)|motocykl, motorka
+nacer (zc)|narodit se
+natural|přírodní; přirozený
+zumo de naranja natural|čerstvě vymačkaná pomerančová šťáva
+negarse (ie)|odmítnout
+la nostalgia|nostalgie, stesk
+la nota|známka
+obligatorio|povinný
+oler a peste (hovor.)|páchnout jako tchoř (hovor.)
+oral|ústní
+otorgar|poskytnout, dát, udělit
+el pago|placení
+ser de pago|být placený (služby apod.)
+el papel|papír
+la papelera|odpadkový koš
+el parque|park
+pasar el examen|udělat zkoušku
+pelma(zo) (hovor.)|otrava, prudič (člověk) (hovor.)
+el pensamiento|myšlenka
+perfecto|perfektní, dokonalý
+la pestaña|řasa
+la pizarra|tabule
+el planeta|planeta
+el póster|plakát
+la presentación|prezentace
+presentar|představit (koho)
+privado|soukromý
+la profundidad|hloubka
+en profundidad|detailně, do hloubky
+el progreso|pokrok
+quemar(se)|spálit (se)
+la redacción|esej, slohová práce
+reír(se) (de)|smát se (komu, čemu)
+el rotulador|fix, popisovač
+el sello|známka (poštovní)
+servirse (i) (de)|využívat/používat (co)
+el silencio|ticho, klid
+sonreír(se) (+|3. p.) usmívat se (na koho)
+suspender (+|předmět) neudělat zkoušku (z předmětu)
+suspender (a alguien)|vyhodit (koho) (od zkoušky)
+la tableta|tablet
+tan solo|pouze, jenom
+la taquilla|přepážka, okénko; pokladna (kina apod.)
+el telegrama|telegram
+la tienda de barrio|místní obchod
+la tiza|křída
+útil|užitečný
+el viaje de negocios|služební cesta`],
+['L16','📗',"Lekce 16 · Una aventura deportiva",`el actor|herec
+actual|současný, nynější
+el aficionado (a)|fanoušek, příznivec (čeho)
+la alegría|radost
+alcanzar|dosáhnout
+alrededor (de)|kolem, okolo (čeho)
+amenizar|oživit, zpestřit
+animarse (a)|odhodlat se, odvážit se, dodat si odvahy (k čemu)
+el árbitro|rozhodčí, sudí
+aterrizar|přistávat
+el/la atleta|atlet/ka
+el atletismo|atletika
+el baloncesto|košíková, basket
+el balonmano|házená
+la barbacoa|barbecue, grilování
+brillar|(za)zářit
+el buceo|potápění
+el caballo|kůň
+caber|vejít se
+la cabeza|hlava
+el campeón|vítěz, šampion, mistr
+el campeonato|mistrovství, šampionát
+el campo de deportes|hřiště
+la cancha|hřiště, kurt
+la carrera (por etapas)|(etapový) závod
+celebrarse|konat se
+la cesta f, cestita|košík, košíček
+el ciclismo|cyklistika
+colapsar|zkolabovat, zhroutit se
+comparable|srovnatelný
+la condición|podmínka
+el corredor|závodník, běžec
+corredor de fondo|vytrvalostní běžec
+la corrupción|korupce
+cortar|zde: přerušit, zastavit
+corto|krátký
+cubrir|(za/při)krýt
+darse cuenta (de)|uvědomit si, zjistit (co), všimnout si (čeho)
+cuidar (de)|pečovat / starat se (o)
+cuidarse|šetřit se, pečovat o sebe
+el deporte|sport
+deportes acuáticos|vodní sporty
+deportes de aventura|adrenalinové sporty
+deportes de pelota|míčové sporty
+el/la deportista|sportovec, -kyně
+descender (ie)|sestoupit, sejít; sjet, sjíždět
+destacar(se)|vynikat
+detestar|nenávidět, nesnášet
+doble|dvojnásobný, dvojitý
+la duración|trvání
+ejemplar|příkladný
+empatar|remizovat
+enterarse (de)|dozvědět se (co)
+la entrada|vstup, vchod; vstupenka
+entusiasmar(se)|nadchnout (se)
+el equilibrio|rovnováha, vyrovnanost
+equipar (con)|vybavit (čím)
+el equipo|mužstvo, družstvo, oddíl, tým
+esconder|schovat
+el espectador|divák
+el esquí|lyže, lyžování
+la estación de esquí|lyžařské středisko
+el estadio|stadion
+la estrella|hvězda
+excelente|výborný, vynikající
+exhibir|vystavovat, předvádět, ukazovat
+exorbitante|přehnaný, závratný
+la experiencia|zkušenost, zážitek
+el extraterrestre|mimozemšťan
+la fase|fáze
+fenomenal|fenomenální, skvělý; (hovor.) fantastický, vynikající
+el fichaje|přestup, transfer (hráče)
+final|konečný, závěrečný, poslední
+la final|finále
+la fórmula|formule
+futbolero|fotbalový
+la gana|chuť
+tener ganas (de)|mít chuť (na něco;, něco dělat)
+la gimnasia|cvičení, gymnastika
+hacer gimnasia|cvičit
+el/la gimnasta|gymnasta, -ka
+el golf|golf
+el golfista|hráč golfu
+la golosina|pamlsek, sladkost
+el helicóptero|vrtulník, helikoptéra
+el héroe|hrdina
+el/la hincha|fanoušek
+el hockey [jókei]|hokej
+hockey sobre hielo|lední hokej
+hockey sobre hierba|pozemní hokej
+el icono|ikona
+igual (que)|stejný (jako)
+ilimitado|neomezený
+inventar|vymyslet, vynalézt
+el juego|hra
+los Juegos Olímpicos|Olympijské hry
+el jugador|hráč
+jugar (ue) (a)|hrát (co)
+la libertad|svoboda
+el líder|lídr, vedoucí závodník
+la liga|liga
+la locura|bláznovství, šílenství
+magnífico|skvělý, obdivuhodný
+matricularse (en)|zapsat se (do)
+los modales|způsoby, chování
+montar|jezdit (na čem)
+montar en bici(cleta)|jezdit na kole
+montar a caballo|jezdit na koni
+moverse (ue)|hýbat se, pohybovat se
+mundial|světový
+el músculo|sval
+nacional|národní, celostátní; tuzemský
+la natación|plavání
+o sea|to jest, to znamená
+el papel|úloha, role
+participar (en)|(z)účastnit se (čeho)
+el partido|zápas, utkání
+pasarse (hovor.)|přehnat (něco)
+la pasión|vášeň
+el patinaje|bruslení
+patinaje artístico|krasobruslení
+patinaje sobre ruedas|bruslení na kolečkových bruslích
+la pelota|míč
+perder (ie)|prohrát
+la pesca (submarina)|(podmořský) rybolov
+la pista|sjezdovka, dráha
+el pitido|písknutí
+por cierto|mimochodem
+el premio|cena, výhra
+Gran Ppremio|Velká cena
+prestigioso|proslulý, prestižní
+pronto|brzy
+el puenting [puéntin]|bungee jumping
+puro|čistý
+el rafting [ráftin]|rafting
+la regla|pravidlo
+el relato|vyprávění, referát
+remar|veslovat
+el representante|reprezentant; zástupce
+la semifinal|semifinále
+la sensación|pocit
+el snow(board)|snowboard
+[esnóu bor]|snowboarding
+el squash [eskuás]|squash
+sudar|potit se
+tatuar (ú)|(po)tetovat
+el tenis|tenis
+el torneo|turnaj
+el tráfico|provoz, doprava
+trasladar|převézt, přemístit
+el trofeo|trofej, kořist
+últimamente|v poslední době
+la vela|plachta, plachtění
+vencer (a)|porazit (koho), zvítězit/vyhrát (nad kým)
+el voleibol|volejbal
+la Vuelta a Francia|Tour de France, Závod kolem Francie
+ya que|neboť, protože`],
+['L17','📗',"Lekce 17 · Entrevista con el doctor Curalotodo",`abandonar|opustit
+adorar|zbožňovat
+agotado|vyčerpaný; vyprodaný
+agotador|vyčerpávající, únavný
+el agotamiento|vyčerpání
+agudo|ostrý; akutní (o nemoci), prudký (o bolesti)
+la alergia (a)|alergie (na)
+la alimentación|strava, stravování, výživa
+el alimento|potravina
+la ambulancia|ambulance, záchranka
+el amor|láska
+las anginas|angína
+el antibiótico|antibiotikum
+la apendicitis|apendicitida, zánět slepého střeva
+la articulación|kloub
+el asma (el)|astma
+atreverse (a)|odvážit se
+bajo en calorías|nízkokalorický
+la balsa|vor, člun, raft
+la barriga|břicho
+la boca|ústa
+bravo|divoký, prudký
+el brazo|paže
+la cabeza|hlava
+caer(se)|(u)padnout, spadnout
+caer enfermo|onemocnět
+calmar|zmírnit (bolest), utišit, uklidnit
+la camilla|lehátko, nosítka
+casero|domácí
+el catarro|rýma, katar
+complicar|komplikovat
+la compresa|obklad
+la consulta|ordinace, poradna
+contagiar(se)|nakazit (se), přenášet se (o nemoci)
+convencido (de)|přesvědčený (o)
+corregir (i)|opravit
+cualquiera|jakýkoliv, kterýkoliv
+el cuello|krk; límec
+curar|(vy)léčit
+los deberes|úkoly (školní)
+débil|slabý
+descender (ie)|sestoupit, sejít, sjet
+el dedo|prst
+destacado|význačný, vynikající
+la diarrea|průjem
+el diente|zub
+la dificultad|obtíž, nesnáz
+con dificultad|obtížně
+el doctor|doktor
+doler (ue)|bolet
+el dolor|bolest
+la enfermedad|nemoc, choroba
+enfermedad de la civilización|civilizační choroba
+la entrevista|rozhovor, interview
+la escalera|schody, schodiště
+el esparadrapo|náplast
+el/la especialista|odborník, -ice, znalec, -kyně, specialista, -ka
+el estilo|styl, způsob
+estilo de vida|životní styl
+estimado|vážený, ctěný
+estrecho|úzký, těsný
+el estreñimiento|zácpa
+el estrés|stres
+la explicación|vysvětlení
+extremo|krajní, extrémní
+facilitado|poskytnutý (zpráva apod.)
+la falta|vada, chyba
+hace falta|je (to) zapotřebí
+la fibra|vláknina
+la fiebre|horečka
+frente a|před, proti
+fumar|kouřit
+la garganta|krk, hrdlo
+gemir (i)|sténat
+la gota|kapka
+la grasa|tuk
+la gripe (aviar)|(ptačí) chřipka
+el grupo sanguíneo|krevní skupina
+hacer ejercicio|cvičit
+la hepatitis|žloutenka
+la historia clínica|zdravotní karta
+el hombro|rameno
+el hospital|nemocnice
+ignorar|neznat, nevědět
+el infarto|infarkt
+influir (y) (en)|mít vliv (na), ovlivňovat (koho/co)
+ingresar|hospitalizovat
+lácteo|mléčný
+lamentable|žalostný, politováníhodný
+lavar|mýt; prát
+lavarse|mýt se
+el líquido|tekutina
+la manera|způsob
+manera de vivir|způsob života
+la mano|ruka
+el manual|učebnice
+medir (i)|(z)měřit
+la meningitis|meningitida, zápal mozkových blan
+el menisco|meniskus
+la migraña|migréna
+el motivo|důvod, motiv
+el movimiento|pohyb
+la muestra|vzor, vzorek
+la nota|zpráva; známka (ve škole); poznámka
+la novedad|novinka
+la observación|poznámka; pozorování
+oír|slyšet
+la operación|operace
+la oreja|ucho
+el/la oyente|posluchač/ka
+el/la paciente|pacient/ka
+la palabra|slovo
+para que + subj.|aby
+la pastilla|tableta, prášek
+perdonar|prominout
+la pierna|noha
+el/la pobre|chudák, chudinka
+el presentador|moderátor
+la profesión|profese, povolání
+prohibir|zakázat
+que + subj.|ať
+quejarse (de)|stěžovat si (na)
+reaccionar|reagovat
+la receta|předpis, recept
+recetar|předepsat (lék)
+recuperarse|zotavovat se, vzchopit se
+relacionado (con)|spojený (s)
+el remedio|prostředek, lék
+resfriado|nachlazený
+el resultado|výsledek
+la rodilla|koleno
+romper|rozbít
+romperse|zlomit si
+roncar|chrápat
+roto|rozbitý; zlomený
+sacar la lengua|vypláznout jazyk
+saludable|zdravý
+sano|zdravý (člověk)
+según|podle
+la seguridad social|sociální pojištění
+siguiente|další, příští, následující
+la sirena|siréna
+el socorro|pomoc
+tener sueño|být ospalý
+la temperatura|teplota
+la tensión (alta/baja)|(vysoký/nízký) tlak
+la tirita|náplast (s polštářkem)
+la tos|kašel
+toser|kašlat
+tragar|polykat
+transmitir|předat, přenést; vysílat
+tumbarse|položit se, lehnout si
+las urgencias|pohotovostní služba
+la venda|obvaz
+la víctima|oběť
+el vientre|břicho
+vomitar|zvracet`],
+['L18','📗',"Lekce 18 · Alicia en Madrid (II)",`abatido|skleslý, sklíčený
+el aire|vzduch
+amar|milovat
+el aplauso|potlesk
+apoderarse (de)|zmocnit se (čeho, koho)
+bellas artes|krásná umění
+el/la artista|umělec, -kyně
+así|tak; takový
+algo así|něco takového
+el/la asistente|asistent/ka
+el ataque|útok; záchvat
+ataque de nervios|nervový záchvat, nervové zhroucení
+averiguar|vyšetřit, zjistit
+el/la ayudante|pomocník, -ice; asistent/ka
+la banda|skupina (hudební), kapela
+la beca (de estudios)|stipendium
+la boda|svatba
+regalo de bodas|svatební dar
+el borde|okraj
+borrar|(vy)mazat, smazat
+bostezar|zívat
+la butaca|křeslo, sedadlo (v divadle apod.)
+la caja|bedna, krabice, truhla
+hacer la cama|ustlat postel
+el cartel|plakát, vývěska
+la cartelera|program (kin, divadel apod.)
+la celebración|oslava, slavnost; konání
+el césped|trávník
+el círculo|kruh; klub, kroužek
+la colección|sbírka, soubor
+el comienzo|začátek
+confirmar|potvrdit
+constante|stálý, trvalý
+contemporáneo|současný, soudobý
+contener (jako tener)|obsahovat
+la crítica|kritika
+debajo|dole, vespod
+el desastre|pohroma, katastrofa, neštěstí
+el despertador|budík
+poner el despertador|nastavit budík
+el Día de los Muertos (Mex.)|Dušičky
+dibujar|nakreslit
+el dibujo|kresba, výkres; kreslení
+la dimensión|rozměr, velikost, dimenze
+el director|ředitel; režisér, dirigent
+el disco de estudio|studiová deska
+distinto|rozdílný, odlišný
+el don (se jménem)|pan
+la doña (se jménem)|paní
+la dulzura|něžnost, jemnost
+el emperador|císař
+entero|úplný, kompletní
+escapar|utéct, uniknout, ujít
+el espectáculo|představení
+el estreno|premiéra
+estupefacto|ohromený, užaslý, zaražený
+la exposición|výstava
+el favor|laskavost
+la fila|řada
+frenético|frenetický, šílený
+gastar|spotřebovat, vyplýtvat
+el género|žánr
+la gira|turné
+la guía|průvodce (kniha); průvodkyně
+Gguía del Ocio|kulturní přehled
+el guía|průvodce
+hasta que|až (spojka)
+iluminado|osvětlený
+infiel (ser)|(být) nevěrný, - á
+instruir (y)|instruovat, školit
+la intención|záměr, úmysl
+interpretar|interpretovat, hrát (roli)
+el/la intérprete|představitel/ka, interpret/ka; tlumočník, -ice
+japonés|japonský
+jubilarse|odejít do důchodu
+el letrero|nápis
+la licencia de conducir|řidičský průkaz
+la llave|klíč
+maldito|prokletý
+merecer (zc)|zasloužit si
+meter|strčit, vložit
+el millonario|milionář
+la muerte|smrt
+murmurar|šeptat, mumlat
+el musical|muzikál
+navegar (por)|plout, plavit se (po); (inform.) surfovat (po)
+el ocio|volný čas
+la oportunidad|příležitost
+la orquesta|orchestr
+la oscuridad|tma, temnota
+el otro día|tehdy, onehdy
+el palco|lóže
+el papagayo|papoušek
+la pared|zeď, stěna
+la película|film
+película de animación|animovaný film
+perplejo|zmatený, zaražený, rozpačitý
+la pintura|malířství; obraz, malba
+poco a poco|postupně, pomalu
+el polvo|prach
+estar hecho polvo (hovor.)|být zničený (vyčerpaný)
+precio de promoción|zaváděcí cena
+la prisa|spěch
+tener prisa|mít naspěch, spěchat
+darse prisa|pospíšit si, pospíchat
+el/la protagonista|hlavní postava/osoba
+el/la psiquiatra|psychiatr/ička
+el puente|most; prodloužený víkend
+recientemente|nedávno
+recoger (j)|vyzvednout, (pře)vzít
+reconocer (zc)|(roz)poznat
+la representación|představení (divadelní apod.); reprezentace, zastoupení
+la reseña|recenze
+reservar|rezervovat (si), zamluvit (si)
+reunirse (ú)|sejít se, shromáždit se
+la rosa|růže
+de color rosa|růžový, růžové barvy
+la sala|sál
+la sequía|sucho (období sucha)
+sollozar|vzlykat
+soñar (ue) (con)|snít, zdát se (o)
+la suerte|osud, štěstí
+buena / mala suerte|štěstí/neštěstí, smůla
+como más tarde|nejpozději
+teclear|(vy)ťukat
+tirar|vyhodit
+el tono|tón
+tras|po, za
+el tronco|kmen, pařez
+vacante|volný, neobsazený
+la valla publicitaria|billboard, reklamní tabule
+la vecina|sousedka
+vetusto|prastarý, starobylý
+el virus|virus, vir
+por lo visto|patrně, zřejmě`],
+['L19','📗',"Lekce 19 · Desastres caseros",`absoluto|absolutní, naprostý
+además|kromě toho, navíc, mimoto
+el alargador|prodlužovací šnůra
+alegrar|rozveselit, rozradostnit, těšit
+alegrarse (de)|mít radost / radovat se (z), být rád
+la almohada|polštář
+alquilar|pronajmout (si), najmout si
+el alquiler|nájemné
+anunciar|oznámit
+el aperitivo|aperitiv
+arreglar|upravit, uklidit, dát do pořádku
+el ascensor|výtah
+asustar(se)|polekat (se), (vy)děsit (se)
+atascado|ucpaný (odtok apod.)
+la bañera|vana
+el bigote|knír
+la bombilla|žárovka
+el cable|kabel
+casero|domácí
+la catástrofe|katastrofa, pohroma
+el cepillo|kartáč/ek; košťátko (na smetí)
+el cerebro|mozek
+cesar (de)|přestat
+charlar|povídat si
+la cocina|sporák
+cocina eléctrica|elektrický sporák
+cocina de gas|plynový sporák
+colarse (ue)|vklouznout, vniknout, pronikat
+el colmo|vrchol
+completo|kompletní, úplný
+conectar|zapojit
+la correa|řemen
+la delicia|potěšení, slast, rozkoš
+desatascar|pročistit (ucpané potrubí)
+desesperarse|zoufat si
+el detergente|čisticí/prací prostředek
+dispuesto (a)|ochotný, připravený (k)
+echar|hodit, naházet
+el electricista|elektrikář
+eléctrico|elektrický
+el electrodoméstico|domácí
+(aparato )|elektrospotřebič
+el embrollo|zmatek; průšvih
+enchufar|zastrčit (do zásuvky)
+por enésimoa vez|po iksté
+entero|celý
+entreabierto|pootevřený
+la escoba|koště
+el estallido|rána, třesknutí, prasknutí, výbuch
+exacto|přesný
+el fontanero|instalatér
+la fregona|mop a kbelík (na mytí podlah)
+el frigorífico|lednička
+el fusible|pojistka (elektr.)
+la gotera|mokrá skvrna (na zdi, stropě apod.)
+el hervidor|rychlovarná konvice
+el hogar|domov; domácnost
+el horno|trouba
+el hoyo|díra, jáma; jamka (v golfu)
+impaciente|netrpělivý, nedočkavý
+inmediatamente|ihned, okamžitě
+insoportable|nesnesitelný
+instalarse|nastěhovat se
+el intento (de)|pokus (o)
+inútil|neužitečný, zbytečný
+el inútil|budižkničemu
+el jefe|šéf, vedoucí
+el ladrón|rozdvojka
+la lavadora|pračka
+lavavajillas m,|myčka nádobí
+el llanto|pláč
+llorar|plakat
+la maceta|květináč
+el manitas|všeuměl, šikula|hovor.
+la marcha|chůze, jízda, pochod; provoz, chod (stroje)
+poner en marcha|pustit, uvést do chodu/provozu
+la manta|deka
+en medio (de)|uprostřed (čeho)
+el microondas (el horno microondas)|mikrovlná trouba
+el miedo|strach
+molestar|obtěžovat, rušit, vadit
+por el momento|teď, momentálně
+mudo|němý
+quedarse mudo|oněmět
+normal|normální
+el paisaje|krajina
+la persiana|žaluzie
+la plancha|žehlička
+preocuparse|dělat si starosti
+de pronto|najednou, náhle
+el recogedor|lopatka (na smetí)
+reinar|panovat
+la remodelación|přestavba, renovace
+rendido|vyčerpaný, utahaný, zmožený
+caer rendido|padnout vyčerpáním
+reparar|opravit
+romper a + inf.|dát se / pustit se (do čeho)
+la sábana|prostěradlo
+sábana bajera|spodní prostěradlo
+sábana encimera|svrchní prostěradlo
+salir|zde: odtékat
+saltar|(vy)skočit, skákat, vylítnout; vypadnout/ prasknout (pojistka)
+la señal|znamení, známka; signál
+el sollozo|vzlyk, vzlykání
+sorprendente|překvapivý
+sorprenderse (de)|(po)divit se (čemu)
+el techo|strop
+el tesoro|poklad
+la tienda de campaña|stan
+el timbre|zvonek
+la tubería|potrubí, trubky
+a la vez|současně`],
+['L20','📗',"Lekce 20 · De viaje",`a través de|přes (co), prostřednictvím (čeho)
+abusar (de)|zneužívat (čeho, koho)
+acaso|snad, možná, třeba
+aceptar|přijmout
+acerca (de)|ohledně (čeho)
+acordarse (ue) (de)|vzpomínat si (na)
+advertir (ie-i) (de)|upozornit (na)
+el aeropuerto|letiště
+la agencia de viajes|cestovní kancelář
+el alcohol|alkohol
+alejado|vzdálený; daleko
+alojado|ubytovaný
+el andén|nástupiště
+con antelación|předem, s předstihem
+los aseos|toalety
+asequible|dostupný, přijatelný, dosažitelný
+el asiento|místo, sedadlo
+aterrizar|přistát
+el billete|jízdenka
+billete con reserva de asiento|jízdenka s místenkou
+billete de avión|letenka
+billete de ida y vuelta|zpáteční jízdenka/ letenka
+caliente|teplý, horký
+cancelar|zrušit, stornovat
+celoso (de)|žárlivý (na)
+coleccionar|sbírat (známky apod.)
+complicado|komplikovaný, složitý
+confiar (í) (en)|důvěřovat (komu), spoléhat (na)
+la confirmación|potvrzení (objednávky apod.)
+el control|kontrola
+correspondiente|příslušný, odpovídající
+por su cuenta|na vlastní účet, na vlastní pěst, individuálně
+decidirse (a)|rozhodnout se
+descartar|vyloučit, odmítnout, zavrhnout (možnost apod.)
+despegar|odlétat, startovat
+el destino|cíl, místo určení, destinace
+con destino a|(směrem) do
+directo|přímý, rovný
+tener disponible|mít k dispozici / volný (pokoj apod.)
+económico|ekonomický, hospodářský; úsporný, levný
+la empleada|úřednice, zaměstnankyně
+el equipaje|zavazadlo
+equipaje de mano|příruční zavazadlo
+la escala|mezipřistání
+la estrella|hvězda, hvězdička
+el éxito|úspěch
+facturar (el equipaje)|podat/odbavit (zavazadlo)
+el grifo|kohoutek
+la habitación|pokoj
+habitación doble|dvojlůžkový pokoj
+habitación individual|jednolůžkový pokoj
+a primera hora|brzy
+de la mañana|časně ráno
+horrorizar|děsit, nahánět hrůzu
+la hospitalidad|pohostinnost
+el hostal|hostel
+el hotel|hotel
+húngaro|maďarský
+la ida|cesta (tam)
+imponer (jako poner)|předepisovat, uložit
+incluido|včetně
+la Inglaterra|Anglie
+las instrucciones|pokyny, návod, instrukce
+investigar|(pro)zkoumat, pátrat
+lastimarse|poranit se/si
+la línea|čára, řádek, linka
+las líneas aéreas|aerolinie
+las líneas de bajo coste|nízkonákladové aerolinie
+la llegada|příjezd, přílet
+la maleta|kufr, zavazadlo
+el mentiroso|lhář, prolhaný člověk
+la mochila|batoh
+el modo|způsob
+de todos modos|v každém případě
+el montón|hromada, množství
+el mostrador|pult; odbavovací přepážka
+la ocasión|příležitost
+en / con ocasión de|při příležitosti (čeho)
+la oferta|nabídka
+el ofertón|obrovská nabídka
+operar|působit, pracovat; létat; operovat
+orgulloso (de)|pyšný, hrdý (na)
+la página|strana, stránka
+la pantalla de llegadas /|tabule příletů/odletů
+el parador nacional|luxusní ubytování
+el pasaporte|pas (cestovní)
+la pena|trápení, žal, zármutek, lítost; námaha, obtíž
+no vale la pena|nestojí to za to / tu námahu
+la pensión|penzion; penze (v hotelu apod.); důchod
+el peso|váha
+por (lo) tanto|proto, tudíž
+la posibilidad|možnost
+en principio|v podstatě, v zásadě
+a propósito|mimochodem
+la puerta (que da)|východ k letadlu
+el quiosco|samoodbavovací
+de autofacturación|kiosek
+el rango (de precios)|(cenový) rozsah, (cenové) rozpětí
+el recado|vzkaz
+la reclamación|reklamace
+regular|pravidelný
+la reserva|rezerva, rezervace; místenka
+hacer (la) reserva|zamluvit/rezervovat (si)
+la restricción|omezení, restrikce
+sacar|získat, dostat
+la salida|odjezd, odlet; východ
+el servicio|služba, obsluha, servis, provoz
+servicio de a bordo|palubní servis
+servir (i)|sloužit, obsluhovat, servírovat, podávat
+la tarjeta de embarque|palubní vstupenka
+la terminal|terminál; konečná stanice
+el tobillo|kotník
+los trámites|formality
+hacer los trámites|vyřídit formality
+el trayecto|trať, dráha
+tropezar (ie)|klopýtnout
+ventajoso|výhodný
+el vuelo|let
+vuelo chárter|charterový let
+vuelo directo|přímý let
+vuelo regular|pravidelný let
+vuelo con escala / trasbordo|let s mezipřistáním/ přestupem
+vuelo de bajo coste|nízkonákladový let
+la vuelta|návrat, cesta zpět`],
+['L21','📗',"Lekce 21 · Alicia en Praga",`aburrir(se)|nudit (se)
+el acontecimiento|událost, příhoda
+andar|jít, chodit, kráčet
+anterior|dřívější, předchozí, předcházející
+el apóstol|apoštol
+el aprendizaje|učení se, vyučení se
+el arqueólogo|archeolog
+atractivo|atraktivní, přitažlivý
+el barroco|baroko
+besar|líbat, políbit
+la callejuela|ulička
+la campanada|úder zvonu, odbíjení hodin, zvonění
+el castillo|hrad, zámek
+la catedral|katedrála
+el cementerio|hřbitov
+el científico|vědec
+comentar|komentovat
+la compañía|společnost
+la conclusión|závěr
+consolar (ue)|utěšit
+construir (y)|postavit, vybudovat
+convertirse (ie-i) (en)|změnit se (na), stát se (čím)
+la copia|kopie
+la cortina|záclona
+la cosmética|kosmetika
+la cúpula|kupole
+descalzo|bos, zutý
+el descubrimiento|objev, objevení
+desistir (de)|upustit (od), vzdát se (čeho)
+despreocupado|bezstarostný
+destinar|určit
+destruido|zničený, zruinovaný, zbořený
+medio destruido|napůl zbořený
+destruir (y)|zničit, zbořit
+el diplomático|diplomat
+la duquesa|vévodkyně
+ejecutar|popravit
+eliminar|odstranit
+enamorarse (de)|zamilovat se (do)
+entretanto|mezitím
+la escalinata|schody, schodiště (jen vnější)
+expulsar|vyhnat, vypovědět, vyhostit
+extraordinario|mimořádný, výjimečný, neobvyklý
+la faena|práce, dřina
+fundar|založit
+la gaviota|racek
+hermoso|krásný
+el horror|hrůza, děs
+el hueco|otvor, díra
+inscrito (en)|zapsaný (do)
+la inteligencia artificial|umělá inteligence
+la joya|klenot, šperk
+judío|židovský
+el lazo|pouto, svazek
+lindo|pěkný, hezký, skvělý
+la luna|měsíc
+luna llena|úplněk
+la magia|magie, kouzla
+mágico|magický, kouzelný
+la mejilla|tvář
+el milagro|zázrak, div
+milagroso|zázračný
+el mirador|rozhledna; prosklená veranda
+el Moldava|Vltava
+el monte|hora
+nervioso|nervózní
+nítido|jasný, zřetelný
+el noble|šlechtic
+el original|originál
+la pandilla|parta, banda, tlupa
+el paraguas|deštník
+el pasaje|defilé
+el pavimento|dláždění, dlažba
+penetrar (en)|pronikat (do)
+pesado|těžký
+de pie|vestoje, na nohou
+la piedra|kámen
+la pólvora|střelný prach
+ponerse (jako poner)|postavit se (kam)
+posponer (jako poner)|odložit, přesunout
+praguense|pražský
+el punto|bod, místo; tečka
+la recámara|komora, komůrka
+reconstruir (y)|rekonstruovat, obnovit
+reemplazar (por)|nahradit (čím)
+la relación|vztah, styk
+el reloj astronómico|orloj
+representar|představovat; zastupovat
+retratar|portrétovat, zobrazit, zpodobnit
+el retrato|portrét
+la risa|smích
+la ruina|troska, zřícenina, ruina
+satisfacer|uspokojit, vyhovět
+satisfecho|spokojený
+serpenteante|křivolaký, klikatý
+el sótano|sklep, suterén
+su(b)stituir (y)|nahradit
+supersónico|nadzvukový
+suspirar|vzdychat
+susurrar|šeptat
+el tejado|střecha
+el templo|chrám
+la torre|věž
+el tranvía|tramvaj
+unirse (a)|připojit se (k)
+en vano|marně, nadarmo, zbytečně
+la victoria|vítězství`],
+['R3','🔁',"Opakování III · Diario de un náufrago",`el accesorio|příslušenství, doplněk
+la afluencia|příliv (peněz apod.); přítok
+agridulce|sladkokyselý
+artificial|umělý
+atravesar (ie)|probíhat; projít, přejít
+el automóvil|automobil
+el azulejo|obkládačka, kachlík
+el balneario|lázně
+bicameral|dvoukomorový
+la bisutería|bižuterie
+la Bohemia|Čechy
+bohemio|bohémský; český
+la Cámara de Diputados|Poslanecká sněmovna
+la caída|pád
+caótico|chaotický
+la cara|tvář, obličej
+poner cara|tvářit se
+la Chequia|Česko
+cobrar|vybírat (peníze), inkasovat; získat
+la col|zelí
+el coma|kóma, bezvědomí
+el comentario|komentář, poznámka
+comercial|obchodní
+componerse (jako poner)|skládat se
+el comunismo|komunismus
+conseguir (i)|podařit se, dokázat; dosáhnout; sehnat, opatřit si
+el consejo|rada
+el cristal|sklo, křišťál
+dañar|poškodit
+darse|zde: stát se, přihodit se, vyskytnout se
+deducir (zc)|dedukovat, odvodit
+la democracia|demokracie
+descomponer (jako poner)|rozložit, rozebrat
+despistar|zmást, zmýlit, svést ze stopy
+el diario|deník
+distar (de)|být vzdálený (od)
+dorado|zlatavý
+la economía|hospodářství, ekonomika
+economía de mercado|tržní ekonomika
+el efecto|efekt, účinek
+elegir (j) (i)|(z)volit, vybrat
+en cuanto a|pokud jde o, co se týká (čeho)
+la Eslovaquia|Slovensko
+la espuma|pěna
+estabilizarse|stabilizovat se
+exportar|vyvážet
+extraño|(po)divný, zvláštní
+extrañar (a)|postrádat (koho/co), stýskat se (po kom/ čem)
+extraviado|ztracený, zbloudilý
+evaporarse|vypařit se
+fabricar|vyrábět
+farmacéutico|farmaceutický
+fingir (j)|předstírat
+el flechazo|láska na první pohled
+la fuerza|síla
+el funcionamiento|fungování, chod
+el golpe|rána, úder
+gracias (a)|díky (čemu)
+guardar|hlídat, schovat, nechat si
+importar|dovážet
+independiente|nezávislý
+la innovación|inovace
+el instante|okamžik, chvilka
+en un instante|v mžiku, hned
+la inversión|investice
+el inversor|investor
+invertir (ie-i)|investovat
+el juego|sada, servis, komplet
+el juguete|hračka
+el lago|jezero
+la máquina|stroj
+la maquinaria|stroje, strojní zařízení
+el mar Adriático|Jaderské moře
+el mar Báltico|Baltské moře
+el máximo|maximum
+mentir (ie-i)|lhát
+hacerse miembro|stát se členem
+la Moravia|Morava
+el mueble|nábytek, kus nábytku
+el náufrago|trosečník
+la nave|loď (i vesmírná)
+nefasto|neblahý
+país comunitario|země EU
+parlamentario|parlamentní
+el partido|strana (politická)
+la patria|vlast
+la pieza|díl (náhradní apod.)
+el poder|moc
+la porcelana|porcelán
+positivo|pozitivní, kladný
+preferible|lepší
+el presidente|prezident; předseda
+reciente|nedávný
+la reconversión|rekonverze
+recorrer|probíhat; projet, procestovat
+el renglón|položka, druh zboží
+la renovación|obnovení, obnova
+la República Eslovaca|Slovenská republika
+rodear|obklopovat
+la rueda|kolo
+la Rusia|Rusko
+ruso|ruský
+salpicar|postříkat, pokropit
+el Senado|Senát
+la separación|oddělení, rozdělení
+la Silesia|Slezsko
+el socio|partner, společník
+sospechoso|podezřelý
+la sustancia|látka, substance
+la tecnología|technologie
+alta tecnología|špičková technologie
+el terciopelo|samet
+la transición|přechod, přeměna
+tratarse (de)|jít / jednat se (o)
+el universo|vesmír
+el valle|údolí
+el vehículo|vozidlo, dopravní prostředek
+verdadero|opravdový, skutečný
+en vez de|místo (čeho)
+el volumen|obrat (obchodní)
+dar una vuelta (a)|obejít/objet (co)
+dar una vuelta (por)|projít se (kudy), projet (co)`]
+];
+
 /* ===================== ZÁKLAD ===================== */
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const KEY='slovnik-es-v1', INTERVALS=[0,1,3,7,14,30];
-const DEF={theme:'auto',fontScale:1,smart:true,ignoreArticles:true,tolerant:false,autoSpeak:false,ttsRate:0.9,dailyGoal:20,mode:'cards',dir:'es-cz',len:20,source:'all',conjTense:'pres',conjSet:'reg',vosotros:true};
+const DEF={theme:'auto',fontScale:1,smart:true,ignoreArticles:true,tolerant:false,autoSpeak:false,ttsRate:0.9,dailyGoal:20,mode:'cards',dir:'es-cz',len:20,source:'all',conjTense:'pres',conjTenses:['pres'],conjSet:'reg',vosotros:true};
 const memStore={};
 const store={get(k){try{return localStorage.getItem(k)}catch(e){return memStore[k]??null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){memStore[k]=v}}};
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
@@ -1028,7 +3704,23 @@ function buildSeed(){
       const w=newWord(es,cz,note,[lid]); words.push(w); byEs.set(k,w);
     });
   }
+  for(const [id,emoji,name,txt] of BOOK) addSeedList(lists,words,byEs,'k-'+id,emoji,name,txt,true);
   return{lists,words};
+}
+function addSeedList(lists,words,byEs,lid,emoji,name,txt,book){
+  lists.push({id:lid,name,emoji,builtin:true,book:!!book});
+  txt.trim().split('\n').forEach(line=>{
+    const [es,cz,note]=line.split('|'); if(!es||!cz) return;
+    const k=es.trim().toLowerCase();
+    if(byEs.has(k)){const w=byEs.get(k); if(!w.lists.includes(lid)) w.lists.push(lid); return;}
+    const w=newWord(es,cz,note,[lid]); words.push(w); byEs.set(k,w);
+  });
+}
+function mergeBook(){
+  const byEs=new Map();D.words.forEach(w=>{const k=w.es.trim().toLowerCase();if(!byEs.has(k))byEs.set(k,w)});
+  const lists=[],words=[];
+  for(const [id,emoji,name,txt] of BOOK){if(listById('k-'+id))continue;addSeedList(lists,words,byEs,'k-'+id,emoji,name,txt,true)}
+  D.lists.push(...lists);D.words.push(...words);return words.length;
 }
 
 let D;
@@ -1036,6 +3728,8 @@ function load(){
   try{const raw=store.get(KEY); if(raw) D=JSON.parse(raw);}catch(e){D=null}
   if(!D||!Array.isArray(D.words)){const s=buildSeed(); D={v:1,words:s.words,lists:s.lists,settings:{},days:{},sessions:[]};}
   D.settings={...DEF,...(D.settings||{})}; D.days=D.days||{}; D.sessions=D.sessions||[]; D.lists=D.lists||[]; D.gram=D.gram||{};
+  if(!D.bookV){mergeBook();D.bookV=1}
+  if(!Array.isArray(D.settings.conjTenses))D.settings.conjTenses=D.settings.conjTense==='both'?['pres','pret']:[D.settings.conjTense||'pres'];
   saveNow();
 }
 let saveT; function save(){clearTimeout(saveT); saveT=setTimeout(saveNow,200)}
@@ -1165,7 +3859,7 @@ function diffHTML(user,target){const{marks}=levMarks(user,target);return [...tar
 /* ===================== VÝBĚR SLOV ===================== */
 function sources(){
   const smart=[['all','📚','Všechna slovíčka'],['due','🔁','K opakování dnes'],['problem','⚠️','Neumím + nejistá'],['weak','❌','Neumím'],['unsure','🤔','Nejistá'],['new','🆕','Nová (neprocvičená)'],['star','⭐','Oblíbená']].map(([id,emoji,label])=>({id,emoji,label}));
-  const lists=D.lists.map(l=>({id:'list:'+l.id,emoji:l.emoji||'📁',label:l.name,builtin:l.builtin}));
+  const lists=D.lists.map(l=>({id:'list:'+l.id,emoji:l.emoji||'📁',label:l.name,builtin:l.builtin,book:l.book}));
   return{smart,lists};
 }
 function srcInfo(id){const s=sources();return [...s.smart,...s.lists].find(x=>x.id===id)||s.smart[0]}
@@ -1241,11 +3935,12 @@ function renderHome(){
 function sourceSheet(){
   const s=sources(),cur=D.settings.source;
   const btn=x=>`<button data-src="${x.id}" class="${x.id===cur?'on':''}"><span>${x.emoji}</span><span>${esc(x.label)}</span><span class="n">${poolFor(x.id).length}</span></button>`;
-  const mine=s.lists.filter(x=>!x.builtin),themes=s.lists.filter(x=>x.builtin);
+  const mine=s.lists.filter(x=>!x.builtin),book=s.lists.filter(x=>x.book),themes=s.lists.filter(x=>x.builtin&&!x.book);
   openSheet(`<h3>Co procvičit</h3>
     <div class="opt-list">${s.smart.map(btn).join('')}</div>
     <div class="gtitle">Moje seznamy</div>
     ${mine.length?`<div class="opt-list">${mine.map(btn).join('')}</div>`:`<div class="sub" style="padding:0 4px">Zatím žádné. Vytvoř si seznam v záložce Slovník → Seznamy.</div>`}
+    ${book.length?`<div class="gtitle">Učebnice – lekce</div><div class="opt-list">${book.map(btn).join('')}</div>`:''}
     <div class="gtitle">Témata</div><div class="opt-list">${themes.map(btn).join('')}</div>`,
   r=>$$('[data-src]',r).forEach(b=>b.onclick=()=>{D.settings.source=b.dataset.src;save();closeSheet();renderHome()}));
 }
@@ -1483,7 +4178,7 @@ function renderDict(){
   dict.tab==='words'?renderWordsTab():renderListsTab();
 }
 function renderWordsTab(){
-  const chips=[['all','Vše'],['star','⭐ Oblíbená'],['st:weak','❌ Neumím'],['st:unsure','🤔 Nejistá'],['st:known','✅ Umím'],['st:new','🆕 Nová'],...D.lists.filter(l=>!l.builtin).map(l=>['l:'+l.id,(l.emoji||'📁')+' '+l.name]),...D.lists.filter(l=>l.builtin).map(l=>['l:'+l.id,(l.emoji||'📁')+' '+l.name])];
+  const chips=[['all','Vše'],['star','⭐ Oblíbená'],['st:weak','❌ Neumím'],['st:unsure','🤔 Nejistá'],['st:known','✅ Umím'],['st:new','🆕 Nová'],...D.lists.filter(l=>!l.builtin).map(l=>['l:'+l.id,(l.emoji||'📁')+' '+l.name]),...D.lists.filter(l=>l.book).map(l=>['l:'+l.id,(l.emoji||'📁')+' '+l.name.split(' · ')[0]]),...D.lists.filter(l=>l.builtin&&!l.book).map(l=>['l:'+l.id,(l.emoji||'📁')+' '+l.name])];
   $('#dictBody').innerHTML=`
   <input type="search" id="q" placeholder="Hledat španělsky nebo česky" value="${esc(dict.q)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
   <div class="chips" id="chips" style="margin-top:10px">${chips.map(([id,l])=>`<button class="chip ${dict.filter===id?'on':''}" data-f="${id}">${esc(l)}</button>`).join('')}</div>
@@ -1621,11 +4316,12 @@ function renderListsTab(){
     <button class="lbody" data-open="${l.id}"><span class="lname">${esc(l.name)}</span><span class="lmeta">${ws.length} ${plural(ws.length,'slovíčko','slovíčka','slovíček')} · umím ${c.known}</span>
     <span class="mbar"><i style="width:${c.known/n*100}%;background:var(--good)"></i><i style="width:${c.unsure/n*100}%;background:var(--warn)"></i><i style="width:${c.weak/n*100}%;background:var(--bad)"></i></span></button>
     <button class="lplay" data-play="${l.id}" aria-label="Procvičit">▶</button><button class="lmore" data-more="${l.id}" aria-label="Možnosti">⋯</button></div>`};
-  const mine=D.lists.filter(l=>!l.builtin),themes=D.lists.filter(l=>l.builtin);
+  const mine=D.lists.filter(l=>!l.builtin),book=D.lists.filter(l=>l.book),themes=D.lists.filter(l=>l.builtin&&!l.book);
   $('#dictBody').innerHTML=`
   <button class="btn primary block" id="newList" style="margin:0 0 6px">+ Nový seznam</button>
   <div class="gtitle">Moje seznamy</div>
   ${mine.length?mine.map(card).join(''):'<div class="card sub" style="margin-top:0">Vytvoř si seznam třeba „Slovíčka na test“ – vložíš do něj slova najednou, nebo je ve Slovíčkách označíš přes „Vybrat“.</div>'}
+  ${book.length?`<div class="gtitle">Učebnice – slovíčka po lekcích</div>${book.map(card).join('')}`:''}
   <div class="gtitle">Témata</div>${themes.map(card).join('')}`;
   $('#newList').onclick=()=>bulkSheet('',true);
   $$('[data-open]').forEach(b=>b.onclick=()=>{dict.tab='words';dict.filter='l:'+b.dataset.open;dict.q='';renderDict()});
@@ -1719,7 +4415,7 @@ function renderSettings(){
   <div class="sub" style="padding:8px 6px">Data se ukládají jen v tomto telefonu. Zálohu občas exportuj, ať o pokrok nepřijdeš.</div>
   <div class="set-title">Instalace na iPhone</div>
   <div class="set-group"><div class="howto"><ol style="margin-top:14px"><li>Otevři stránku v Safari.</li><li>Klepni na tlačítko Sdílet (čtvereček se šipkou).</li><li>Zvol „Přidat na plochu“.</li></ol>Pak se aplikace spouští přes celou obrazovku jako normální apka.</div></div>
-  <div class="sub" style="text-align:center;padding:18px 0 6px">¡Buena suerte! · verze 1.2</div>`;
+  <div class="sub" style="text-align:center;padding:18px 0 6px">¡Buena suerte! · verze 2.0</div>`;
   bindSegs($('#view-settings'),k=>{if(k==='theme')applyTheme()});
   $$('input[data-k]').forEach(i=>i.onchange=()=>{s[i.dataset.k]=i.checked;save()});
   $('#fs').oninput=e=>{s.fontScale=+e.target.value;$('#fsVal').textContent=Math.round(s.fontScale*100)+' %';applyTheme();save()};
@@ -1729,7 +4425,7 @@ function renderSettings(){
   $('#imp').onclick=()=>$('#importFile').click();
   $('#merge').onclick=()=>{const s2=buildSeed();let a=0;s2.lists.forEach(l=>{if(!listById(l.id))D.lists.push(l)});s2.words.forEach(w=>{const ex=D.words.find(x=>x.es.toLowerCase()===w.es.toLowerCase());if(!ex){D.words.push(w);a++}else w.lists.forEach(l=>{if(!ex.lists.includes(l))ex.lists.push(l)})});save();toast(a?`Doplněno ${a} slovíček`:'Nic nechybělo');renderCurrent()};
   $('#resetStats').onclick=()=>{if(!confirm('Vynulovat všechny statistiky? Slovíčka a seznamy zůstanou.'))return;D.words.forEach(w=>Object.assign(w,{c:0,a:0,w:0,box:0,due:0,recent:[],last:null}));D.days={};D.sessions=[];D.gram={};save();toast('Statistiky vynulovány')};
-  $('#wipe').onclick=()=>{if(!confirm('Opravdu smazat úplně vše včetně vlastních slovíček? Obnoví se výchozí slovník.'))return;const st=D.settings;const s2=buildSeed();D={v:1,words:s2.words,lists:s2.lists,settings:st,days:{},sessions:[],gram:{}};saveNow();toast('Hotovo, začínáš znovu');renderCurrent()};
+  $('#wipe').onclick=()=>{if(!confirm('Opravdu smazat úplně vše včetně vlastních slovíček? Obnoví se výchozí slovník.'))return;const st=D.settings;const s2=buildSeed();D={v:1,words:s2.words,lists:s2.lists,settings:st,days:{},sessions:[],gram:{},bookV:1};saveNow();toast('Hotovo, začínáš znovu');renderCurrent()};
 }
 async function exportData(){
   saveNow();
@@ -1744,7 +4440,7 @@ $('#importFile').onchange=async e=>{
   const f=e.target.files[0];if(!f)return;
   try{const d=JSON.parse(await f.text());if(!Array.isArray(d.words)||!Array.isArray(d.lists))throw 0;
     if(!confirm(`Záloha obsahuje ${d.words.length} slovíček. Nahradit současná data?`))return;
-    D=d;D.gram=d.gram||{};D.settings={...DEF,...(d.settings||{})};D.days=d.days||{};D.sessions=d.sessions||[];saveNow();applyTheme();toast('Obnoveno ze zálohy ✓');renderCurrent()}
+    D=d;D.gram=d.gram||{};if(!D.bookV){mergeBook();D.bookV=1}D.settings={...DEF,...(d.settings||{})};D.days=d.days||{};D.sessions=d.sessions||[];saveNow();applyTheme();toast('Obnoveno ze zálohy ✓');renderCurrent()}
   catch(_){toast('Tohle není platná záloha slovníku')}
   finally{e.target.value=''}
 };
@@ -2226,6 +4922,753 @@ El libro para Juan: ___ lo doy.|se`}
 ];
 function parseEx(L){return L.ex.trim().split('\n').map((line,i)=>{const[q,a,o,note]=line.split('|');return{kind:'ex',key:L.id+':'+i,q:q.trim(),a:a.trim(),opts:o?o.split(';').map(x=>x.trim()):null,note:note?esc(note.trim()):'',label:L.emoji+' '+L.title,plain:q.trim()}})}
 
+/* --- lekce podle učebnice (doplněk) --- */
+LESSONS.push(
+{id:'prep',emoji:'🧭',book:'L2',title:'Předložky a, en, de a pády',intro:'Kam, kde, odkud – a jak nahradit české pády.',
+html:[T('předložka|použití|příklad',`
+a|směr, cíl|Voy <b>a</b> Madrid.
+a|čas na hodinách|<b>a</b> las tres
+a|komu / koho (u osob)|Doy el libro <b>a</b> Ana. Veo <b>a</b> Pedro.
+en|místo (kde)|Estoy <b>en</b> casa.
+en|dopravní prostředek|<b>en</b> tren, <b>en</b> coche (ale: <b>a</b> pie)
+en|měsíc, rok, roční období|<b>en</b> mayo, <b>en</b> 2020, <b>en</b> verano
+de|původ, odkud|Soy <b>de</b> Praga. Vengo <b>de</b> casa.
+de|vlastnictví (2. pád)|el coche <b>de</b> Juan
+de|materiál, obsah|una mesa <b>de</b> madera, un vaso <b>de</b> agua`),
+H('Jak vyjádřit pády'),P('Španělská podstatná jména se neskloňují. Pády se vyjadřují předložkami:'),
+T('pád|jak|příklad',`
+1. kdo, co|bez předložky|<b>el</b> chico
+2. koho, čeho|de|el libro <b>del</b> chico
+3. komu, čemu|a|Escribo <b>al</b> chico.
+4. koho (osoba)|a|Veo <b>al</b> chico.
+4. co (věc)|bez předložky|Veo <b>el</b> coche.
+6. o kom, o čem|de, sobre|Hablamos <b>de</b> ti.
+7. s kým, čím|con|Voy <b>con</b> mi madre.`),
+TIP('Osobní <b>a</b>: když je předmětem osoba (nebo zvíře, které máš rád), dáváš před ni <b>a</b>. Busco <b>a</b> mi hermano × Busco mi llave.')].join(''),
+ex:`Voy ___ Madrid.|a
+Estoy ___ casa.|en
+Soy ___ Praga.|de
+Veo ___ Pedro.|a
+el coche ___ Juan (Juanovo auto)|de
+Viajamos ___ tren.|en
+La clase empieza ___ las tres.|a
+Vamos ___ pie.|a
+Doy el regalo ___ mi madre.|a
+Es una mesa ___ madera.|de
+Mi cumpleaños es ___ mayo.|en`},
+
+{id:'num',emoji:'🔢',book:'L3',title:'Číslovky 0–199',intro:'uno, dos, tres… až ciento noventa y nueve.',
+html:[T('|číslo|',`
+0 cero|8 ocho|16 dieciséis
+1 uno|9 nueve|17 diecisiete
+2 dos|10 diez|18 dieciocho
+3 tres|11 once|19 diecinueve
+4 cuatro|12 doce|20 veinte
+5 cinco|13 trece|21 veintiuno
+6 seis|14 catorce|22 veintidós
+7 siete|15 quince|23 veintitrés`),
+UL(['21–29 se píšou <b>dohromady</b>: veinticuatro, veintiséis.','Od 31 se desítky a jednotky spojují <b>y</b>: treinta <b>y</b> uno, cuarenta <b>y</b> cinco.','Desítky: treinta, cuarenta, cincuenta, sesenta, setenta, ochenta, noventa.','100 je <b>cien</b> (cien libros), 101–199 <b>ciento</b>: ciento uno, ciento cincuenta.']),
+TIP('<b>Uno</b> se před podstatným jménem mužského rodu zkracuje na <b>un</b>: un libro, veintiún años. U ženského rodu je <b>una</b>: veintiuna casas.')].join(''),
+ex:`15 = ___|quince
+16 = ___|dieciséis
+22 = ___|veintidós
+31 = ___|treinta y uno
+47 = ___|cuarenta y siete
+70 = ___|setenta
+90 = ___|noventa
+___ libros (100)|cien
+150 = ___|ciento cincuenta
+Tengo ___ años. (21)|veintiún`},
+
+{id:'cer',emoji:'✏️',book:'L3',title:'conozco, traduzco, escojo, veo',intro:'Slovesa, která se mění jen v tvaru „yo“.',
+html:[H('-cer, -cir po samohlásce → -zco'),T('infinitiv|yo|tú, él…',`
+conocer – znát|cono<b>zco</b>|conoces, conoce…
+parecer – zdát se|pare<b>zco</b>|pareces…
+conducir – řídit|condu<b>zco</b>|conduces…
+traducir – překládat|tradu<b>zco</b>|traduces…
+producir – vyrábět|produ<b>zco</b>|produces…`),
+H('-ger, -gir → g se mění na j'),P('Aby se zachovala výslovnost [ch], píše se před o a a písmeno <b>j</b>:'),
+T('infinitiv|yo|tú',`
+coger – vzít, chytit|co<b>jo</b>|coges
+escoger – vybrat|esco<b>jo</b>|escoges
+elegir – zvolit (e→i)|eli<b>jo</b>|eliges
+dirigir – řídit, vést|diri<b>jo</b>|diriges`),
+H('Ver – vidět'),P('veo, ves, ve, vemos, <b>veis</b>, ven (vosotros bez čárky).')].join(''),
+ex:`Yo ___ a tu hermano. (conocer)|conozco
+Yo ___ el texto. (traducir)|traduzco
+Yo ___ el coche. (conducir)|conduzco
+Yo ___ el autobús. (coger)|cojo
+Yo ___ este vestido. (escoger)|escojo
+Tú ___ muy bien. (conducir)|conduces
+Nosotros ___ la tele. (ver)|vemos
+Yo no ___ nada. (ver)|veo`},
+
+{id:'se',emoji:'🌐',book:'L3',title:'Neosobní vazby se se',intro:'Aquí se habla español. ¿Cómo se dice…?',
+html:[P('Když nechceš říct, kdo konkrétně něco dělá (obecně „se“, „lidé“), použij <b>se + sloveso ve 3. osobě</b>.'),
+E(`Aquí se habla español.|Tady se mluví španělsky.
+¿Cómo se dice „pes“ en español?|Jak se řekne „pes“ španělsky?
+En España se cena tarde.|Ve Španělsku se večeří pozdě.
+Se vende piso.|Prodá se byt.
+Se venden pisos.|Prodávají se byty.`),
+TIP('Když následuje podstatné jméno v <b>množném čísle</b>, dává se sloveso do množného čísla: se vend<b>en</b> pisos.')].join(''),
+ex:`Aquí ___ habla español.|se
+¿Cómo se ___ „pes“ en español? (decir)|dice
+Se ___ pisos. (vender)|venden
+Se ___ piso. (alquilar)|alquila
+En España se ___ tarde. (cenar)|cena
+¿Cómo se ___ tu nombre? (escribir)|escribe`},
+
+{id:'muy',emoji:'📏',book:'L3',title:'Muy, mucho, poco, bastante, demasiado',intro:'Kdy „velmi“ a kdy „hodně“.',
+html:[T('slovo|použití|příklad',`
+muy|před přídavným jménem a příslovcem|<b>muy</b> bonito, <b>muy</b> bien
+mucho|u slovesa (nemění se)|Trabajo <b>mucho</b>.
+mucho, -a, -os, -as|před podst. jménem (shoda)|<b>mucha</b> gente, <b>muchos</b> libros
+poco, -a, -os, -as|málo|<b>pocos</b> turistas; <b>un poco</b> de agua
+bastante(s)|dost|<b>bastante</b> dinero
+demasiado, -a, -os, -as|příliš (mnoho)|Comes <b>demasiado</b>.
+tanto, -a, -os, -as|tolik|No tengo <b>tanto</b> tiempo.`),
+TIP('S <b>mejor, peor, más, menos</b> se používá <b>mucho</b>, ne muy: mucho mejor, mucho más. A samostatně na konci věty: ¿Te gusta? – Sí, <b>mucho</b>.')].join(''),
+ex:`Es ___ guapo.|muy
+Trabajas ___.|mucho
+Hay ___ gente.|mucha
+Tengo ___ amigos.|muchos
+Estoy ___ bien.|muy
+Es ___ mejor.|mucho
+Hay ___ turistas. (málo)|pocos
+Comes ___. (příliš)|demasiado
+¿Tienes ___ dinero? (dost)|bastante`},
+
+{id:'tener',emoji:'✋',book:'L4',title:'Tener a výrazy s ním',intro:'tengo hambre, tengo que, tengo 20 años.',
+html:[P('Časování: tengo, tienes, tiene, tenemos, tenéis, tienen. Kromě „mít“ se používá v řadě ustálených výrazů, kde čeština říká „být“ nebo „je mi“:'),
+T('výraz|význam',`
+tener … años|být … let: Tengo 20 años.
+tener hambre / sed|mít hlad / žízeň
+tener frío / calor|být zima / horko (osobě)
+tener sueño|být ospalý
+tener miedo (de)|bát se (čeho)
+tener prisa|spěchat
+tener razón|mít pravdu
+tener suerte|mít štěstí
+tener ganas de + inf.|mít chuť (něco dělat)
+tener que + inf.|muset`),
+TIP('<b>Tener que</b> = musím já (osobně). <b>Hay que</b> = musí se (obecně, neosobně).')].join(''),
+ex:`___ 25 años. (tener, yo)|Tengo
+Tengo ___. (hlad)|hambre
+¿Tienes ___? (žízeň)|sed
+Tenemos ___ ir. (musíme)|que
+Tienes ___. (pravdu)|razón
+Tengo ___ de ir al cine. (chuť)|ganas
+Ellos ___ prisa.|tienen
+Tengo ___. (je mi zima)|frío
+Tiene ___ de los perros. (strach)|miedo`},
+
+{id:'todo',emoji:'🌍',book:'L4',title:'Todo a přídavná jména na -or',intro:'todo el día, todos los días, trabajadora.',
+html:[H('Todo'),T('tvar|příklad|význam',`
+todo|todo el día|celý den
+toda|toda la semana|celý týden
+todos|todos los días|každý den (všechny dny)
+todas|todas las chicas|všechny dívky
+todo (samost.)|Lo sé todo.|Vím všechno.
+todo el mundo|Todo el mundo lo sabe.|Všichni to vědí.`),
+H('Přídavná jména na -or'),P('Ženský tvar dostane <b>-a</b>: trabajador → trabajador<b>a</b>, hablador → hablador<b>a</b>, encantador → encantador<b>a</b>. Množné: trabajadores, trabajadoras.'),
+TIP('Výjimka: srovnávací tvary <b>mejor, peor, mayor, menor, superior, inferior</b> se v rodě nemění: mi hermana mayor, la mejor amiga.')].join(''),
+ex:`___ el día (celý)|todo
+___ la semana (celý)|toda
+___ los días (každý den)|todos
+___ las chicas (všechny)|todas
+Ella es muy ___. (trabajador)|trabajadora
+Son chicas muy ___. (hablador)|habladoras
+Es mi ___ amiga. (nejlepší)|mejor
+___ el mundo lo sabe. (všichni)|Todo`},
+
+{id:'saber',emoji:'🧠',book:'L5',title:'Saber vs. conocer vs. poder',intro:'Vědět, znát, umět, moct.',
+html:[T('sloveso|význam|příklad',`
+saber (sé, sabes…)|vědět (fakta)|No <b>sé</b> dónde está.
+saber + inf.|umět (naučená dovednost)|<b>Sé</b> nadar.
+conocer (conozco…)|znát osobu, místo, věc|<b>Conozco</b> a Pedro. <b>Conozco</b> Madrid.
+poder (puedo…)|moct (možnost, svolení)|Hoy no <b>puedo</b> nadar, estoy enfermo.`),
+TIP('„Umím plavat“ = <b>Sé</b> nadar (naučil jsem se). „Můžu dnes plavat“ = <b>Puedo</b> nadar (nic mi nebrání).')].join(''),
+ex:`¿___ dónde está la estación?|Sabes|Sabes;Conoces|fakt → saber
+___ a tu hermano.|Conozco|Sé;Conozco|osoba → conocer
+¿___ nadar?|Sabes|Sabes;Conoces|dovednost → saber
+No ___ Barcelona.|conozco|sé;conozco|místo → conocer
+Hoy no ___ venir, estoy enfermo.|puedo|sé;puedo|možnost → poder
+Yo no ___ la respuesta.|sé|sé;conozco|fakt → saber
+¿___ tocar la guitarra?|Sabes|Sabes;Puedes|naučená dovednost → saber
+¿___ abrir la ventana, por favor?|Puedes|Sabes;Puedes|prosba → poder`},
+
+{id:'lugar',emoji:'📦',book:'L6',title:'Poloha v prostoru',intro:'delante de, detrás de, encima de, debajo de…',
+html:[T('výraz|význam',`
+delante de|před
+detrás de|za
+encima de / sobre|na, nad
+debajo de|pod
+al lado de|vedle
+junto a|u, vedle
+enfrente de|naproti
+entre|mezi
+dentro de / fuera de|uvnitř / venku, mimo
+cerca de / lejos de|blízko / daleko od
+a la derecha de / a la izquierda de|vpravo / vlevo od
+al fondo (de)|vzadu, na konci`),
+TIP('Pozor na stažení: al lado <b>del</b> banco, cerca <b>del</b> centro (de + el = del).')].join(''),
+ex:`El gato está ___ la mesa. (pod)|debajo de
+La lámpara está ___ la mesa. (na)|encima de, sobre
+El coche está ___ la casa. (před)|delante de
+El jardín está ___ la casa. (za)|detrás de
+El banco está al lado ___ hotel.|del
+La farmacia está ___ del museo. (naproti)|enfrente
+Vivo ___ del centro. (blízko)|cerca
+La silla está ___ la mesa y la cama. (mezi)|entre`},
+
+{id:'hora',emoji:'🕐',book:'L7',title:'Hodiny a dny v týdnu',intro:'¿Qué hora es? Son las tres y media.',
+html:[H('Kolik je hodin?'),T('čas|španělsky',`
+1:00|Es la una.
+2:00|Son las dos.
+3:05|Son las tres y cinco.
+4:15|Son las cuatro y cuarto.
+5:30|Son las cinco y media.
+6:40|Son las siete menos veinte.
+7:45|Son las ocho menos cuarto.
+12:00|Es mediodía. / Son las doce.`),
+UL(['¿<b>A qué hora</b>…? – <b>A las</b> ocho. (V kolik? – V osm.)','de la mañana (ráno), de la tarde (odpoledne), de la noche (večer, v noci)','en punto = přesně: Son las tres en punto.']),
+H('Dny v týdnu'),P('lunes, martes, miércoles, jueves, viernes, sábado, domingo – píšou se <b>malým</b> písmenem.'),
+T('výraz|význam',`
+el lunes|v pondělí (tento)
+los lunes|v pondělí (každé)
+el fin de semana|o víkendu`)].join(''),
+ex:`1:00 → ___ la una.|Es
+3:00 → Son ___ tres.|las
+2:15 → Son las dos y ___.|cuarto
+4:30 → Son las cuatro y ___.|media
+5:45 → Son las seis ___ cuarto.|menos
+Voy al cine ___ las ocho.|a
+v pondělí → ___ lunes|el
+každou sobotu → ___ sábados|los
+středa = ___|miércoles
+22:00 → las diez de la ___|noche`},
+
+{id:'soler',emoji:'🔄',book:'L7',title:'Soler + infinitiv a časové vazby',intro:'suelo, al llegar, antes de, después de.',
+html:[H('Soler (ue) + infinitiv'),P('Vyjadřuje, co obvykle děláme – česky „obvykle“, „mívat ve zvyku“: <b>Suelo</b> levantarme a las siete. Časuje se suelo, sueles, suele, solemos, soléis, suelen.'),
+H('Časové vazby s infinitivem'),T('vazba|význam|příklad',`
+al + inf.|když, jakmile|<b>Al llegar</b> a casa, ceno.
+antes de + inf.|před tím, než|<b>Antes de salir</b>, cierro la puerta.
+después de + inf.|po tom, co|<b>Después de comer</b>, duermo.
+hasta + inf.|dokud, až do|Trabajo <b>hasta terminar</b>.`),
+TIP('Vazba s infinitivem se používá, když je v obou částech věty stejný podmět.')].join(''),
+ex:`___ levantarme temprano. (soler, yo)|Suelo
+¿Qué ___ hacer los domingos? (soler, tú)|sueles
+Nosotros ___ cenar a las nueve. (soler)|solemos
+___ llegar a casa, me ducho. (když)|Al
+Antes ___ salir, cierro la puerta.|de
+___ de comer, duermo la siesta. (po)|Después
+Ella ___ ir en metro. (soler)|suele`},
+
+{id:'tiempo',emoji:'☀️',book:'R1',title:'Počasí a roční období',intro:'hace calor, llueve, está nublado.',
+html:[T('výraz|význam',`
+¿Qué tiempo hace?|Jaké je počasí?
+hace calor / frío|je horko / zima
+hace sol / viento|svítí slunce / fouká vítr
+hace buen / mal tiempo|je hezky / ošklivo
+hace 20 grados|je 20 stupňů
+llueve (llover)|prší
+nieva (nevar)|sněží
+está nublado|je zataženo
+hay niebla / tormenta|je mlha / bouřka`),
+TIP('S <b>hace</b> se pojí podstatné jméno, proto <b>mucho</b>, ne muy: hace <b>mucho</b> calor, hace <b>mucho</b> frío.'),
+P('Roční období: <b>la primavera</b> (jaro), <b>el verano</b> (léto), <b>el otoño</b> (podzim), <b>el invierno</b> (zima). V létě = <b>en</b> verano.')].join(''),
+ex:`¿Qué tiempo ___?|hace
+Hace ___ calor. (hodně)|mucho
+Hoy ___. (prší)|llueve
+En invierno ___. (sněží)|nieva
+___ nublado.|Está
+Hace ___ tiempo. (hezky)|buen
+___ niebla. (je mlha)|Hay
+léto = el ___|verano`},
+
+{id:'numbig',emoji:'💰',book:'L8',title:'Číslovky od 200 do miliardy',intro:'doscientos, mil, un millón.',
+html:[T('číslo|španělsky',`
+200|doscientos / doscientas
+300|trescientos
+400|cuatrocientos
+500|quinientos
+600|seiscientos
+700|setecientos
+800|ochocientos
+900|novecientos
+1 000|mil
+2 000|dos mil
+1 000 000|un millón (de)
+1 000 000 000|mil millones`),
+UL(['Stovky se shodují v rodě: doscient<b>as</b> personas, trescient<b>os</b> libros.','<b>Mil</b> se neříká „un mil“ a v množném čísle se nemění: dos mil, tres mil.','<b>Millón</b> je podstatné jméno, proto <b>de</b>: un millón <b>de</b> habitantes, dos millones <b>de</b> euros.','Letopočty čteme jako čísla: 1995 = mil novecientos noventa y cinco.'])].join(''),
+ex:`500 = ___|quinientos
+700 = ___|setecientos
+900 = ___|novecientos
+___ casas (200)|doscientas
+1000 = ___|mil
+2000 = ___|dos mil
+un millón ___ euros|de
+Tenemos ___ personas. (300)|trescientas`},
+
+{id:'tonic',emoji:'👉',book:'L9',title:'Přízvučná zájmena: para mí, conmigo',intro:'Zájmena po předložkách a zdůraznění.',
+html:[P('Po předložkách se používají tvary: <b>mí, ti</b>, él, ella, usted, nosotros, vosotros, ellos, ellas, ustedes.'),
+E(`Este regalo es para mí.|Tento dárek je pro mě.
+Hablamos de ti.|Mluvíme o tobě.
+Voy con ella.|Jdu s ní.`),
+T('s předložkou con|',`
+se mnou|conmigo
+s tebou|contigo`),
+H('Zdůraznění'),P('Přízvučné zájmeno s <b>a</b> zdůrazní nebo upřesní nepřízvučné: <b>A mí</b> me gusta. Le doy el libro <b>a ella</b>. Lo veo <b>a él</b>.'),
+TIP('Pozor na čárku: <b>mí</b> (mě) × <b>mi</b> (můj). Po <b>entre</b> a <b>según</b> se používá yo, tú: entre tú y yo.')].join(''),
+ex:`Este regalo es para ___. (mě)|mí
+¿Vienes ___? (se mnou)|conmigo
+Voy ___. (s tebou)|contigo
+Hablo de ___. (o něm)|él
+___ mí me gusta el café.|A
+Esto es para ___. (tebe)|ti
+Entre tú y ___.|yo
+Le escribo a ___. (jí)|ella`},
+
+{id:'comp',emoji:'📊',book:'L10',title:'Stupňování a porovnávání',intro:'más… que, tan… como, el mejor.',
+html:[T('význam|vazba|příklad',`
+víc než|más + příd. + que|Pedro es <b>más</b> alto <b>que</b> Juan.
+méně než|menos + příd. + que|Es <b>menos</b> caro <b>que</b> el otro.
+stejně jako|tan + příd. + como|Es <b>tan</b> alto <b>como</b> su padre.
+tolik jako|tanto/-a/-os/-as + podst. + como|Tengo <b>tantos</b> libros <b>como</b> tú.
+nej-|el/la/los/las más + příd. (de)|Es la ciudad <b>más bonita de</b> España.`),
+H('Nepravidelné tvary'),T('základ|2. stupeň|3. stupeň',`
+bueno|mejor|el mejor
+malo|peor|el peor
+grande (věk, význam)|mayor|el mayor
+pequeño (věk)|menor|el menor`),
+TIP('O velikosti se říká <b>más grande</b>, o věku <b>mayor</b>: mi hermano mayor (starší bratr).')].join(''),
+ex:`Pedro es ___ alto que Juan. (víc)|más
+Madrid es más grande ___ Toledo.|que
+Es tan alto ___ su padre.|como
+Tengo ___ libros como tú. (tolik)|tantos
+Este vino es ___ que ese. (lepší)|mejor
+Es la chica ___ simpática de la clase.|más
+Mi hermano ___ tiene 10 años. (mladší)|menor
+Esta película es ___ que la otra. (horší)|peor
+Ana es ___ trabajadora que Luis. (méně)|menos`},
+
+{id:'dimin',emoji:'🐭',book:'L10',title:'Zdrobněliny a zveličeliny',intro:'casita, perrito, poquito, hombrón.',
+html:[H('Zdrobněliny'),UL(['nejčastěji <b>-ito, -ita</b>: casa → cas<b>ita</b>, perro → perr<b>ito</b>','po -e, -n, -r obvykle <b>-cito, -cita</b>: coche → coche<b>cito</b>, canción → cancion<b>cita</b>','také <b>-illo, -illa</b>: pan → panecillo, chica → chiquilla']),
+P('Pravopis se přizpůsobí výslovnosti: poco → po<b>qu</b>ito, amigo → ami<b>gu</b>ito, chico → chi<b>qu</b>ito.'),
+H('Zveličeliny'),P('<b>-ón, -ona</b> (hombre → hombrón, cabeza → cabezón), <b>-azo</b> (perro → perrazo; také úder: portazo = bouchnutí dveřmi), <b>-ote</b> (grande → grandote).'),
+TIP('Zdrobněliny ve španělštině často vyjadřují něhu nebo zdvořilost: ¿Un cafecito? Un momentito, por favor.')].join(''),
+ex:`casa → ___|casita
+perro → ___|perrito
+poco → ___|poquito
+abuela → ___|abuelita
+coche → ___|cochecito
+amigo → ___|amiguito
+momento → ___|momentito
+hombre → (zveličelé) ___|hombrón`},
+
+{id:'fut',emoji:'🚀',book:'L11',title:'Budoucí čas jednoduchý',intro:'hablaré, comerás, vivirá – a věty se si.',
+html:[P('Ke <b>celému infinitivu</b> přidáš koncovky – stejné pro -ar, -er i -ir:'),
+T('osoba|koncovka|hablar',`
+yo|-é|hablar<b>é</b>
+tú|-ás|hablar<b>ás</b>
+él / usted|-á|hablar<b>á</b>
+nosotros|-emos|hablar<b>emos</b>
+vosotros|-éis|hablar<b>éis</b>
+ellos / ustedes|-án|hablar<b>án</b>`),
+H('Nepravidelné kmeny'),T('infinitiv|kmen|yo',`
+tener / venir / poner / salir|tendr- / vendr- / pondr- / saldr-|tendré, vendré…
+poder / saber / haber / querer|podr- / sabr- / habr- / querr-|podré, sabré…
+hacer / decir|har- / dir-|haré, diré`),
+P('Kromě budoucnosti vyjadřuje i <b>domněnku</b>: ¿Dónde está Juan? – <b>Estará</b> en casa. (Asi je doma.)'),
+H('Podmínková věta se si'),P('<b>Si + přítomný čas</b>, pak budoucí čas (nebo přítomný či rozkaz): <b>Si llueve, me quedaré</b> en casa.'),
+TIP('Po <b>si</b> (jestliže) nikdy nedávej budoucí čas: správně je <b>si llueve</b>, ne „si lloverá“.')].join(''),
+ex:`Mañana ___ a mi abuela. (visitar, yo)|visitaré
+¿Cuándo ___ tú? (volver)|volverás
+Ellos ___ en Madrid. (vivir)|vivirán
+Nosotros ___ tiempo. (tener)|tendremos
+¿Qué ___ tú mañana? (hacer)|harás
+Él no ___ nada. (decir)|dirá
+Si ___ sol, iremos a la playa. (hacer)|hace
+Si tengo tiempo, te ___. (llamar, yo)|llamaré
+Yo no ___ venir. (poder)|podré
+Vosotros ___ a las ocho. (salir)|saldréis`},
+
+{id:'hace',emoji:'⏳',book:'L12',title:'Hace, desde, desde hace',intro:'Llegué hace dos días. Vivo aquí desde hace un año.',
+html:[T('výraz|význam|příklad',`
+hace + doba|před (časově)|Llegué <b>hace</b> dos días.
+desde + bod v čase|od|Vivo aquí <b>desde</b> 2015.
+desde hace + doba|už (od doby)|Estudio español <b>desde hace</b> un año.
+hace + doba + que|už … (dělám)|<b>Hace</b> un año <b>que</b> estudio español.
+antes de|před (něčím)|<b>antes de</b> la cena
+delante de|před (místně)|<b>delante de</b> la casa`),
+P('Otázka: ¿<b>Cuánto tiempo hace que</b> vives aquí? = Jak dlouho tu bydlíš?')].join(''),
+ex:`Llegué ___ dos días. (před)|hace
+Vivo aquí ___ 2015. (od)|desde
+Estudio español ___ hace un año. (už rok)|desde
+___ tres años que trabajo aquí.|Hace
+Siempre me ducho ___ desayunar. (před)|antes de
+El coche está ___ la casa. (před, místně)|delante de
+¿Cuánto tiempo ___ que vives aquí?|hace
+Te llamé hace una ___. (hodinou)|hora`},
+
+{id:'imper',emoji:'📣',book:'L13',title:'Rozkazovací způsob (tú, vosotros)',intro:'¡Habla! ¡Come! ¡Ven! ¡Hablad!',
+html:[H('Tú – kladný'),P('Tvar je stejný jako 3. osoba j. č. přítomného času: habla, come, escribe, cierra, duerme.'),
+H('Vosotros – kladný'),P('Z infinitivu: <b>-r → -d</b>: habla<b>d</b>, come<b>d</b>, escribi<b>d</b>.'),
+H('Nepravidelné tvary pro tú'),T('infinitiv|rozkaz',`
+tener|ten
+venir|ven
+poner|pon
+salir|sal
+hacer|haz
+decir|di
+ir|ve
+ser|sé`),
+H('Zájmena'),P('Připojují se na konec a často přibude čárka: dí<b>melo</b>, siénta<b>te</b>, cóme<b>lo</b>. U vosotros zvratných odpadá -d: senta<b>os</b>, levanta<b>os</b>.')].join(''),
+ex:`___ más despacio. (hablar, tú)|Habla
+___ la ventana. (abrir, tú)|Abre
+___ aquí. (venir, tú)|Ven
+___ los deberes. (hacer, tú)|Haz
+___ la verdad. (decir, tú)|Di
+___ la mesa. (poner, tú)|Pon
+Niños, ___ la sopa. (comer, vosotros)|comed
+___ a casa. (ir, tú)|Ve
+___, por favor. (sentarse, tú)|Siéntate
+___ con atención. (escuchar, vosotros)|Escuchad`},
+
+{id:'adv',emoji:'🏎️',book:'L13',title:'Příslovce na -mente a -ísimo',intro:'rápidamente, guapísimo, así × tan, porque × como.',
+html:[H('Příslovce na -mente'),P('K <b>ženskému tvaru</b> přídavného jména přidej -mente: rápid<b>a</b> → rápida<b>mente</b>, lent<b>a</b> → lenta<b>mente</b>, fácil → fácil<b>mente</b> (čárka zůstává).'),
+P('Dvě za sebou: -mente jen u druhého: clara y lenta<b>mente</b>. Nepravidelné: bien, mal (lépe = mejor, hůř = peor).'),
+H('Absolutní superlativ -ísimo'),P('guapo → guap<b>ísimo</b>, mucho → much<b>ísimo</b>, fácil → facil<b>ísimo</b>; rico → ri<b>qu</b>ísimo, largo → lar<b>gu</b>ísimo.'),
+H('Así × tan, porque × como'),UL(['<b>así</b> = takto, tak (způsob): No lo hagas así.','<b>tan</b> = tak (míra) + příd./přísl.: Es tan guapa.','<b>porque</b> = protože (uprostřed věty): Me quedo porque llueve.','<b>como</b> = protože (na začátku věty): Como llueve, me quedo.'])].join(''),
+ex:`rápido → ___|rápidamente
+fácil → ___|fácilmente
+tranquilo → ___|tranquilamente
+guapo → (-ísimo) ___|guapísimo
+rico → (-ísimo) ___|riquísimo
+mucho → (-ísimo) ___|muchísimo
+___ llueve, me quedo en casa. (protože – na začátku)|Como
+No lo hagas ___. (takhle)|así
+¡Es ___ guapa! (tak)|tan`},
+
+{id:'perif',emoji:'🔗',book:'L13',title:'Slovesné vazby s infinitivem',intro:'empezar a, acabar de, dejar de, volver a.',
+html:[T('vazba|význam|příklad',`
+empezar / comenzar a + inf.|začít|Empiezo <b>a</b> trabajar.
+ponerse a + inf.|dát se do|Se puso <b>a</b> llorar.
+terminar de + inf.|dokončit|Termino <b>de</b> comer.
+dejar de + inf.|přestat|Dejo <b>de</b> fumar.
+acabar de + inf.|právě (něco udělat)|Acabo <b>de</b> llegar.
+volver a + inf.|znovu|Vuelve <b>a</b> llover.
+ponerse + příd.|změnit se, zčervenat…|Me pongo nervioso.`),
+TIP('<b>Acabo de llegar</b> = Právě jsem přijel. Přítomný čas, ale česky minulý.')].join(''),
+ex:`Empiezo ___ trabajar a las ocho.|a
+Acabo ___ llegar. (právě jsem přijel)|de
+Quiero dejar ___ fumar.|de
+Vuelve ___ llover. (znovu)|a
+Se puso ___ llorar.|a
+Cuando ___ de comer, salimos. (terminar, nosotros)|terminamos
+Me ___ nervioso. (ponerse, yo)|pongo
+___ de ver a Juan. (acabar, yo)|Acabo`},
+
+{id:'cond',emoji:'🤔',book:'L14',title:'Podmiňovací způsob (condicional)',intro:'hablaría, me gustaría, podría.',
+html:[P('Ke <b>infinitivu</b> přidej <b>-ía, -ías, -ía, -íamos, -íais, -ían</b>. Nepravidelné kmeny jsou stejné jako u budoucího času: tendría, vendría, pondría, saldría, podría, sabría, querría, haría, diría.'),
+H('Použití'),UL(['zdvořilost: ¿<b>Podría</b> ayudarme? <b>Me gustaría</b> un café.','rada: Yo que tú, <b>iría</b> al médico. <b>Deberías</b> descansar.','budoucnost z pohledu minulosti: Dijo que <b>vendría</b>.','domněnka o minulosti: <b>Serían</b> las diez. (Bylo asi deset.)'])].join(''),
+ex:`Me ___ un café. (gustar)|gustaría
+¿___ ayudarme? (poder, usted)|Podría
+Yo que tú, ___ al médico. (ir)|iría
+Tú ___ estudiar más. (deber)|deberías
+Dijo que ___ mañana. (venir)|vendría
+Nosotros lo ___ mejor. (hacer)|haríamos
+¿Qué ___ tú? (decir)|dirías
+Ellos ___ tiempo. (tener)|tendrían`},
+
+{id:'rel',emoji:'🪢',book:'L14',title:'Vztažná zájmena',intro:'que, quien, el que, lo que, donde, cuyo.',
+html:[T('zájmeno|použití|příklad',`
+que|který, co – nejčastější|El libro <b>que</b> leo.
+quien / quienes|kdo; po předložce u osob|La chica con <b>quien</b> hablo.
+el que, la que, los que, las que|ten, který; po předložce|La casa en <b>la que</b> vivo.
+lo que|co (celá věc, myšlenka)|No entiendo <b>lo que</b> dices.
+donde|kde|La ciudad <b>donde</b> nací.
+cuyo, -a, -os, -as|jehož, jejíž (shoda s věcí)|El hombre <b>cuyo</b> hijo es médico.`),
+TIP('<b>Cuyo</b> se shoduje s tím, co se vlastní, ne s vlastníkem: la mujer cuy<b>os</b> hijos…')].join(''),
+ex:`El libro ___ leo es interesante.|que
+La chica con ___ hablo es mi prima.|quien
+No entiendo ___ dices.|lo que
+La casa ___ vivo es pequeña. (kde)|donde
+El hombre ___ hijo es médico. (jehož)|cuyo
+La ciudad en ___ nací. (ve které)|la que
+Es el chico del ___ te hablé.|que
+La mujer ___ hijas estudian aquí. (jejíž)|cuyas`},
+
+{id:'poss2',emoji:'🏷️',book:'L14',title:'Přivlastňovací zájmena samostatná',intro:'mío, tuyo, suyo, nuestro.',
+html:[T('|m. j.|ž. j.|m. mn.|ž. mn.',`
+můj|mío|mía|míos|mías
+tvůj|tuyo|tuya|tuyos|tuyas
+jeho, její, Váš|suyo|suya|suyos|suyas
+náš|nuestro|nuestra|nuestros|nuestras
+váš|vuestro|vuestra|vuestros|vuestras
+jejich, Váš|suyo|suya|suyos|suyas`),
+UL(['samostatně: Este libro es <b>mío</b>.','za podstatným jménem: un amigo <b>mío</b> (jeden můj kamarád)','se členem = ten můj: Mi coche es rojo, ¿y <b>el tuyo</b>?'])].join(''),
+ex:`Este libro es ___. (můj)|mío
+Esta casa es ___. (moje)|mía
+¿Estas llaves son ___? (tvoje)|tuyas
+un amigo ___ (můj)|mío
+Mi coche es rojo, ¿y el ___? (tvůj)|tuyo
+Esos zapatos son ___. (naše)|nuestros
+Es una amiga ___. (jeho)|suya`},
+
+{id:'sino',emoji:'⚖️',book:'L14',title:'Lo + přídavné jméno, pero × sino',intro:'lo bueno, lo que; no es rojo, sino azul.',
+html:[H('Člen středního rodu LO'),UL(['<b>lo</b> + příd. jméno = to … : <b>lo</b> bueno (to dobré), <b>lo</b> importante, <b>lo</b> mejor','<b>lo que</b> = co: Haz <b>lo que</b> quieras.','<b>lo</b> + příd. + <b>que</b> = jak moc: No sabes <b>lo</b> difícil <b>que</b> es.']),
+H('Pero × sino'),UL(['<b>pero</b> = ale (přidává informaci): Es caro, <b>pero</b> bonito.','<b>sino</b> = nýbrž, ale (po záporu, opravuje): No es rojo, <b>sino</b> azul.','<b>sino que</b> + sloveso: No estudia, <b>sino que</b> trabaja.'])].join(''),
+ex:`___ importante es estudiar. (to důležité)|Lo
+No es mi hermano, ___ mi primo.|sino
+Es caro, ___ bonito.|pero
+No quiero té, ___ café.|sino
+No sabes ___ difícil que es.|lo
+No lo compró, ___ lo alquiló.|sino que
+___ mejor de España es la comida.|Lo
+Quiero ir, ___ no tengo tiempo.|pero`},
+
+{id:'fecha',emoji:'📅',book:'L14',title:'Měsíce a datum',intro:'el 5 de mayo de 2024.',
+html:[P('Měsíce se píšou <b>malým</b> písmenem: enero, febrero, marzo, abril, mayo, junio, julio, agosto, septiembre, octubre, noviembre, diciembre.'),
+T('česky|španělsky',`
+5. května 2024|el 5 de mayo de 2024
+1. ledna|el uno / el primero de enero
+v květnu|en mayo
+v roce 1995|en 1995
+Jaké je dnes datum?|¿Qué fecha es hoy? / ¿A qué estamos?
+Dnes je pondělí 3. března.|Hoy es lunes, 3 de marzo.`),
+TIP('V dopise se datum píše: Praga, 3 de marzo de 2024.')].join(''),
+ex:`5. května → el 5 ___ mayo|de
+leden = ___|enero
+září = ___|septiembre
+¿Qué ___ es hoy?|fecha
+v květnu → ___ mayo|en
+prosinec = ___|diciembre
+Nací ___ 1995. (v roce)|en
+1. ledna → el ___ de enero|primero, uno`},
+
+{id:'impf',emoji:'🕰️',book:'L15',title:'Imperfektum (pretérito imperfecto)',intro:'hablaba, comía, era, iba.',
+html:[T('osoba|hablar|comer / vivir',`
+yo|habl<b>aba</b>|com<b>ía</b>
+tú|habl<b>abas</b>|com<b>ías</b>
+él / usted|habl<b>aba</b>|com<b>ía</b>
+nosotros|habl<b>ábamos</b>|com<b>íamos</b>
+vosotros|habl<b>abais</b>|com<b>íais</b>
+ellos / ustedes|habl<b>aban</b>|com<b>ían</b>`),
+P('Nepravidelná jsou jen tři slovesa: <b>ser</b> (era, eras, era, éramos, erais, eran), <b>ir</b> (iba, ibas, iba, íbamos, ibais, iban), <b>ver</b> (veía, veías…).'),
+H('Kdy ho použít'),UL(['opakované děje a zvyky v minulosti: De niño <b>jugaba</b> al fútbol.','popis v minulosti: <b>Era</b> alto. <b>Hacía</b> sol.','děj, který zrovna probíhal: <b>Leía</b> cuando sonó el teléfono.','čas a věk v minulosti: <b>Eran</b> las tres. <b>Tenía</b> diez años.'])].join(''),
+ex:`De niño ___ al fútbol. (jugar, yo)|jugaba
+Mi abuela ___ en el campo. (vivir)|vivía
+Nosotros ___ mucho. (comer)|comíamos
+___ las tres de la tarde. (ser)|Eran
+Cuando era niño, ___ a la playa. (ir, yo)|iba
+Antes ___ la tele todos los días. (ver, tú)|veías
+Mi casa ___ grande. (ser)|era
+Ellos siempre ___ tarde. (llegar)|llegaban
+Mi padre ___ 30 años. (tener)|tenía`},
+
+{id:'impfvs',emoji:'⚔️',book:'L15',title:'Imperfektum vs. indefinido',intro:'Kulisa × děj, který se stal.',
+html:[T('indefinido (hablé)|imperfektum (hablaba)',`
+jednorázový ukončený děj|opakovaný děj, zvyk
+Ayer <b>fui</b> al cine.|De niño <b>iba</b> al cine.
+sled dějů|popis, kulisa
+Me levanté, me duché y salí.|<b>Era</b> tarde y <b>llovía</b>.
+děj, který „vstoupí“|děj, který probíhal
+…cuando <b>sonó</b> el teléfono.|Mientras <b>leía</b>…`),
+TIP('Pomůcka: imperfektum je <b>kulisa na jevišti</b>, indefinido je <b>to, co se na jevišti stane</b>.')].join(''),
+ex:`Ayer ___ al cine.|fui|fui;iba|jednorázový děj
+De pequeño siempre ___ al parque.|iba|fui;iba|zvyk
+Mientras ___, sonó el teléfono.|leía|leí;leía|probíhající děj
+___ un día precioso cuando salimos.|Era|Fue;Era|popis
+Mi abuelo ___ muy alto.|era|fue;era|popis
+De repente ___ a llover.|empezó|empezó;empezaba|děj, který vstoupí
+Cuando era niño, ___ en el campo.|vivía|viví;vivía|popis minulosti
+Me levanté, me duché y ___.|desayuné|desayuné;desayunaba|sled dějů
+___ las diez cuando llegó.|Eran|Fueron;Eran|čas v minulosti`},
+
+{id:'perf',emoji:'✅',book:'L16',title:'Minulý čas složený (he hablado)',intro:'haber + příčestí: he comido, has visto.',
+html:[T('osoba|haber|+ příčestí',`
+yo|he|hablado
+tú|has|comido
+él / usted|ha|vivido
+nosotros|hemos|hablado
+vosotros|habéis|comido
+ellos / ustedes|han|vivido`),
+P('Příčestí: -ar → <b>-ado</b>, -er/-ir → <b>-ido</b>. V tomto čase se nemění.'),
+T('nepravidelná příčestí|',`
+hacer → hecho|decir → dicho
+ver → visto|poner → puesto
+volver → vuelto|escribir → escrito
+abrir → abierto|romper → roto
+morir → muerto|leer → leído (čárka)`),
+H('Kdy ho použít'),UL(['děj v období, které ještě trvá: <b>hoy</b>, <b>esta semana</b>, <b>este año</b>','zkušenost: ¿<b>Has estado</b> en México? Nunca <b>he visto</b>…','s ya (už) a todavía no (ještě ne)']),
+TIP('Ve Španělsku se používá velmi často. V Latinské Americe se místo něj častěji říká indefinido.')].join(''),
+ex:`Hoy ___ trabajado mucho. (yo)|he
+¿___ estado en México? (tú)|Has
+Esta semana hemos ___ mucho. (estudiar)|estudiado
+¿Qué has ___? (hacer)|hecho
+No he ___ esa película. (ver)|visto
+Ella ha ___ una carta. (escribir)|escrito
+¿Quién ha ___ la ventana? (abrir)|abierto
+Todavía no han ___. (volver)|vuelto
+¿Qué te ha ___? (decir)|dicho
+Hemos ___ el libro. (leer)|leído`},
+
+{id:'ord',emoji:'🥇',book:'L16',title:'Řadové číslovky',intro:'primero, segundo, tercero…',
+html:[T('|m.|ž.',`
+1.|primero (primer)|primera
+2.|segundo|segunda
+3.|tercero (tercer)|tercera
+4.|cuarto|cuarta
+5.|quinto|quinta
+6.|sexto|sexta
+7.|séptimo|séptima
+8.|octavo|octava
+9.|noveno|novena
+10.|décimo|décima`),
+UL(['<b>primero</b> a <b>tercero</b> se před podst. jménem m. r. zkracují: el <b>primer</b> piso, el <b>tercer</b> día.','Od 11 se obvykle používají základní číslovky: el siglo XXI (veintiuno), Alfonso XIII (trece).','Násobné: doble, triple; una vez, dos veces (jednou, dvakrát).'])].join(''),
+ex:`1. patro → el ___ piso|primer
+třetí žena → la ___ mujer|tercera
+5. = ___|quinto
+7. = ___|séptimo
+10. = ___|décimo
+poprvé → la ___ vez|primera
+dvakrát → dos ___|veces
+9. = ___|noveno`},
+
+{id:'subj',emoji:'🌫️',book:'L17',title:'Subjunktiv přítomného času',intro:'hable, coma, tenga, sea, vaya.',
+html:[P('Vezmi tvar <b>yo</b> přítomného času, odtrhni -o a přidej „opačnou“ samohlásku: -ar → <b>e</b>, -er/-ir → <b>a</b>.'),
+T('osoba|hablar|comer|vivir',`
+yo|habl<b>e</b>|com<b>a</b>|viv<b>a</b>
+tú|habl<b>es</b>|com<b>as</b>|viv<b>as</b>
+él / usted|habl<b>e</b>|com<b>a</b>|viv<b>a</b>
+nosotros|habl<b>emos</b>|com<b>amos</b>|viv<b>amos</b>
+vosotros|habl<b>éis</b>|com<b>áis</b>|viv<b>áis</b>
+ellos / ustedes|habl<b>en</b>|com<b>an</b>|viv<b>an</b>`),
+UL(['Nepravidelnost v yo zůstává: tengo → <b>tenga</b>, hago → <b>haga</b>, digo → <b>diga</b>, conozco → <b>conozca</b>.','Kmenové změny zůstávají kromě nosotros a vosotros: quiera, queramos. U -ir: duerma, durmamos; pida, pidamos.','Pravopis: buscar → busque, llegar → llegue, empezar → empiece.']),
+T('úplně nepravidelné|',`
+ser → sea|estar → esté
+ir → vaya|saber → sepa
+dar → dé|haber → haya`),
+TIP('Subjunktiv se používá po vyjádření přání, citu, pochybnosti, po <b>para que</b>, <b>ojalá</b> a v záporném rozkazu. Podrobnosti najdeš v dalších lekcích.')].join(''),
+ex:`Quiero que ___ más. (hablar, tú)|hables
+Espero que ___ bien. (estar, tú)|estés
+Ojalá ___ sol mañana. (hacer)|haga
+Quiero que ___ a la fiesta. (venir, tú)|vengas
+Dudo que ___ verdad. (ser)|sea
+Es necesario que ___ más. (estudiar, nosotros)|estudiemos
+No creo que ___ tiempo. (tener, él)|tenga
+Te lo digo para que lo ___. (saber, tú)|sepas
+Espero que ___ bien. (dormir, tú)|duermas`},
+
+{id:'imp2',emoji:'🚫',book:'L17',title:'Záporný rozkaz a rozkaz pro usted',intro:'no hables, no comáis, pase usted.',
+html:[UL(['<b>Záporný rozkaz</b> všech osob = no + subjunktiv: no habl<b>es</b>, no com<b>áis</b>, no veng<b>as</b>.','<b>Kladný rozkaz pro usted, ustedes</b> = subjunktiv: habl<b>e</b>, pas<b>e</b>, com<b>an</b>.','<b>Nosotros</b> (pojďme): hablemos, comamos; ir → vamos.']),
+H('Kam se zájmena'),T('kladný|záporný',`
+dígamelo|no me lo diga
+siéntese|no se siente
+cómelo|no lo comas`)].join(''),
+ex:`No ___ tan rápido. (hablar, tú)|hables
+No ___ eso. (comer, vosotros)|comáis
+___ usted, por favor. (pasar)|Pase
+No ___ tarde. (llegar, tú)|llegues
+___ ustedes aquí. (esperar)|Esperen
+No me lo ___. (decir, tú)|digas
+___, por favor. (sentarse, usted)|Siéntese
+No ___ miedo. (tener, tú)|tengas
+No ___ allí. (ir, tú)|vayas`},
+
+{id:'paraque',emoji:'🎯',book:'L17',title:'Para que + subjunktiv, cualquiera',intro:'Te lo explico para que lo entiendas.',
+html:[UL(['<b>para + infinitiv</b>, když je podmět stejný: Estudio <b>para aprobar</b>.','<b>para que + subjunktiv</b>, když je podmět jiný: Te lo explico <b>para que</b> lo <b>entiendas</b>.']),
+H('Cualquiera'),P('= jakýkoli, kdokoli. Před podstatným jménem se zkracuje: <b>cualquier</b> día, <b>cualquier</b> persona. Samostatně: <b>cualquiera</b> puede hacerlo.')].join(''),
+ex:`Te llamo ___ que vengas.|para
+Te lo explico para que lo ___. (entender, tú)|entiendas
+Estudio para ___. (aprender)|aprender
+Hablo despacio para que me ___. (comprender, vosotros)|comprendáis
+Trabajo para que mis hijos ___ estudiar. (poder)|puedan
+Ven ___ día. (kterýkoli)|cualquier
+Te doy dinero para que ___ pan. (comprar, tú)|compres`},
+
+{id:'plusc',emoji:'⏪',book:'L18',title:'Předminulý čas',intro:'había comido, habían salido.',
+html:[P('Imperfektum slovesa <b>haber</b> (había, habías, había, habíamos, habíais, habían) + <b>příčestí</b>.'),
+P('Vyjadřuje děj, který se stal <b>před jiným minulým dějem</b>:'),
+E(`Cuando llegué, la película ya había empezado.|Když jsem přišel, film už začal.
+Nunca había visto el mar.|Nikdy předtím jsem neviděl moře.
+Dijo que había estado en Praga.|Řekl, že byl v Praze.`)].join(''),
+ex:`Cuando llegué, ella ya ___ salido.|había
+Nunca ___ visto el mar antes. (yo)|había
+Nosotros ya ___ comido.|habíamos
+Dijo que ___ estado en Praga. (él)|había
+Cuando llegamos, la película ya había ___. (empezar)|empezado
+¿___ estado antes en España? (tú)|Habías
+Ellos ya lo ___ hecho.|habían
+No sabía que te habías ___. (casarse)|casado`},
+
+{id:'ojala',emoji:'🙏',book:'L18',title:'Věty přací: ojalá, que…',intro:'Ojalá haga sol. ¡Que tengas suerte!',
+html:[UL(['<b>Ojalá (que) + subjunktiv</b> = kéž by, snad: Ojalá <b>haga</b> buen tiempo.','<b>Que + subjunktiv</b> = ať: ¡Que te <b>mejores</b>! ¡Que <b>tengas</b> suerte! ¡Que lo <b>pases</b> bien! ¡Que <b>aproveche</b>!']),
+H('Infinitiv jako neosobní rozkaz'),P('Na cedulích a v návodech: <b>No fumar.</b> <b>Abrir</b> con cuidado. <b>Empujar.</b>')].join(''),
+ex:`Ojalá ___ buen tiempo. (hacer)|haga
+¡Que ___ suerte! (tener, tú)|tengas
+¡Que te ___! (mejorar)|mejores
+Ojalá ___ aprobar. (poder, yo)|pueda
+¡Que lo ___ bien! (pasar, tú)|pases
+Ojalá ___ pronto. (venir, ellos)|vengan
+No ___. (kouřit – nápis)|fumar
+¡Que ___! (aprovechar – dobrou chuť)|aproveche`},
+
+{id:'subj2',emoji:'😊',book:'L19',title:'Subjunktiv po citech a hodnocení',intro:'Me alegra que vengas. Busco un piso que tenga…',
+html:[H('Po vyjádření citu'),P('me alegra que, siento que, me molesta que, me encanta que, tengo miedo de que + <b>subjunktiv</b>: Me alegra que <b>vengas</b>.'),
+H('Po hodnocení'),P('es importante / necesario / mejor / normal / una pena que + <b>subjunktiv</b>: Es importante que <b>llegues</b> a tiempo.'),
+TIP('Když je podmět stejný, použij infinitiv: Me alegra <b>verte</b>. × Me alegra que <b>me veas</b>.'),
+H('Ve vztažných větách'),P('O něčem neznámém nebo neexistujícím → subjunktiv: Busco un piso que <b>tenga</b> terraza. No hay nadie que lo <b>sepa</b>. O něčem známém → indikativ: Tengo un piso que <b>tiene</b> terraza.')].join(''),
+ex:`Me alegra que ___ aquí. (estar, tú)|estés
+Siento que no ___ venir. (poder, vosotros)|podáis
+Es importante que ___ a tiempo. (llegar, tú)|llegues
+Es una pena que ___. (llover)|llueva
+Me molesta que ___ tanto ruido. (hacer, ellos)|hagan
+Busco un piso que ___ terraza. (tener)|tenga
+No hay nadie que lo ___. (saber)|sepa
+Me alegra ___. (vidět tě – stejný podmět)|verte
+Tengo un amigo que ___ en Madrid. (vivir – existuje)|vive`},
+
+{id:'subj3',emoji:'⏰',book:'L20',title:'Subjunktiv po cuando, quizás, no creo que',intro:'Cuando llegues, llámame.',
+html:[H('Časové spojky'),P('<b>cuando, en cuanto, hasta que, después de que</b> + subjunktiv, když jde o <b>budoucnost</b>: Cuando <b>llegues</b>, llámame. O zvyku nebo minulosti indikativ: Cuando <b>llego</b>, ceno.'),
+P('<b>Antes de que</b> je vždy se subjunktivem.'),
+H('Možnost'),P('<b>quizá(s), tal vez, posiblemente</b> + subjunktiv (větší nejistota): Quizás <b>venga</b> mañana.'),
+H('Zápor názoru'),P('<b>No creo que, no pienso que, no es verdad que</b> + subjunktiv: No creo que <b>tenga</b> razón. Ale kladně: Creo que <b>tiene</b> razón.')].join(''),
+ex:`Cuando ___ a casa, llámame. (llegar, tú)|llegues
+Cuando ___ a casa, siempre ceno. (llegar, yo – zvyk)|llego
+Te espero hasta que ___. (volver, tú)|vuelvas
+No creo que ___ razón. (tener, él)|tenga
+Creo que ___ razón. (tener, él)|tiene
+Quizás ___ mañana. (llover)|llueva
+Antes de que ___, cierra la ventana. (salir, tú)|salgas
+En cuanto ___ dinero, compraré un coche. (tener, yo)|tenga
+No es verdad que ___ caro. (ser)|sea`},
+
+{id:'pasiva',emoji:'🏛️',book:'L21',title:'Trpný rod',intro:'fue construido por…, se venden pisos.',
+html:[UL(['<b>ser + příčestí</b> (shoduje se) + <b>por</b>: El castillo <b>fue construido por</b> el rey. Las casas <b>fueron vendidas</b>.','Častější je <b>zvratný pasiv se</b>: <b>Se venden</b> pisos. La catedral <b>se construyó</b> en 1344.','<b>estar + příčestí</b> = výsledný stav: La puerta <b>está cerrada</b>.']),
+H('Člen u vlastních jmen'),P('Řeky, hory, moře a oceány mají člen: <b>el</b> Moldava, <b>los</b> Pirineos, <b>el</b> Mediterráneo. Země a města většinou ne: España, Praga.')].join(''),
+ex:`El puente ___ construido en el siglo XIV. (ser, minulý)|fue
+La novela fue escrita ___ Cervantes.|por
+Las casas fueron ___. (vender)|vendidas
+La puerta está ___. (cerrar)|cerrada
+Aquí ___ venden pisos.|se
+La catedral ___ construyó en 1344.|se
+Los libros ___ publicados el año pasado. (ser)|fueron
+Vltava = ___ Moldava|el`}
+);
+(function(){
+  const pr=LESSONS.find(l=>l.id==='prog');
+  pr.title='Gerundium a vazby s ním';pr.intro='estoy hablando, sigo trabajando, llevo dos años viviendo…';
+  pr.html+=[H('Další vazby s gerundiem'),T('vazba|význam|příklad',`
+seguir / continuar + ger.|pořád, dál (něco dělat)|<b>Sigo</b> trabajando aquí.
+llevar + doba + ger.|dělat něco už (dobu)|<b>Llevo</b> dos años estudiando español.
+ir + ger.|postupně|<b>Voy</b> aprendiendo.`)].join('');
+  pr.ex+=`\n___ estudiando español. (seguir, yo)|Sigo\nLlevo dos años ___ aquí. (vivir)|viviendo\n¿___ trabajando en el banco? (seguir, tú)|Sigues`;
+  const BM={pron:'U',art:'L1',plur:'L1',pers:'L1',neg:'L1',irr:'L2',serestar:'L2',gustar:'L2',reg:'L3',future:'L4',stem:'L5',hay:'L5',poss:'L5',refl:'L7',obj:'L9',prog:'L11',pret:'L12',porpara:'X'};
+  LESSONS.forEach(l=>{l.book=l.book||BM[l.id]||'X';const B=l.book,n=+B.slice(1)||0;l.level=B==='U'||B==='R1'?'A1':B==='R2'||B==='X'?'A2':B==='R3'?'B1':n<=7?'A1':n<=14?'A2':'B1'});
+})();
+
 /* --- časování --- */
 const PERS=['yo','tú','él / ella / usted','nosotros','vosotros','ellos / ustedes'];
 const IRR={pres:{},pret:{}};
@@ -2279,17 +5722,52 @@ pagar:pagué,pagaste,pagó,pagamos,pagasteis,pagaron`.split('\n').forEach(l=>{co
 const REG_PRES='hablar trabajar estudiar escuchar mirar comprar llamar llegar tomar llevar esperar preguntar ayudar necesitar caminar nadar viajar cocinar limpiar usar cambiar bailar cantar ganar buscar pagar tocar terminar comer beber aprender vender correr responder creer leer comprender vivir escribir abrir recibir decidir subir'.split(' ');
 const REG_PRET='hablar trabajar estudiar escuchar mirar comprar llamar tomar llevar esperar preguntar ayudar necesitar caminar nadar viajar cocinar limpiar usar cambiar bailar cantar ganar terminar comer beber aprender vender correr responder comprender vivir escribir abrir recibir decidir subir'.split(' ');
 const ENDS={pres:{ar:['o','as','a','amos','áis','an'],er:['o','es','e','emos','éis','en'],ir:['o','es','e','imos','ís','en']},pret:{ar:['é','aste','ó','amos','asteis','aron'],er:['í','iste','ió','imos','isteis','ieron'],ir:['í','iste','ió','imos','isteis','ieron']}};
-function conjugate(v,t){if(IRR[t][v])return IRR[t][v];const st=v.slice(0,-2),g=v.slice(-2);return ENDS[t][g].map(e=>st+e)}
+const FUT_STEM={tener:'tendr',venir:'vendr',poner:'pondr',salir:'saldr',poder:'podr',saber:'sabr',querer:'querr',hacer:'har',decir:'dir',oír:'oir'};
+const PART_IRR={hacer:'hecho',decir:'dicho',ver:'visto',poner:'puesto',volver:'vuelto',escribir:'escrito',abrir:'abierto',romper:'roto',morir:'muerto',descubrir:'descubierto',leer:'leído',oír:'oído',traer:'traído',creer:'creído'};
+const IMPF_IRR={ser:'era,eras,era,éramos,erais,eran',ir:'iba,ibas,iba,íbamos,ibais,iban',ver:'veía,veías,veía,veíamos,veíais,veían'};
+const SUBJ_IRR={ser:'sea,seas,sea,seamos,seáis,sean',estar:'esté,estés,esté,estemos,estéis,estén',ir:'vaya,vayas,vaya,vayamos,vayáis,vayan',saber:'sepa,sepas,sepa,sepamos,sepáis,sepan',dar:'dé,des,dé,demos,deis,den'};
+const SUBJ_STEM={tener:['teng','teng'],hacer:['hag','hag'],decir:['dig','dig'],venir:['veng','veng'],salir:['salg','salg'],poner:['pong','pong'],conocer:['conozc','conozc'],ver:['ve','ve'],oír:['oig','oig'],traer:['traig','traig'],poder:['pued','pod'],querer:['quier','quer'],dormir:['duerm','durm'],jugar:['juegu','jugu'],pensar:['piens','pens'],empezar:['empiec','empec'],volver:['vuelv','volv'],pedir:['pid','pid'],entender:['entiend','entend'],encontrar:['encuentr','encontr']};
+const TENSES=[['pres','Přítomný'],['pret','Indefinido'],['impf','Imperfektum'],['perf','Perfektum'],['fut','Budoucí'],['cond','Podmiňovací'],['subj','Subjunktiv']];
+const TNAME=Object.fromEntries(TENSES.map(([k,v])=>[k,v]));
+const TLABEL={pres:'Přítomný čas',pret:'Minulý čas (indefinido)',impf:'Imperfektum',perf:'Minulý čas složený',fut:'Budoucí čas',cond:'Podmiňovací způsob',subj:'Subjunktiv přítomný'};
+const participle=v=>PART_IRR[v]||(v.endsWith('ar')?v.slice(0,-2)+'ado':v.slice(0,-2)+'ido');
+function conjugate(v,t){
+  const st=v.slice(0,-2),g=v.slice(-2).replace('ír','ir');
+  if(t==='pres'||t==='pret'){if(IRR[t][v])return IRR[t][v];return ENDS[t][g].map(e=>st+e)}
+  if(t==='impf'){if(IMPF_IRR[v])return IMPF_IRR[v].split(',');return(g==='ar'?['aba','abas','aba','ábamos','abais','aban']:['ía','ías','ía','íamos','íais','ían']).map(e=>st+e)}
+  if(t==='fut'||t==='cond'){const s=FUT_STEM[v]||v;return(t==='fut'?['é','ás','á','emos','éis','án']:['ía','ías','ía','íamos','íais','ían']).map(e=>s+e)}
+  if(t==='perf'){const p=participle(v);return['he','has','ha','hemos','habéis','han'].map(h=>h+' '+p)}
+  if(t==='subj'){
+    if(SUBJ_IRR[v])return SUBJ_IRR[v].split(',');
+    const E=g==='ar'?['e','es','e','emos','éis','en']:['a','as','a','amos','áis','an'];
+    let s1,s2;
+    if(SUBJ_STEM[v])[s1,s2]=SUBJ_STEM[v];
+    else{s1=s2=v.endsWith('car')?st.slice(0,-1)+'qu':v.endsWith('gar')?st+'u':v.endsWith('zar')?st.slice(0,-1)+'c':st}
+    return E.map((e,i)=>(i===3||i===4?s2:s1)+e);
+  }
+}
+function tensePools(t){
+  const irrP=Object.keys(IRR.pres),extra=['tener','hacer','poder','querer','decir','venir','salir','poner','saber','estar','dar','dormir','pedir','volver','pensar','jugar','empezar','entender','encontrar','conocer','traer'];
+  switch(t){
+    case 'pres':return{reg:REG_PRES,irr:irrP};
+    case 'pret':return{reg:REG_PRET,irr:Object.keys(IRR.pret)};
+    case 'impf':return{reg:[...REG_PRES,...extra],irr:Object.keys(IMPF_IRR)};
+    case 'fut':case 'cond':return{reg:[...REG_PRES,'ser','estar','ir','dar','ver','dormir','pedir','volver','pensar','jugar','empezar'],irr:Object.keys(FUT_STEM)};
+    case 'perf':return{reg:[...REG_PRES,...extra].filter(v=>!PART_IRR[v]),irr:Object.keys(PART_IRR)};
+    case 'subj':return{reg:REG_PRES,irr:[...Object.keys(SUBJ_IRR),...Object.keys(SUBJ_STEM)]};
+  }
+}
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
+function verbCz(v){const w=D.words.find(w=>w.es===v)||D.words.find(w=>w.es.startsWith(v+' ('));return w?w.cz:''}
 function genConj(n=20){
-  const s=D.settings,tenses=s.conjTense==='both'?['pres','pret']:[s.conjTense],items=[],used=new Set();let guard=0;
+  const s=D.settings,tenses=(s.conjTenses&&s.conjTenses.length)?s.conjTenses:['pres'],items=[],used=new Set();let guard=0;
   const persons=[0,1,2,3,4,5].filter(p=>s.vosotros||p!==4);
-  while(items.length<n&&guard++<800){
-    const t=rnd(tenses),reg=t==='pres'?REG_PRES:REG_PRET,irr=Object.keys(IRR[t]);
-    const v=rnd(s.conjSet==='reg'?reg:s.conjSet==='irr'?irr:[...reg,...irr,...irr]),p=rnd(persons),k=v+t+p;
+  while(items.length<n&&guard++<1500){
+    const t=rnd(tenses),P=tensePools(t);
+    const v=rnd(s.conjSet==='reg'?P.reg:s.conjSet==='irr'?P.irr:[...P.reg,...P.irr,...P.irr]),p=rnd(persons),k=v+t+p;
     if(used.has(k))continue;used.add(k);
-    const forms=conjugate(v,t),cz=(D.words.find(w=>w.es===v)||{}).cz||'',tl=t==='pres'?'Přítomný čas':'Minulý čas';
-    items.push({kind:'conj',key:k,v,p,a:forms[p],cz,label:tl,plain:`${v} · ${PERS[p]} (${t==='pres'?'přítomný':'minulý'})`,
+    const forms=conjugate(v,t);
+    items.push({kind:'conj',key:k,v,p,a:forms[p],cz:verbCz(v),label:TLABEL[t],plain:`${v} · ${PERS[p]} (${TNAME[t].toLowerCase()})`,
       note:forms.map((f,i)=>(s.vosotros||i!==4)?`<span class="${i===p?'hl':''}">${PERS[i].split(' ')[0]} <b>${f}</b></span>`:'').join('')});
   }
   return items;
@@ -2320,30 +5798,41 @@ function choiceUI(item,card){
 }
 
 /* --- záložka a lekce --- */
+const BOOK_ORDER=['U','L1','L2','L3','L4','L5','L6','L7','R1','L8','L9','L10','L11','L12','L13','L14','R2','L15','L16','L17','L18','L19','L20','L21','R3','X'];
+const gOpen=new Set();
+function bookTitle(k){if(k==='U')return 'Úvod · výslovnost a přízvuk';if(k==='X')return 'Navíc';const b=BOOK.find(x=>x[0]===k);return b?b[2]:k}
 function renderGrammar(){
-  const s=D.settings,done=LESSONS.filter(l=>D.gram[l.id]).length;
+  const s=D.settings,done=LESSONS.filter(l=>D.gram[l.id]).length,tsel=new Set(s.conjTenses);
   const lcard=l=>{const g=D.gram[l.id],n=parseEx(l).length;return `<button class="gl" data-l="${l.id}"><span class="lemoji">${l.emoji}</span><span class="lbody2"><b>${l.title}</b><span>${l.intro}</span></span>${g?`<span class="badge ${g.best>=80?'ok':''}">${g.best} %</span>`:`<span class="badge">${n} cv.</span>`}</button>`};
+  const sec=k=>{const ls=LESSONS.filter(l=>l.book===k),list=listById('k-'+k),nw=list?D.words.filter(w=>w.lists.includes(list.id)).length:0;
+    if(!ls.length&&!list)return '';const dn=ls.filter(l=>D.gram[l.id]).length;
+    return `<details class="grp" data-k="${k}" ${gOpen.has(k)?'open':''}><summary>${esc(bookTitle(k))}<span class="n">${ls.length?`${dn}/${ls.length}`:''}</span></summary><div class="grp-body">
+      ${list?`<button class="gvoc" data-voc="${list.id}"><span>📗 Slovíčka lekce</span><span class="muted">${nw} ›</span></button>`:''}
+      ${ls.map(lcard).join('')}</div></details>`};
   $('#view-gram').innerHTML=`<header class="top"><div><div class="sub">${done} z ${LESSONS.length} lekcí procvičeno</div><h1>Gramatika</h1></div></header>
   <div class="card"><h2>🔤 Trenažér časování</h2><div class="sub">Dostaneš sloveso a osobu, napíšeš správný tvar.</div>
-    <div class="lbl">Čas</div>${segHTML('conjTense',[['pres','Přítomný'],['pret','Minulý'],['both','Oba']])}
+    <div class="lbl">Časy (můžeš vybrat víc)</div><div class="lchips" id="tchips">${TENSES.map(([k,n])=>`<button type="button" data-t="${k}" class="${tsel.has(k)?'on':''}">${n}</button>`).join('')}</div>
     <div class="lbl">Slovesa</div>${segHTML('conjSet',[['reg','Pravidelná'],['irr','Nepravidelná'],['all','Vše']])}
     <div class="set-row" style="padding:16px 0 0;border:0"><div><div class="t">Včetně „vosotros“</div><div class="d">V Latinské Americe se nepoužívá</div></div>${sw('vosotros')}</div>
     <button class="btn primary big" id="conjGo">Začít časovat</button></div>
-  <button class="qbtn" id="gMix" style="width:100%"><b>🎲 Gramatický mix</b><span>20 náhodných cvičení ze všech lekcí</span></button>
-  <div class="gtitle">A1 · úplné základy</div>${LESSONS.filter(l=>l.level==='A1').map(lcard).join('')}
-  <div class="gtitle">A2 · další krok</div>${LESSONS.filter(l=>l.level==='A2').map(lcard).join('')}`;
+  <button class="qbtn" id="gMix" style="width:100%;margin-bottom:6px"><b>🎲 Gramatický mix</b><span>20 náhodných cvičení z lekcí, které máš procvičené (nebo ze všech)</span></button>
+  <div class="gtitle">Podle učebnice</div>
+  ${BOOK_ORDER.map(sec).join('')}`;
   bindSegs($('#view-gram'));
+  $$('#tchips button').forEach(b=>b.onclick=()=>{b.classList.toggle('on');s.conjTenses=$$('#tchips button.on').map(x=>x.dataset.t);if(!s.conjTenses.length){s.conjTenses=[b.dataset.t];b.classList.add('on')}save()});
   $$('#view-gram input[data-k]').forEach(i=>i.onchange=()=>{s[i.dataset.k]=i.checked;save()});
+  $$('#view-gram details.grp').forEach(d=>d.addEventListener('toggle',()=>{d.open?gOpen.add(d.dataset.k):gOpen.delete(d.dataset.k)}));
   $('#conjGo').onclick=()=>{const regen=()=>startGram(genConj(20),{src:'conj',label:'🔤 Časování',regen,keepOrder:true});regen()};
-  $('#gMix').onclick=()=>{const regen=()=>startGram(shuffle(LESSONS.flatMap(parseEx)).slice(0,20),{src:'gmix',label:'🎲 Gramatický mix',regen});regen()};
+  $('#gMix').onclick=()=>{const pool=LESSONS.filter(l=>D.gram[l.id]);const src=(pool.length>=2?pool:LESSONS);const regen=()=>startGram(shuffle(src.flatMap(parseEx)).slice(0,20),{src:'gmix',label:'🎲 Gramatický mix',regen});regen()};
   $$('.gl').forEach(b=>b.onclick=()=>openLesson(b.dataset.l));
+  $$('[data-voc]').forEach(b=>b.onclick=()=>startSession({src:'list:'+b.dataset.voc}));
 }
 let curLesson=null;
 function lessonFoot(){if(!curLesson)return;const g=D.gram[curLesson.id],n=parseEx(curLesson).length;$('#lGo').textContent=`Procvičit (${n} cvičení)${g?` · nejlépe ${g.best} %`:''}`}
 function openLesson(id){
   const L=LESSONS.find(l=>l.id===id);if(!L)return;curLesson=L;
   $('#lTitle').textContent=L.emoji+' '+L.title;
-  $('#lBody').innerHTML=`<div class="g"><span class="pill">${L.level}</span><p class="lead">${L.intro}</p>${L.html}</div>`;
+  $('#lBody').innerHTML=`<div class="g"><span class="pill">${L.level}</span> <span class="pill">${esc(bookTitle(L.book).split(' · ')[0])}</span><p class="lead">${L.intro}</p>${L.html}</div>`;
   lessonFoot();$('#lesson').hidden=false;document.body.classList.add('lock');$('#lBody').scrollTop=0;
   $('#lGo').onclick=()=>{const regen=()=>startGram(parseEx(L),{src:'lesson:'+L.id,lid:L.id,label:L.emoji+' '+L.title,regen});regen()};
 }
