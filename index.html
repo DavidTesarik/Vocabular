@@ -155,7 +155,10 @@ mark{background:color-mix(in srgb,var(--warn) 45%,transparent);color:inherit;bor
 .sheet-panel{position:absolute;left:0;right:0;bottom:0;max-height:92vh;overflow:auto;-webkit-overflow-scrolling:touch;background:var(--bg);border-radius:26px 26px 0 0;padding:8px 18px calc(22px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .28s cubic-bezier(.2,.8,.2,1);max-width:640px;margin:0 auto}
 #sheet.open .scrim{opacity:1}
 #sheet.open .sheet-panel{transform:none}
-.grab{width:40px;height:5px;border-radius:9px;background:var(--border);margin:4px auto 10px}
+.sheet-head{position:sticky;top:-8px;z-index:3;margin:-8px -18px 4px;padding:10px 18px 6px;background:var(--bg);touch-action:none}
+.grab{width:44px;height:5px;border-radius:9px;background:var(--muted);opacity:.45;margin:2px auto 6px}
+.sheet-x{position:absolute;right:14px;top:8px;width:32px;height:32px;border-radius:50%;border:0;background:var(--surface2);color:var(--muted);font-size:.95rem;font-weight:700;display:grid;place-items:center;padding:0}
+.sheet-panel{overscroll-behavior:contain}
 .opt-list{display:flex;flex-direction:column;gap:6px}
 .opt-list button{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:14px;border:1px solid var(--border);background:var(--surface);text-align:left;font-weight:600}
 .opt-list button.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
@@ -309,7 +312,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   <div class="l-body" id="lBody"></div>
   <div class="l-foot"><button class="btn primary big" id="lGo"></button></div>
 </div>
-<div id="sheet" hidden><div class="scrim"></div><div class="sheet-panel"><div class="grab"></div><div id="sheetBody"></div></div></div>
+<div id="sheet" hidden><div class="scrim"></div><div class="sheet-panel"><div class="sheet-head"><div class="grab"></div><button class="sheet-x" id="sheetX" aria-label="Zavřít">✕</button></div><div id="sheetBody"></div></div></div>
 <div id="toast"></div>
 <input type="file" id="importFile" accept="application/json,.json" hidden>
 
@@ -1068,8 +1071,33 @@ function applyTheme(){
 mq.addEventListener?.('change',()=>D&&applyTheme());
 let toastT; function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2200)}
 function openSheet(html,mount){const sh=$('#sheet');$('#sheetBody').innerHTML=html;sh.hidden=false;$('.sheet-panel').scrollTop=0;requestAnimationFrame(()=>requestAnimationFrame(()=>sh.classList.add('open')));mount&&mount($('#sheetBody'))}
-function closeSheet(){const sh=$('#sheet');sh.classList.remove('open');setTimeout(()=>{if(!sh.classList.contains('open'))sh.hidden=true},280)}
+function closeSheet(){const sh=$('#sheet'),pn=$('.sheet-panel');if(document.activeElement&&pn.contains(document.activeElement))document.activeElement.blur();pn.style.transition='';pn.style.transform='';$('#sheet .scrim').style.opacity='';sh.classList.remove('open');setTimeout(()=>{if(!sh.classList.contains('open'))sh.hidden=true},280)}
 $('#sheet .scrim').onclick=closeSheet;
+$('#sheetX').onclick=closeSheet;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#sheet').hidden){e.stopImmediatePropagation();closeSheet()}},true);
+/* stažení lišty dolů prstem = zavřít */
+(function(){
+  const pn=$('.sheet-panel'),scrim=$('#sheet .scrim');let y0=null,dy=0,t0=0,drag=false,fromHead=false;
+  pn.addEventListener('touchstart',e=>{
+    if(e.touches.length>1)return;
+    fromHead=!!e.target.closest('.sheet-head');
+    if(!fromHead&&(pn.scrollTop>0||e.target.closest('textarea,.chips,.lchips,input[type=range]')))return;
+    y0=e.touches[0].clientY;dy=0;t0=Date.now();drag=false;
+  },{passive:true});
+  pn.addEventListener('touchmove',e=>{
+    if(y0===null)return;
+    dy=e.touches[0].clientY-y0;
+    if(!drag){if(dy>6&&(fromHead||pn.scrollTop<=0)){drag=true;if(document.activeElement&&pn.contains(document.activeElement))document.activeElement.blur()}else if(dy<-6&&!fromHead){y0=null;return}}
+    if(drag){e.preventDefault();const d=Math.max(0,dy);pn.style.transition='none';pn.style.transform=`translateY(${d}px)`;scrim.style.opacity=String(Math.max(0,1-d/400))}
+  },{passive:false});
+  const end=()=>{
+    if(y0===null)return;y0=null;if(!drag)return;drag=false;
+    const v=dy/Math.max(1,Date.now()-t0);
+    if(dy>110||(dy>40&&v>0.5)){closeSheet()}
+    else{pn.style.transition='';pn.style.transform='';scrim.style.opacity=''}
+  };
+  pn.addEventListener('touchend',end);pn.addEventListener('touchcancel',end);
+})();
 
 /* ===================== VÝSLOVNOST ===================== */
 let esVoice=null;
@@ -1691,7 +1719,7 @@ function renderSettings(){
   <div class="sub" style="padding:8px 6px">Data se ukládají jen v tomto telefonu. Zálohu občas exportuj, ať o pokrok nepřijdeš.</div>
   <div class="set-title">Instalace na iPhone</div>
   <div class="set-group"><div class="howto"><ol style="margin-top:14px"><li>Otevři stránku v Safari.</li><li>Klepni na tlačítko Sdílet (čtvereček se šipkou).</li><li>Zvol „Přidat na plochu“.</li></ol>Pak se aplikace spouští přes celou obrazovku jako normální apka.</div></div>
-  <div class="sub" style="text-align:center;padding:18px 0 6px">¡Buena suerte! · verze 1.1</div>`;
+  <div class="sub" style="text-align:center;padding:18px 0 6px">¡Buena suerte! · verze 1.2</div>`;
   bindSegs($('#view-settings'),k=>{if(k==='theme')applyTheme()});
   $$('input[data-k]').forEach(i=>i.onchange=()=>{s[i.dataset.k]=i.checked;save()});
   $('#fs').oninput=e=>{s.fontScale=+e.target.value;$('#fsVal').textContent=Math.round(s.fontScale*100)+' %';applyTheme();save()};
