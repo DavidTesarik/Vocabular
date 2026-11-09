@@ -279,6 +279,10 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 .gnote .hl{color:var(--accent)}.gnote .hl b{text-decoration:underline}
 .gvoc{width:100%;display:flex;justify-content:space-between;align-items:center;padding:12px 14px;margin:0 0 10px;border-radius:16px;border:1.5px dashed var(--accent);background:color-mix(in srgb,var(--accent) 8%,var(--surface));color:var(--accent);font-weight:700}
 #view-gram details.grp .gl{margin-bottom:8px;background:var(--bg)}
+.testcard{border:2px solid var(--accent)}
+.tbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.tbtns .btn{padding:12px 8px;font-size:.95rem}
+.tbtns .btn.primary{grid-column:1/-1;padding:15px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -1007,7 +1011,7 @@ el gimnasio|posilovna`]
 
 /* ===================== SLOVÍČKA Z UČEBNICE ===================== */
 const BOOK=[
-['L1','📗',"Lekce 1 · ¡Hola! Yo soy Pedro",`el amable|ilý, -á, příjemný, -á, laskavý, -á
+['L1','📗',"Lekce 1 · ¡Hola! Yo soy Pedro",`amable|milý, -á, příjemný, -á, laskavý, -á
 antipático, -a|nesympatický, -á, protivný, -á
 aquí|zde, tady
 de aquí|odsud
@@ -1079,7 +1083,7 @@ la tarde|odpoledne
 el texto|text`],
 ['L2','📗',"Lekce 2 · De vacaciones en España",`la abuela|babička
 ¿adónde?|kam
-el agosto|srpen
+agosto|srpen
 la amiga|přítelkyně
 el amigo|přítel
 el año (académico)|rok (školní)
@@ -1111,7 +1115,7 @@ el hospital|nemocnice
 importante|důležitý, -á
 ir|jít, jet
 la juerga|flám
-el julio|červenec
+julio|červenec
 juntos, -as|spolu, společně
 lleno, -a (de)|plný, -á (čeho)
 el lugar|místo
@@ -1145,7 +1149,7 @@ el verano|léto
 la visita|návštěva
 y|a
 ya|už`],
-['L3','📗',"Lekce 3 · La abuela de Alicia",`la América Latina|Latinská Amerika
+['L3','📗',"Lekce 3 · La abuela de Alicia",`América Latina|Latinská Amerika
 además (de)|kromě (čeho)
 ahora|nyní, teď
 aprender|učit se
@@ -1155,19 +1159,18 @@ bien|dobře; hodně, velmi
 la carta|dopis
 catalán, -ana|katalánský, -á
 el catalán|Katalánec; katalánština
-la Cataluña|Katalánsko
+Cataluña|Katalánsko
 checo|česky
 claro, -a|jasný, světlý
 clásico, -a|klasický, -á
 como|jako
-la comunidad|autonomní oblast
-autónoma|(ve Španělsku)
+la comunidad autónoma|autonomní oblast (ve Španělsku)
 conocer (zc)|znát, poznat
 el corazón|srdce
 la cosa|věc
 desconocer (zc)|neznat
 desear|přát si, chtít
-el Dios|bůh
+Dios|bůh
 dos|dva, dvě
 duro, -a|tvrdý; nesnadný, obtížný
 el ejemplo|příklad
@@ -1181,7 +1184,7 @@ el euskera|baskičtina
 existir|existovat
 francés, -esa|francouzský, -á
 el francés|Francouz; francouzština
-la Galicia|Galicie
+Galicia|Galicie
 gallego, -a|galicijský, -á
 el gallego|Galicijec; galicijština
 hablar|mluvit
@@ -1591,11 +1594,11 @@ el viernes|pátek
 volver (ue)|vrátit se`],
 ['R1','🔁',"Opakování I · España",`a menudo|často
 administrativo|správní, administrativní
-la África (el)|Afrika
+África|Afrika
 africano|africký
 la asignatura|předmět (ve škole)
 asistir (a)|chodit (do, na), zúčastnit se (čeho)
-el Asturias|Asturie
+Asturias|Asturie
 bañado (por)|omývaný (čím)
 bañar(se)|koupat (se)
 el bosque|les
@@ -1677,7 +1680,7 @@ los Picos de Europa|pohoří v severním Španělsku
 los Pirineos|Pyreneje
 la política|politika
 política exterior|zahraniční politika
-el Portugal|Portugalsko
+Portugal|Portugalsko
 practicar|provozovat, praktikovat
 practicar deportes|provozovat/dělat sporty
 el prado|louka
@@ -1694,7 +1697,7 @@ sentirse (ie)|cítit se
 la sierra|pohoří
 situado|umístěný, položený
 el sol|slunce
-la Suiza|Švýcarsko
+Suiza|Švýcarsko
 el supermercado|samoobsluha, supermarket
 tarado|bláznivý, hloupý
 el territorio|území
@@ -2222,7 +2225,7 @@ loco|bláznivý
 volverse loco|zbláznit se
 la maja|kráska (zastarale)
 el marciano|Marťan
-el Marte|Mars
+Marte|Mars
 el medio|prostředek
 medio de transporte|dopravní prostředek
 mencionado|zmíněný
@@ -2648,7 +2651,7 @@ consistir (en)|spočívat, tkvít (v)
 constar (de)|skládat se / sestávat (z)
 conversar|mluvit, hovořit, povídat si
 el coñazo|otrava, nuda, opruz, pruda (hovor.)|hovor.
-el Correos|pošta (úřad)
+Correos|pošta (úřad)
 correr|běžet; jet (závod)
 el cuaderno|sešit
 el cuidado|péče, starost, opatrnost
@@ -3385,7 +3388,7 @@ húngaro|maďarský
 la ida|cesta (tam)
 imponer (jako poner)|předepisovat, uložit
 incluido|včetně
-la Inglaterra|Anglie
+Inglaterra|Anglie
 las instrucciones|pokyny, návod, instrukce
 investigar|(pro)zkoumat, pátrat
 lastimarse|poranit se/si
@@ -3565,14 +3568,14 @@ el azulejo|obkládačka, kachlík
 el balneario|lázně
 bicameral|dvoukomorový
 la bisutería|bižuterie
-la Bohemia|Čechy
+Bohemia|Čechy
 bohemio|bohémský; český
 la Cámara de Diputados|Poslanecká sněmovna
 la caída|pád
 caótico|chaotický
 la cara|tvář, obličej
 poner cara|tvářit se
-la Chequia|Česko
+Chequia|Česko
 cobrar|vybírat (peníze), inkasovat; získat
 la col|zelí
 el coma|kóma, bezvědomí
@@ -3597,7 +3600,7 @@ economía de mercado|tržní ekonomika
 el efecto|efekt, účinek
 elegir (j) (i)|(z)volit, vybrat
 en cuanto a|pokud jde o, co se týká (čeho)
-la Eslovaquia|Slovensko
+Eslovaquia|Slovensko
 la espuma|pěna
 estabilizarse|stabilizovat se
 exportar|vyvážet
@@ -3632,7 +3635,7 @@ el mar Báltico|Baltské moře
 el máximo|maximum
 mentir (ie-i)|lhát
 hacerse miembro|stát se členem
-la Moravia|Morava
+Moravia|Morava
 el mueble|nábytek, kus nábytku
 el náufrago|trosečník
 la nave|loď (i vesmírná)
@@ -3655,12 +3658,12 @@ la renovación|obnovení, obnova
 la República Eslovaca|Slovenská republika
 rodear|obklopovat
 la rueda|kolo
-la Rusia|Rusko
+Rusia|Rusko
 ruso|ruský
 salpicar|postříkat, pokropit
 el Senado|Senát
 la separación|oddělení, rozdělení
-la Silesia|Slezsko
+Silesia|Slezsko
 el socio|partner, společník
 sospechoso|podezřelý
 la sustancia|látka, substance
@@ -3682,7 +3685,7 @@ dar una vuelta (por)|projít se (kudy), projet (co)`]
 /* ===================== ZÁKLAD ===================== */
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const KEY='slovnik-es-v1', INTERVALS=[0,1,3,7,14,30];
-const DEF={theme:'auto',fontScale:1,smart:true,ignoreArticles:true,tolerant:false,autoSpeak:false,ttsRate:0.9,dailyGoal:20,mode:'cards',dir:'es-cz',len:20,source:'all',conjTense:'pres',conjTenses:['pres'],conjSet:'reg',vosotros:true};
+const DEF={theme:'auto',fontScale:1,smart:true,ignoreArticles:true,tolerant:false,autoSpeak:false,ttsRate:0.9,dailyGoal:20,mode:'cards',dir:'es-cz',len:20,source:'all',conjTense:'pres',conjTenses:['pres'],conjSet:'reg',vosotros:true,showTest:true};
 const memStore={};
 const store={get(k){try{return localStorage.getItem(k)}catch(e){return memStore[k]??null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){memStore[k]=v}}};
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
@@ -3716,6 +3719,11 @@ function addSeedList(lists,words,byEs,lid,emoji,name,txt,book){
     const w=newWord(es,cz,note,[lid]); words.push(w); byEs.set(k,w);
   });
 }
+function fixWords(){
+  const M={'el amable':['amable','milý, -á, příjemný, -á, laskavý, -á'],'el agosto':['agosto'],'el julio':['julio'],'la América Latina':['América Latina'],'la Cataluña':['Cataluña'],'el Dios':['Dios'],'la Galicia':['Galicia'],'la África (el)':['África'],'el Asturias':['Asturias'],'el Portugal':['Portugal'],'la Suiza':['Suiza'],'el Marte':['Marte'],'el Correos':['Correos'],'la Inglaterra':['Inglaterra'],'la Bohemia':['Bohemia'],'la Chequia':['Chequia'],'la Eslovaquia':['Eslovaquia'],'la Moravia':['Moravia'],'la Rusia':['Rusia'],'la Silesia':['Silesia'],'la comunidad':['la comunidad autónoma','autonomní oblast (ve Španělsku)']};
+  D.words.forEach(w=>{const f=M[w.es];if(f){w.es=f[0];if(f[1])w.cz=f[1]}});
+  D.words=D.words.filter(w=>!(w.es==='autónoma'&&w.cz==='(ve Španělsku)'));
+}
 function mergeBook(){
   const byEs=new Map();D.words.forEach(w=>{const k=w.es.trim().toLowerCase();if(!byEs.has(k))byEs.set(k,w)});
   const lists=[],words=[];
@@ -3729,6 +3737,7 @@ function load(){
   if(!D||!Array.isArray(D.words)){const s=buildSeed(); D={v:1,words:s.words,lists:s.lists,settings:{},days:{},sessions:[]};}
   D.settings={...DEF,...(D.settings||{})}; D.days=D.days||{}; D.sessions=D.sessions||[]; D.lists=D.lists||[]; D.gram=D.gram||{};
   if(!D.bookV){mergeBook();D.bookV=1}
+  if(!D.fixV){fixWords();D.fixV=1}
   if(!Array.isArray(D.settings.conjTenses))D.settings.conjTenses=D.settings.conjTense==='both'?['pres','pret']:[D.settings.conjTense||'pres'];
   saveNow();
 }
@@ -3908,6 +3917,7 @@ function renderHome(){
     <div class="kpi"><b style="color:var(--good)">${cs.known}</b><span>umím</span></div>
     <div class="kpi"><b style="color:var(--accent)">${due}</b><span>k opakování</span></div>
   </div>
+  ${D.settings.showTest?testCardHTML(true):''}
   <div class="card">
     <div class="lbl">Co procvičit</div>
     <button class="srcbtn" id="srcBtn"><span>${src.emoji}</span><span>${esc(src.label)}</span><span class="n">${srcN} ›</span></button>
@@ -3928,6 +3938,7 @@ function renderHome(){
   ${wod?`<div class="card wod tile"><div style="opacity:.85;font-size:.9rem">Slovo dne</div><div class="w">${esc(wod.es)}</div><div>${esc(wod.cz)}</div><button class="spk" id="wodSpk" aria-label="Přehrát">🔊</button></div>`:''}`;
   bindSegs($('#view-home'));
   $('#srcBtn').onclick=sourceSheet;
+  bindTest($('#view-home'));
   $('#startBtn').onclick=()=>startSession();
   $$('.qbtn').forEach(b=>b.onclick=()=>startSession({src:b.dataset.q}));
   if(wod) $('#wodSpk').onclick=()=>speak(wod.es);
@@ -4397,6 +4408,7 @@ function renderSettings(){
   </div>
   <div class="set-title">Procvičování</div>
   <div class="set-group">
+    <div class="set-row"><div><div class="t">Karta „Test z lekcí 1–3“</div><div class="d">Zobrazit na úvodní obrazovce</div></div>${sw('showTest')}</div>
     <div class="set-row"><div><div class="t">Chytré opakování</div><div class="d">Častěji dává slova, co neumíš nebo dlouho neviděl</div></div>${sw('smart')}</div>
     <div class="set-row"><div><div class="t">Ignorovat členy</div><div class="d">„perro“ se uzná za „el perro“</div></div>${sw('ignoreArticles')}</div>
     <div class="set-row"><div><div class="t">Tolerovat diakritiku</div><div class="d">Chybějící čárky a háčky nebudou brát jako chybu</div></div>${sw('tolerant')}</div>
@@ -4415,7 +4427,7 @@ function renderSettings(){
   <div class="sub" style="padding:8px 6px">Data se ukládají jen v tomto telefonu. Zálohu občas exportuj, ať o pokrok nepřijdeš.</div>
   <div class="set-title">Instalace na iPhone</div>
   <div class="set-group"><div class="howto"><ol style="margin-top:14px"><li>Otevři stránku v Safari.</li><li>Klepni na tlačítko Sdílet (čtvereček se šipkou).</li><li>Zvol „Přidat na plochu“.</li></ol>Pak se aplikace spouští přes celou obrazovku jako normální apka.</div></div>
-  <div class="sub" style="text-align:center;padding:18px 0 6px">¡Buena suerte! · verze 2.0</div>`;
+  <div class="sub" style="text-align:center;padding:18px 0 6px">¡Buena suerte! · verze 2.1</div>`;
   bindSegs($('#view-settings'),k=>{if(k==='theme')applyTheme()});
   $$('input[data-k]').forEach(i=>i.onchange=()=>{s[i.dataset.k]=i.checked;save()});
   $('#fs').oninput=e=>{s.fontScale=+e.target.value;$('#fsVal').textContent=Math.round(s.fontScale*100)+' %';applyTheme();save()};
@@ -5669,6 +5681,125 @@ ir + ger.|postupně|<b>Voy</b> aprendiendo.`)].join('');
   LESSONS.forEach(l=>{l.book=l.book||BM[l.id]||'X';const B=l.book,n=+B.slice(1)||0;l.level=B==='U'||B==='R1'?'A1':B==='R2'||B==='X'?'A2':B==='R3'?'B1':n<=7?'A1':n<=14?'A2':'B1'});
 })();
 
+/* --- příprava na test z lekcí 1–3 --- */
+LESSONS.push({id:'test13',emoji:'🎯',book:'T13',level:'A1',title:'Tahák a cvičení na test (lekce 1–3)',intro:'Všechno podstatné z lekcí 1–3 na jednom místě + 54 cvičení.',
+html:[H('1. Člen a rod'),T('|mužský|ženský',`
+určitý j. č.|el chico|la chica
+určitý mn. č.|los chicos|las chicas
+neurčitý j. č.|un chico|una chica
+neurčitý mn. č.|unos chicos|unas chicas`),
+UL(['-o většinou mužský, -a většinou ženský.','Výjimky: <b>el día, el problema, el idioma, el poema, el mapa</b> (mužské na -a).','-ción, -dad → vždy ženský: la lección, la ciudad.','<b>la gente</b> (lidé) je v j. č. a ženského rodu: La gente es simpática.']),
+H('2. Množné číslo'),UL(['samohláska + <b>s</b>: casa → casas','souhláska + <b>es</b>: ciudad → ciudades, país → países','-ción → <b>-ciones</b> (čárka zmizí): lección → lecciones']),
+H('3. Přídavná jména'),P('Stojí většinou za podstatným jménem a shodují se v rodě i čísle: un chico simpático, las playas preciosas. Na -e a souhlásku mají pro oba rody stejný tvar (grande, difícil, joven). Národnosti: español → española, francés → francesa.'),
+H('4. Ser, estar, ir'),T('osoba|ser|estar|ir',`
+yo|soy|estoy|voy
+tú|eres|estás|vas
+él / ella / usted|es|está|va
+nosotros|somos|estamos|vamos
+vosotros|sois|estáis|vais
+ellos / ustedes|son|están|van`),
+UL(['<b>SER</b>: kdo kdo je, povolání, národnost, odkud (ser de), vlastnosti, čas.','<b>ESTAR</b>: kde se kdo/co nachází, jak se kdo má, momentální stav (estoy cansado).']),
+H('5. Předložky a pády'),T('předložka|použití|příklad',`
+a|kam, komu, koho (osoba)|Voy a la playa. Veo a Pedro.
+en|kde, čím (doprava)|Estoy en casa. Voy en tren.
+de|odkud, čí, z čeho|Soy de Praga. El libro de Ana.
+a + el|al|Voy al cine.
+de + el|del|La casa del profesor.`),
+TIP('Domů = <b>a casa</b>, doma = <b>en casa</b> (bez členu).'),
+H('6. Gustar'),P('<b>me / te / le / nos / os / les</b> + <b>gusta</b> (jedna věc nebo infinitiv) / <b>gustan</b> (více věcí): Me gusta la música. Me gusta leer. Me gustan los libros.'),
+H('7. Pravidelná slovesa v přítomném čase'),T('osoba|hablar|comer|escribir',`
+yo|hablo|como|escribo
+tú|hablas|comes|escribes
+él / usted|habla|come|escribe
+nosotros|hablamos|comemos|escribimos
+vosotros|habláis|coméis|escribís
+ellos / ustedes|hablan|comen|escriben`),
+UL(['conocer → <b>conozco</b>, traducir → <b>traduzco</b> (jen yo, jinak pravidelně)','ver → veo, ves, ve, vemos, veis, ven','leer je pravidelné: leo, lees, lee, leemos, leéis, leen']),
+H('8. Neosobní se'),P('Aquí <b>se habla</b> español. En Galicia <b>se habla</b> gallego. ¿Cómo <b>se dice</b>…?'),
+H('9. Číslovky 0–20'),P('cero, uno, dos, tres, cuatro, cinco, seis, siete, ocho, nueve, diez, once, doce, trece, catorce, quince, dieciséis, diecisiete, dieciocho, diecinueve, veinte.'),
+H('10. Muy × mucho, bien'),UL(['<b>muy</b> + přídavné jméno / příslovce: muy bonito, muy bien','<b>mucho</b> u slovesa: Trabajo mucho. Před podst. jménem se shoduje: mucha gente.','hovorově <b>bien</b> = hodně: es bien duro; <b>super-</b>: superdifícil']),
+H('11. Otázky a zápor'),P('Zápor: <b>no</b> před slovesem (Pedro no es profesor). Tázací slova mají čárku: ¿qué?, ¿quién?, ¿cómo?, ¿dónde?, ¿adónde?, ¿de dónde?, ¿cuándo?, ¿por qué? – odpověď porque (protože).'),
+H('12. Užitečné výrazy'),E(`por supuesto|samozřejmě
+sin embargo|avšak, přesto
+así que|takže
+por eso|proto
+por ejemplo|například
+un poco|trochu
+¿Perdón? No comprendo bien.|Promiňte? Moc nerozumím.`)].join(''),
+ex:`___ ciudad (ta)|la
+___ problema (ten)|el
+___ idioma (ten)|el
+___ lección (ta)|la
+___ día (ten)|el
+___ gente es simpática.|La
+la lección → mn. č.: las ___|lecciones
+el país → mn. č.: los ___|países
+la ciudad → mn. č.: las ___|ciudades
+el chico español → mn. č.: los chicos ___|españoles
+Las chicas son muy ___. (simpático)|simpáticas
+Alicia es ___. (español)|española
+Las playas son ___. (precioso)|preciosas
+Nosotros ___ estudiantes. (ser)|somos
+Vosotros ___ de Praga. (ser)|sois
+¿De dónde ___ tú? (ser)|eres
+Yo ___ cansado. (estar)|estoy
+Ellos ___ en la playa. (estar)|están
+Nosotros ___ al cine. (ir)|vamos
+¿Adónde ___ vosotros? (ir)|vais
+Pedro ___ de Praga.|es|es;está|původ → ser
+Santander ___ en el norte de España.|está|es;está|poloha → estar
+La abuela ___ muy despierta.|es|es;está|vlastnost → ser
+Hoy ___ muy cansada.|estoy|soy;estoy|momentální stav → estar
+Voy ___ la playa.|a
+Estoy ___ casa.|en
+Soy ___ Praga.|de
+Voy ___ cine. (a + el)|al
+el libro ___ profesor (de + el)|del
+Me ___ la música.|gusta
+Me ___ los libros.|gustan
+¿Te ___ leer?|gusta
+Yo ___ español. (hablar)|hablo
+Tú ___ mucho. (trabajar)|trabajas
+Ella ___ una revista. (leer)|lee
+Nosotros ___ cartas. (escribir)|escribimos
+Vosotros ___ inglés. (aprender)|aprendéis
+Ellos ___ música clásica. (escuchar)|escuchan
+Yo ___ a Alicia. (conocer)|conozco
+Yo ___ del checo al español. (traducir)|traduzco
+Nosotros ___ la tele. (ver)|vemos
+En Galicia ___ habla gallego.|se
+13 = ___|trece
+17 = ___|diecisiete
+8 + 12 = ___|veinte
+Es ___ interesante.|muy|muy;mucho
+Trabajo ___.|mucho|muy;mucho
+Hablas español ___ bien.|muy|muy;mucho
+¿___ te llamas? (jak)|Cómo
+¿___ es Pedro? (kdo)|Quién
+¿___ vas? (kam)|Adónde
+Pedro ___ es profesor. (zápor)|no
+Co znamená „por supuesto“?|samozřejmě|samozřejmě;předpokládejme;proto
+Co znamená „sin embargo“?|avšak, přesto|bez embarga;avšak, přesto;takže`});
+const TEST_LISTS=['k-L1','k-L2','k-L3'];
+function testWords(){return D.words.filter(w=>w.lists.some(l=>TEST_LISTS.includes(l)))}
+function wordItem(w){
+  const pl=Math.random()<.5?'es':'cz',lk=(w.lists.find(l=>TEST_LISTS.includes(l))||'').slice(3);
+  return{kind:'word',key:'w:'+w.id,w,pl,al:pl==='es'?'cz':'es',q:pl==='es'?w.es:w.cz,a:pl==='es'?w.cz:w.es,label:'📗 Slovíčko'+(lk?' · lekce '+lk.slice(1):''),plain:pl==='es'?w.es:w.cz};
+}
+const testGramItems=()=>parseEx(LESSONS.find(l=>l.id==='test13'));
+function startTest(kind){
+  if(kind==='sheet')return openLesson('test13');
+  const W=testWords();
+  if(kind==='vocab'){const regen=()=>startGram(pickWords(W,25).map(wordItem),{src:'test-vocab',label:'🎯 Test 1–3 · slovíčka',regen,keepOrder:true});regen()}
+  else if(kind==='gram'){const regen=()=>startGram(shuffle(testGramItems()).slice(0,25),{src:'test-gram',label:'🎯 Test 1–3 · gramatika',regen});regen()}
+  else{const regen=()=>startGram([...pickWords(W,15).map(wordItem),...shuffle(testGramItems()).slice(0,25)],{src:'test-full',label:'🏁 Zkušební test 1–3',regen});regen()}
+}
+function testCardHTML(home){
+  return `<div class="card testcard"><div class="row" style="align-items:flex-start"><div style="flex:3"><h2>🎯 Test z lekcí 1–3</h2><div class="sub">${testWords().length} slovíček + gramatika z lekcí 1–3</div></div>${home?'<button class="linkbtn" data-test="hide" style="flex:none">Skrýt</button>':''}</div>
+  <div class="tbtns"><button class="btn primary" data-test="full">🏁 Zkušební test · 40 otázek</button><button class="btn" data-test="vocab">📗 Slovíčka · 25</button><button class="btn" data-test="gram">✏️ Gramatika · 25</button><button class="btn" data-test="sheet" style="grid-column:1/-1">📄 Tahák + 54 cvičení</button></div></div>`;
+}
+function bindTest(root){$$('[data-test]',root).forEach(b=>b.onclick=()=>{if(b.dataset.test==='hide'){D.settings.showTest=false;save();toast('Kartu vrátíš v Nastavení');renderHome();return}startTest(b.dataset.test)})}
+
 /* --- časování --- */
 const PERS=['yo','tú','él / ella / usted','nosotros','vosotros','ellos / ustedes'];
 const IRR={pres:{},pret:{}};
@@ -5780,6 +5911,10 @@ function startGram(items,meta={}){
   $('#practice').hidden=false;document.body.classList.add('lock');updateScore();renderItem();
 }
 function renderGram(item){
+  if(item.kind==='word'){
+    const card=`<div class="tcard"><div class="lang">${esc(item.label)} · ${lbl(item.pl)}</div><div class="word">${esc(item.q)}</div>${item.pl==='es'?'<button class="spk" id="tSpk" aria-label="Přehrát">🔊</button>':''}</div>`;
+    return typingUI(item,{card,answer:item.a,placeholder:`Napiš ${item.al==='es'?'španělsky':'česky'}…`,say:item.w.es,note:item.w.note?esc(item.w.note):''});
+  }
   let card;
   if(item.kind==='conj')card=`<div class="tcard"><div class="lang">${item.label}</div><div class="word">${esc(item.v)}</div>${item.cz?`<div class="sub">${esc(item.cz)}</div>`:''}<div class="gperson">${esc(PERS[item.p])}</div></div>`;
   else card=`<div class="tcard"><div class="lang">${esc(item.label)}</div><div class="gqt">${esc(item.q).replace(/_{2,}/g,'<span class="blank"></span>')}</div></div>`;
@@ -5798,9 +5933,9 @@ function choiceUI(item,card){
 }
 
 /* --- záložka a lekce --- */
-const BOOK_ORDER=['U','L1','L2','L3','L4','L5','L6','L7','R1','L8','L9','L10','L11','L12','L13','L14','R2','L15','L16','L17','L18','L19','L20','L21','R3','X'];
+const BOOK_ORDER=['T13','U','L1','L2','L3','L4','L5','L6','L7','R1','L8','L9','L10','L11','L12','L13','L14','R2','L15','L16','L17','L18','L19','L20','L21','R3','X'];
 const gOpen=new Set();
-function bookTitle(k){if(k==='U')return 'Úvod · výslovnost a přízvuk';if(k==='X')return 'Navíc';const b=BOOK.find(x=>x[0]===k);return b?b[2]:k}
+function bookTitle(k){if(k==='T13')return '🎯 Příprava na test · lekce 1–3';if(k==='U')return 'Úvod · výslovnost a přízvuk';if(k==='X')return 'Navíc';const b=BOOK.find(x=>x[0]===k);return b?b[2]:k}
 function renderGrammar(){
   const s=D.settings,done=LESSONS.filter(l=>D.gram[l.id]).length,tsel=new Set(s.conjTenses);
   const lcard=l=>{const g=D.gram[l.id],n=parseEx(l).length;return `<button class="gl" data-l="${l.id}"><span class="lemoji">${l.emoji}</span><span class="lbody2"><b>${l.title}</b><span>${l.intro}</span></span>${g?`<span class="badge ${g.best>=80?'ok':''}">${g.best} %</span>`:`<span class="badge">${n} cv.</span>`}</button>`};
@@ -5810,6 +5945,7 @@ function renderGrammar(){
       ${list?`<button class="gvoc" data-voc="${list.id}"><span>📗 Slovíčka lekce</span><span class="muted">${nw} ›</span></button>`:''}
       ${ls.map(lcard).join('')}</div></details>`};
   $('#view-gram').innerHTML=`<header class="top"><div><div class="sub">${done} z ${LESSONS.length} lekcí procvičeno</div><h1>Gramatika</h1></div></header>
+  ${testCardHTML(false)}
   <div class="card"><h2>🔤 Trenažér časování</h2><div class="sub">Dostaneš sloveso a osobu, napíšeš správný tvar.</div>
     <div class="lbl">Časy (můžeš vybrat víc)</div><div class="lchips" id="tchips">${TENSES.map(([k,n])=>`<button type="button" data-t="${k}" class="${tsel.has(k)?'on':''}">${n}</button>`).join('')}</div>
     <div class="lbl">Slovesa</div>${segHTML('conjSet',[['reg','Pravidelná'],['irr','Nepravidelná'],['all','Vše']])}
@@ -5826,6 +5962,7 @@ function renderGrammar(){
   $('#gMix').onclick=()=>{const pool=LESSONS.filter(l=>D.gram[l.id]);const src=(pool.length>=2?pool:LESSONS);const regen=()=>startGram(shuffle(src.flatMap(parseEx)).slice(0,20),{src:'gmix',label:'🎲 Gramatický mix',regen});regen()};
   $$('.gl').forEach(b=>b.onclick=()=>openLesson(b.dataset.l));
   $$('[data-voc]').forEach(b=>b.onclick=()=>startSession({src:'list:'+b.dataset.voc}));
+  bindTest($('#view-gram'));
 }
 let curLesson=null;
 function lessonFoot(){if(!curLesson)return;const g=D.gram[curLesson.id],n=parseEx(curLesson).length;$('#lGo').textContent=`Procvičit (${n} cvičení)${g?` · nejlépe ${g.best} %`:''}`}
